@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_sharings",
+  "info": {
+    "displayName": "sharing",
+    "icon": "cast",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "contributor": {
+      "type": "string",
+      "required": true
+    },
+    "userLink": {
+      "type": "string"
+    }
+  }
+}

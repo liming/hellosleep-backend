@@ -1,0 +1,43 @@
+{
+  "name": "hellosleep-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "deploy": "strapi deploy",
+    "single-migration-test": "node script/single-migration-test.js",
+    "single-import-test": "node script/single-import-test.js",
+    "batch-export": "node script/batch-export.js",
+    "batch-migration": "node script/batch-migration.js",
+    "batch-import": "node script/batch-import.js",
+    "migrate-all": "npm run batch-export && npm run batch-migration && npm run batch-import"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@strapi/strapi": "5.20.0",
+    "@strapi/plugin-cloud": "5.20.0",
+    "@strapi/plugin-i18n": "5.20.0",
+    "@strapi/plugin-users-permissions": "5.20.0",
+    "better-sqlite3": "8.6.0",
+    "pg": "^8.16.3",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "5.3.4",
+    "styled-components": "5.3.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "09e70c5e-ac33-4a5d-992b-08fc3a68af02"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
