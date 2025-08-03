@@ -45,13 +45,13 @@ async function testImportSingleMigrated() {
     // Prepare the article data for import
     const importData = {
       data: {
-        title: testArticle.data.title,
+        title: testArticle.data.title + '-test',
         excerpt: testArticle.data.excerpt,
         date: testArticle.data.date,
         like: testArticle.data.like,
         coverUrl: testArticle.data.coverUrl,
         body: testArticle.data.body,
-        altId: testArticle.data.altId, // Include the altId from remote _id
+        altId: testArticle.data.altId + '-test', // Add test suffix to avoid conflicts
         publishedAt: testArticle.data.publishedAt,
         // Note: createdAt and updatedAt will be set by Strapi
       }

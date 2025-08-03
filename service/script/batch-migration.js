@@ -216,7 +216,7 @@ function markdownToLexicalJSON(markdown) {
         // Convert list items to paragraphs for now
         return { type: 'paragraph', children: block.children };
       case 'image': 
-        // Convert external images to proper image blocks with external URL
+        // Convert external images to proper Strapi image format with external provider
         return { 
           type: 'image',
           image: {

@@ -1,61 +1,111 @@
-# 🚀 Getting started with Strapi
+# HelloSleep
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+A comprehensive sleep improvement platform with backend API, web frontend, and mobile app.
 
-### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+## 🏗️ Project Structure
 
 ```
-npm run develop
-# or
-yarn develop
+hellosleep/
+├── service/          # Strapi backend API
+├── web/             # Web frontend (React/Next.js)
+├── shared/          # Shared utilities and types
+└── package.json     # Root workspace configuration
 ```
 
-### `start`
+## 🚀 Quick Start
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+### Prerequisites
+- Node.js >= 18.0.0
+- Yarn or npm
+- PostgreSQL (for service)
 
-```
-npm run start
-# or
-yarn start
-```
+### Installation
+```bash
+# Install all dependencies
+npm run install:all
 
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
+# Or install individually
+npm install
+cd service && npm install
+cd ../web && npm install
 ```
 
-## ⚙️ Deployment
+### Development
+```bash
+# Start all services
+npm run dev
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
+# Start individual services
+npm run dev:service    # Strapi backend
+npm run dev:web        # Web frontend
 ```
-yarn strapi deploy
+
+## 📁 Services
+
+### Service (Backend)
+- **Technology**: Strapi 4.25.23
+- **Database**: PostgreSQL
+- **Port**: 1337
+- **Admin**: http://localhost:1337/admin
+
+### Web (Frontend)
+- **Technology**: React/Next.js
+- **Port**: 3000
+- **URL**: http://localhost:3000
+
+
+
+## 🔧 Scripts
+
+```bash
+# Development
+npm run dev              # Start all services
+npm run dev:service      # Start Strapi backend
+npm run dev:web          # Start web frontend
+
+
+# Build
+npm run build            # Build all services
+npm run build:service    # Build Strapi
+npm run build:web        # Build web app
+
+# Utilities
+npm run install:all      # Install all dependencies
+npm run clean            # Clean all node_modules
 ```
 
-## 📚 Learn more
+## 📝 Migration Scripts
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+The service includes migration scripts for importing articles:
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+```bash
+cd service
+npm run single-migration-test    # Test single article migration
+npm run single-import-test       # Test single article import
+npm run batch-export             # Export all articles from remote
+npm run batch-migration          # Migrate all articles
+npm run batch-import             # Import all articles to local
+npm run migrate-all              # Run full migration pipeline
+```
 
-## ✨ Community
+## 🛠️ Development
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+### Adding New Dependencies
+```bash
+# Add to specific service
+cd service && npm install package-name
+cd ../web && npm install package-name
 
----
+# Add to root (shared dependencies)
+npm install package-name
+```
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+### Code Organization
+- **service/**: Backend API and database
+- **web/**: Web frontend application
+
+- **shared/**: Shared utilities, types, and constants
+
+## 📄 License
+
+MIT 

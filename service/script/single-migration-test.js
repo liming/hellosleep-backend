@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-// Test migrating a single article with the new parsing logic
+// Test single article migration with improved parsing
 function testSingleMigration() {
   try {
-    console.log('🧪 Testing single article migration with new parsing...');
+    console.log('🧪 Testing single article migration...');
     
-    // Load the remote articles
+    // Load a test article from the remote articles
     const remoteArticlesPath = path.join(__dirname, 'remote-articles-simplified.json');
+    
     if (!fs.existsSync(remoteArticlesPath)) {
       console.error('❌ Remote articles file not found. Please run export-articles-remote first.');
       console.log('💡 Run: npm run export-articles-remote');
@@ -15,14 +16,17 @@ function testSingleMigration() {
     }
     
     const remoteArticles = JSON.parse(fs.readFileSync(remoteArticlesPath, 'utf8'));
-    console.log(`📦 Found ${remoteArticles.length} articles, testing with the first one`);
     
-    // Take only the first article for testing
+    if (!remoteArticles || remoteArticles.length === 0) {
+      console.error('❌ No articles found in remote articles file.');
+      process.exit(1);
+    }
+    
+    // Use the first article for testing
     const testArticle = remoteArticles[0];
-    console.log(`📝 Testing with article: "${testArticle.title}"`);
-    console.log(`📄 Article ID: ${testArticle.id}`);
+    console.log(`📄 Testing with article: "${testArticle.title}"`);
     
-    // Copy the parsing functions from migrate-remote-articles.js
+    // Simple markdown parser
     function parseMarkdown(markdown) {
       if (!markdown) return [];
       
@@ -39,12 +43,17 @@ function testSingleMigration() {
             blocks.push(currentBlock);
             currentBlock = null;
           }
+          if (currentList) {
+            blocks.push(currentList);
+            currentList = null;
+          }
           continue;
         }
         
         // Handle headings
         if (line.startsWith('#')) {
           if (currentBlock) blocks.push(currentBlock);
+          if (currentList) blocks.push(currentList);
           const level = line.match(/^#+/)[0].length;
           const text = line.replace(/^#+\s*/, '');
           currentBlock = {
@@ -54,12 +63,14 @@ function testSingleMigration() {
           };
           blocks.push(currentBlock);
           currentBlock = null;
+          currentList = null;
           continue;
         }
         
         // Handle blockquotes
         if (line.startsWith('>')) {
           if (currentBlock) blocks.push(currentBlock);
+          if (currentList) blocks.push(currentList);
           const text = line.replace(/^>\s*/, '');
           currentBlock = {
             type: 'quote',
@@ -67,6 +78,7 @@ function testSingleMigration() {
           };
           blocks.push(currentBlock);
           currentBlock = null;
+          currentList = null;
           continue;
         }
         
@@ -74,6 +86,7 @@ function testSingleMigration() {
         const imageMatch = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
         if (imageMatch) {
           if (currentBlock) blocks.push(currentBlock);
+          if (currentList) blocks.push(currentList);
           currentBlock = {
             type: 'image',
             src: imageMatch[2],
@@ -81,6 +94,7 @@ function testSingleMigration() {
           };
           blocks.push(currentBlock);
           currentBlock = null;
+          currentList = null;
           continue;
         }
         
@@ -132,7 +146,7 @@ function testSingleMigration() {
           currentList = null;
         }
         
-        // Handle regular text with inline formatting
+        // Handle regular paragraphs
         if (!currentBlock) {
           currentBlock = {
             type: 'paragraph',
@@ -226,7 +240,7 @@ function testSingleMigration() {
             // Convert list items to paragraphs for now
             return { type: 'paragraph', children: block.children };
           case 'image': 
-            // Convert external images to proper image blocks with external URL
+            // Convert external images to proper Strapi image format with external provider
             return { 
               type: 'image',
               image: {
@@ -328,4 +342,4 @@ function testSingleMigration() {
   }
 }
 
-testSingleMigration(); 
+testSingleMigration();
