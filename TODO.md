@@ -1,14 +1,6 @@
 # HelloSleep Development TODO
 
-## 🎯 **Project Overview**
-- **Goal**: Migrate from Gatsby to Next.js with new features
-- **Approach**: Build new web app with modern architecture, gradually migrate content
-- **Backend**: Strapi API for content management
-- **Frontend**: Next.js with TypeScript and Tailwind CSS
-
----
-
-## 📋 **Phase 1: Foundation & Setup** ✅ *In Progress*
+## 📋 **Phase 1: Foundation & Setup** ✅ *Completed*
 
 ### ✅ **Completed**
 - [x] Set up monorepo structure
@@ -16,220 +8,151 @@
 - [x] Create Next.js web frontend
 - [x] Configure workspace management
 - [x] Set up development scripts
+- [x] Fix Strapi database connection (PostgreSQL auth issue) ✅
+- [x] Set up shared types between frontend and backend ✅
+- [x] Create basic layout and navigation structure ✅
+- [x] Build shared package with TypeScript types and API client ✅
+- [x] Create landing page with hero section and features ✅
+- [x] Set up basic page structure (articles, assessment, about) ✅
+- [x] Implement internationalization (i18n) with Chinese and English ✅
+- [x] Add language switcher in header ✅
 
 ### 🔄 **In Progress**
-- [x] Fix Strapi database connection (PostgreSQL auth issue) ✅
-- [ ] Set up shared types between frontend and backend
 - [ ] Configure environment variables for development
+- [ ] Implement API client for frontend-backend communication
 
 ### ⏳ **Next Steps**
-- [ ] Set up API client for frontend-backend communication
-- [ ] Create basic layout and navigation structure
+- [ ] Connect web frontend to Strapi API
+- [ ] Build article listing and detail pages
 - [ ] Set up authentication system
 - [ ] Configure Tailwind CSS theme and design system
 
 ---
 
-## 📋 **Phase 2: Content Migration & API Integration**
+## 📋 **Phase 2: Content Migration & API Integration** 🎯 *Current Priority*
 
-### **Backend API Development**
-- [ ] **Article Management**
-  - [ ] Complete article migration scripts (fix image issues)
-  - [ ] Set up article categories and tags
-  - [ ] Add article search and filtering
-  - [ ] Implement article pagination
-  - [ ] Add article metadata (reading time, difficulty level)
+### 🔄 **In Progress**
+- [ ] Fix Strapi backend startup (database connection)
+- [ ] Test API client with Strapi
+- [ ] Import migrated articles to Strapi
 
-- [ ] **User Management**
-  - [ ] Set up user authentication (JWT)
-  - [ ] Add user profiles and preferences
-  - [ ] Implement user bookmarks/favorites
-  - [ ] Add user reading progress tracking
-
-- [ ] **Assessment System**
-  - [ ] Design insomnia assessment data model
-  - [ ] Create assessment questions and scoring
-  - [ ] Implement assessment results storage
-  - [ ] Add assessment history and trends
-
-### **Frontend Development**
-- [ ] **Core Pages**
-  - [ ] Homepage with featured articles
-  - [ ] Article listing page with filters
-  - [ ] Article detail page with rich content
-  - [ ] User dashboard/profile page
-  - [ ] About and contact pages
-
-- [ ] **Components**
-  - [ ] Navigation header and footer
-  - [ ] Article card component
-  - [ ] Rich text content renderer
-  - [ ] Search and filter components
-  - [ ] User authentication forms
-  - [ ] Loading and error states
-
-- [ ] **Assessment App**
-  - [ ] Assessment questionnaire interface
-  - [ ] Progress tracking and results display
-  - [ ] Assessment history and recommendations
-  - [ ] Export/share assessment results
+### ⏳ **Next Steps**
+- [ ] Build article listing page with real data
+- [ ] Create article detail page with rich content
+- [ ] Implement search and filtering for articles
+- [ ] Add pagination for article lists
+- [ ] Set up image handling for articles
 
 ---
 
 ## 📋 **Phase 3: Enhanced Features**
 
-### **Content Features**
-- [ ] **Article Enhancements**
-  - [ ] Add article comments and discussions
-  - [ ] Implement article sharing functionality
-  - [ ] Add related articles suggestions
-  - [ ] Create article reading lists/collections
-  - [ ] Add article bookmarking and notes
-
-- [ ] **Search & Discovery**
-  - [ ] Implement full-text search
-  - [ ] Add search filters (category, difficulty, reading time)
-  - [ ] Create personalized article recommendations
-  - [ ] Add trending and popular articles
-
-### **User Experience**
-- [ ] **Personalization**
-  - [ ] User reading preferences and history
-  - [ ] Personalized content recommendations
-  - [ ] Reading progress tracking
-  - [ ] Customizable dashboard
-
-- [ ] **Mobile Optimization**
-  - [ ] Responsive design for mobile devices
-  - [ ] Progressive Web App (PWA) features
-  - [ ] Offline reading capabilities
-  - [ ] Touch-friendly interactions
+### ⏳ **Planned**
+- [ ] Build sleep assessment tool
+- [ ] Create user authentication system
+- [ ] Add user profiles and preferences
+- [ ] Implement personalized recommendations
+- [ ] Add article bookmarking and favorites
+- [ ] Create newsletter subscription
 
 ---
 
 ## 📋 **Phase 4: Advanced Features**
 
-### **Assessment & Analytics**
-- [ ] **Enhanced Assessment**
-  - [ ] Multiple assessment types (sleep quality, insomnia severity)
-  - [ ] Detailed assessment reports with charts
-  - [ ] Progress tracking over time
-  - [ ] Personalized recommendations based on results
-  - [ ] Export assessment data (PDF, CSV)
-
-- [ ] **Analytics & Insights**
-  - [ ] User behavior analytics
-  - [ ] Content performance metrics
-  - [ ] Assessment result analytics
-  - [ ] A/B testing for content optimization
-
-### **Content Management**
-- [ ] **Admin Features**
-  - [ ] Content editor for articles
-  - [ ] Assessment question management
-  - [ ] User management dashboard
-  - [ ] Analytics and reporting tools
-
-- [ ] **SEO & Performance**
-  - [ ] SEO optimization for articles
-  - [ ] Meta tags and structured data
-  - [ ] Performance optimization
-  - [ ] CDN integration for assets
+### ⏳ **Planned**
+- [ ] Sleep tracking integration
+- [ ] Advanced analytics and insights
+- [ ] Mobile app development
+- [ ] Social features and community
+- [ ] Expert consultation booking
+- [ ] Integration with health devices
 
 ---
 
 ## 📋 **Phase 5: Migration & Deployment**
 
-### **Content Migration**
-- [ ] **From Gatsby Site**
-  - [ ] Audit existing content and features
-  - [ ] Migrate essential articles and pages
-  - [ ] Preserve SEO rankings and redirects
-  - [ ] Test content rendering and functionality
-
-- [ ] **From Insomnia Assessment App**
-  - [ ] Analyze existing assessment logic
-  - [ ] Migrate assessment questions and scoring
-  - [ ] Preserve user assessment data
-  - [ ] Test assessment functionality
-
-### **Deployment & Infrastructure**
-- [ ] **Production Setup**
-  - [ ] Set up production database
-  - [ ] Configure production environment variables
-  - [ ] Set up CI/CD pipeline
-  - [ ] Configure monitoring and logging
-
-- [ ] **Performance & Security**
-  - [ ] Security audit and hardening
-  - [ ] Performance optimization
-  - [ ] Backup and disaster recovery
-  - [ ] SSL and security headers
+### ⏳ **Planned**
+- [ ] Migrate existing Gatsby content
+- [ ] Set up production environment
+- [ ] Configure CI/CD pipeline
+- [ ] Performance optimization
+- [ ] SEO optimization
+- [ ] Analytics and monitoring
 
 ---
 
 ## 🎯 **Priority Matrix**
 
 ### **High Priority (Phase 1-2)**
-1. Fix Strapi database connection
-2. Set up basic API integration
-3. Create core article pages
-4. Implement user authentication
-5. Build assessment questionnaire
+1. ✅ Fix Strapi database connection issue
+2. ✅ Set up shared TypeScript types
+3. ✅ Create basic Next.js layout and navigation
+4. ✅ Implement internationalization (i18n)
+5. 🔄 Implement API client for Strapi communication
+6. 🔄 Build article listing and detail pages
 
-### **Medium Priority (Phase 3)**
-1. Enhanced article features
-2. Search and filtering
-3. Mobile optimization
-4. User personalization
+### **Medium Priority (Phase 2-3)**
+1. Set up authentication system
+2. Build sleep assessment tool
+3. Configure Tailwind CSS theme
+4. Add search and filtering
+5. Implement user profiles
 
 ### **Low Priority (Phase 4-5)**
-1. Advanced analytics
-2. Content migration from Gatsby
-3. Performance optimization
-4. Advanced admin features
+1. Mobile app development
+2. Advanced analytics
+3. Social features
+4. Health device integration
 
 ---
 
-## 📝 **Notes & Considerations**
+## 🛠 **Technical Notes**
 
-### **Technical Decisions**
-- **Framework**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS with custom design system
-- **State Management**: React Context + Zustand (if needed)
-- **API**: Strapi REST API with custom endpoints
-- **Database**: PostgreSQL for production, SQLite for development
+### **Current Stack**
+- **Backend**: Strapi 4.25.23 with PostgreSQL
+- **Frontend**: Next.js 15.4.5 with TypeScript and Tailwind CSS
+- **Shared**: TypeScript types and Axios API client
+- **Package Manager**: npm with workspaces
+- **Internationalization**: Next.js i18n with Chinese (default) and English
 
-### **Design Principles**
-- **Mobile-first**: Responsive design for all screen sizes
-- **Accessibility**: WCAG 2.1 AA compliance
-- **Performance**: Fast loading times and smooth interactions
-- **User-centered**: Focus on user needs and pain points
+### **Development Environment**
+- **Web App**: Running on http://localhost:3000 ✅
+- **Strapi Backend**: Database connection issue (PostgreSQL auth)
+- **Shared Package**: Built and integrated ✅
+- **i18n**: Implemented with language switcher ✅
 
-### **Content Strategy**
-- **Quality over quantity**: Focus on high-value, actionable content
-- **Progressive disclosure**: Show relevant content based on user journey
-- **Personalization**: Tailor content to user preferences and history
-- **Engagement**: Encourage user interaction and feedback
-
----
-
-## 🚀 **Getting Started**
-
-### **Immediate Next Steps**
-1. ✅ Fix Strapi database connection issue
-2. Set up shared TypeScript types
-3. Create basic Next.js layout and navigation
-4. Implement API client for Strapi communication
-5. Build article listing and detail pages
-
-### **Development Workflow**
-- Use `npm run dev` to start both services
-- Use `npm run dev:service` for backend development
-- Use `npm run dev:web` for frontend development
-- Use shared types for API communication
-- Follow component-driven development approach
+### **File Structure**
+```
+hellosleep-backend/
+├── service/          # Strapi backend
+├── web/             # Next.js frontend
+│   ├── src/
+│   │   ├── app/     # App router pages
+│   │   ├── components/layout/  # Header, Footer, Layout
+│   │   ├── hooks/   # useTranslation hook
+│   │   └── lib/     # translations.ts
+│   └── next.config.ts  # i18n configuration
+├── shared/          # Shared types and API client
+└── TODO.md          # This file
+```
 
 ---
 
-*Last updated: August 3, 2025* 
+## 🚀 **Immediate Next Steps**
+
+1. **Fix Strapi Backend**: Resolve PostgreSQL authentication issue
+2. **Test API Integration**: Connect web frontend to Strapi API
+3. **Build Article Pages**: Create dynamic article listing and detail pages
+4. **Add Authentication**: Set up user login/registration system
+
+---
+
+## 📝 **Notes**
+
+- The monorepo structure is working well with npm workspaces
+- Shared package successfully built and integrated
+- Basic layout and navigation implemented
+- Internationalization implemented with Chinese as default language
+- Language switcher added to header for easy language switching
+- Ready to connect frontend to backend API
+- PostgreSQL authentication needs to be resolved for Strapi to start 
