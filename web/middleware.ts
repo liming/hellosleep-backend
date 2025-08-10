@@ -4,22 +4,24 @@ const locales = ['en'];
 const defaultLocale = 'zh';
 
 export function middleware(request: NextRequest) {
-  // Check if there is any supported locale in the pathname
   const pathname = request.nextUrl.pathname;
-  const pathnameIsMissingLocale = locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  
+  // Check if the pathname has a locale prefix
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  // Only redirect if there is a locale prefix and it's not English
-  // Chinese (default) pages should be accessible without prefix
-  if (pathname.startsWith('/zh/') || pathname === '/zh') {
-    // Redirect /zh/* to /* (remove zh prefix for Chinese pages)
-    const newPathname = pathname.replace(/^\/zh/, '') || '/';
+  // If the pathname doesn't have a locale prefix, redirect to the default locale
+  if (!pathnameHasLocale && pathname !== '/') {
+    const newPathname = `/${defaultLocale}${pathname}`;
     return NextResponse.redirect(new URL(newPathname, request.url));
   }
 
-  // For English pages, keep the /en prefix
-  // No redirect needed for English pages
+  // Remove /zh prefix for Chinese pages (default locale)
+  if (pathname.startsWith('/zh/') || pathname === '/zh') {
+    const newPathname = pathname.replace(/^\/zh/, '') || '/';
+    return NextResponse.redirect(new URL(newPathname, request.url));
+  }
 }
 
 export const config = {

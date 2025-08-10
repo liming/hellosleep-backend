@@ -27,5 +27,11 @@ export function createLocalizedPathname(locale: Locale, pathname: string): strin
     segments.splice(1, 0, locale);
   }
 
-  return segments.join('/');
+  let result = segments.join('/');
+  if (!result || result === '') {
+    result = '/';
+  }
+  // Remove duplicate slashes (e.g. //tutorial)
+  result = result.replace(/\/+/g, '/');
+  return result;
 } 

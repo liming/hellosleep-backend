@@ -1,55 +1,69 @@
-# Migration Scripts
+# Migration Scripts Quick Reference
 
-This directory contains scripts for migrating articles from remote sources to local Strapi 5.
+## Available Scripts
 
-## Scripts
+### Core Migration Scripts
 
-### Single Test Scripts
-- `single-migration-test.js` - Test migration of a single article
-- `single-import-test.js` - Test import of the single migrated article
+| Script | Purpose | Command |
+|--------|---------|---------|
+| `batch-export.js` | Export articles from remote Strapi 3 | `npm run migration:export` |
+| `improved-migration.js` | Transform articles to Strapi 5 format | `npm run migration:transform` |
+| `improved-import.js` | Import articles to Strapi 5 | `npm run migration:import` |
+| `improved-import.js categories` | Import only categories | `npm run migration:import-categories` |
 
-### Batch Operation Scripts  
-- `batch-export.js` - Export articles from remote source
-- `batch-migration.js` - Migrate all exported articles to Strapi 5 format
-- `batch-import.js` - Import all migrated articles to local Strapi
+### Testing Scripts
 
-## Usage
+| Script | Purpose | Command |
+|--------|---------|---------|
+| `single-migration-test.js` | Test migration of single article | `npm run migration:test-single` |
+| `single-import-test.js` | Test import of single article | `npm run migration:test-import` |
 
-### Single Test Workflow
-```bash
-# 1. Test migration of single article
-node script/single-migration-test.js
+### Convenience Commands
 
-# 2. Test import of single migrated article  
-node script/single-import-test.js
-```
+| Command | Purpose |
+|---------|---------|
+| `npm run migration:full` | Run complete migration (export + transform + import) |
 
-### Batch Workflow
-```bash
-# 1. Export articles from remote source
-node script/batch-export.js
+## Quick Start
 
-# 2. Migrate articles to Strapi 5 format
-node script/batch-migration.js
+1. **Export articles from remote server:**
+   ```bash
+   npm run migration:export
+   ```
 
-# 3. Import migrated articles to local Strapi
-node script/batch-import.js
-```
+2. **Transform articles to Strapi 5 format:**
+   ```bash
+   npm run migration:transform
+   ```
+
+3. **Import categories first:**
+   ```bash
+   npm run migration:import-categories
+   ```
+
+4. **Import articles:**
+   ```bash
+   npm run migration:import
+   ```
+
+## Prerequisites
+
+- Strapi running on `http://localhost:1337`
+- `LOCAL_API_TOKEN` set in `service/.env`
+- Remote Strapi 3 server accessible
 
 ## Output Files
 
-### Single Test
-- `single-migrated-article.json` - Single migrated article for testing
-
-### Batch Operations
-- `remote-articles-export.json` - Raw exported articles
+- `remote-articles-export.json` - Raw export from remote
 - `remote-articles-simplified.json` - Simplified article data
-- `migrated-remote-articles.json` - Articles in Strapi 5 format
-- `import-results.json` - Import results and statistics
+- `migrated-categories.json` - Categories ready for import
+- `migrated-remote-articles-improved.json` - Articles ready for import
+- `import-results-improved.json` - Import results and errors
 
-## Notes
+## Troubleshooting
 
-- Single test scripts are for testing the migration and import process
-- Batch scripts are for processing all articles
-- Make sure Strapi is running on `http://localhost:1337` before importing
-- Set `LOCAL_API_TOKEN` in `.env` file for authentication (optional) 
+- **Format errors**: Run `npm run migration:test-single` to test format fixes
+- **Import errors**: Check `import-results-improved.json` for details
+- **Category issues**: Ensure categories are imported before articles
+
+See `MIGRATION_GUIDE.md` for detailed documentation. 

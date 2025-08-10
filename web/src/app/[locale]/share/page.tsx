@@ -1,71 +1,128 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { fetchSharedArticles, type Article } from '@/lib/api';
 
 export default function SharePage() {
   const { t } = useTranslation();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetchSharedArticles();
+        setArticles(response.data);
+      } catch (err) {
+        console.error('Failed to load shared articles:', err);
+        setError('Failed to load shared articles. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading shared articles...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
+            <div className="text-red-600 mb-4">
+              <svg className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-brand-text-dark mb-2">Error Loading Articles</h2>
+            <p className="text-gray-600">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
+          <h1 className="text-4xl font-extrabold text-brand-text-dark sm:text-5xl">
             {t('experienceSharingTitle')}
           </h1>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
             {t('experienceSharingDesc')}
           </p>
         </div>
-        
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                我已经好了，好的很彻底
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                现在的我对于偶尔一次的失眠可以坦然到"啊😄失眠了哈哈😄"一点焦虑感也没有了
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>忘记漂泊的云</span>
-                <span className="mx-2">•</span>
-                <span>2022-10-03</span>
+
+        {articles.length > 0 ? (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-brand-text-dark mb-2">
+                    {article.title}
+                  </h3>
+                  {article.excerpt && (
+                    <p className="text-gray-600 text-sm mb-4">
+                      {article.excerpt}
+                    </p>
+                  )}
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span>
+                      {article.date 
+                        ? new Date(article.date).toLocaleDateString()
+                        : 'No date'
+                      }
+                    </span>
+                    {article.originUrl && (
+                      <>
+                        <span className="mx-2">•</span>
+                        <a
+                          href={article.originUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-brand-primary hover:text-primary-600"
+                        >
+                          Original Source
+                        </a>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                用积极的生活方式对待失眠
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                不断失眠不断执行睡吧理念，相信以后面对失眠的时候我照样可以做到
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>枯</span>
-                <span className="mx-2">•</span>
-                <span>2022-10-01</span>
-              </div>
-            </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-600">
+              No shared articles available at the moment.
+            </p>
           </div>
-          
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                失眠，黑夜里的极光
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                你要去战胜它，不要被黑夜所左右，而要做黑夜里的极光
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>不晓今生梦一场</span>
-                <span className="mx-2">•</span>
-                <span>2022-10-01</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

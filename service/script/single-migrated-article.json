@@ -12,7 +12,8 @@
           "children": [
             {
               "type": "text",
-              "text": "几乎每个人对失眠都存在严重的误解。"
+              "text": "几乎每个人对失眠都存在严重的误解。",
+              "format": 0
             }
           ]
         },
@@ -21,7 +22,8 @@
           "children": [
             {
               "type": "text",
-              "text": "在大家的感觉中，失眠是慢性疾病，不停的折磨自己。当失去睡眠能力的时候，我们会惊慌失措，会焦虑担忧，会找各种各样的办法希望重新睡个好觉。抱怨、求医、泡脚、按摩、早早上床……卧床的辗转反侧，睁着眼到天亮的绝望，失去睡眠的痛苦，无法好好生活的白天，被情绪支配的日子。这些情况几乎发生在每个失眠者的身上。"
+              "text": "在大家的感觉中，失眠是慢性疾病，不停的折磨自己。当失去睡眠能力的时候，我们会惊慌失措，会焦虑担忧，会找各种各样的办法希望重新睡个好觉。抱怨、求医、泡脚、按摩、早早上床……卧床的辗转反侧，睁着眼到天亮的绝望，失去睡眠的痛苦，无法好好生活的白天，被情绪支配的日子。这些情况几乎发生在每个失眠者的身上。",
+              "format": 0
             }
           ]
         },
@@ -30,59 +32,60 @@
           "children": [
             {
               "type": "text",
-              "text": "能睡个好觉，似乎成了很多人的愿望。"
+              "text": "能睡个好觉，似乎成了很多人的愿望。",
+              "format": 0
             }
           ]
         },
         {
           "type": "image",
           "image": {
-            "name": "good-night-sleep",
-            "alternativeText": "good-night-sleep",
+            "ext": ".jpg",
             "url": "http://mmbiz.qpic.cn/mmbiz_jpg/csdG5U636b35RymsFeD7t6CfG8kcpR5ib77JkdUiamdia0JVQCiadwT9ticDwqmBKHlI3RWBo0l5QgbzEDichqaP2aVQ/640",
-            "caption": null,
+            "hash": "external_1754790889641_o7ujz5j81",
+            "mime": "image/jpg",
+            "name": "good-night-sleep.jpg",
+            "size": 40.46,
             "width": 640,
-            "height": 427,
+            "height": 480,
+            "caption": null,
             "formats": {
               "small": {
-                "name": "small_good-night-sleep",
-                "hash": "small_good-night-sleep",
                 "ext": ".jpg",
-                "mime": "image/jpeg",
+                "url": "http://mmbiz.qpic.cn/mmbiz_jpg/csdG5U636b35RymsFeD7t6CfG8kcpR5ib77JkdUiamdia0JVQCiadwT9ticDwqmBKHlI3RWBo0l5QgbzEDichqaP2aVQ/640",
+                "hash": "small_external_1754790889641_o7ujz5j81",
+                "mime": "image/jpg",
+                "name": "small_good-night-sleep.jpg",
                 "path": null,
-                "width": 500,
-                "height": 334,
                 "size": 25.88,
-                "sizeInBytes": 25875,
-                "url": "http://mmbiz.qpic.cn/mmbiz_jpg/csdG5U636b35RymsFeD7t6CfG8kcpR5ib77JkdUiamdia0JVQCiadwT9ticDwqmBKHlI3RWBo0l5QgbzEDichqaP2aVQ/640"
+                "width": 500,
+                "height": 375,
+                "sizeInBytes": 25875
               },
               "thumbnail": {
-                "name": "thumbnail_good-night-sleep",
-                "hash": "thumbnail_good-night-sleep",
                 "ext": ".jpg",
-                "mime": "image/jpeg",
+                "url": "http://mmbiz.qpic.cn/mmbiz_jpg/csdG5U636b35RymsFeD7t6CfG8kcpR5ib77JkdUiamdia0JVQCiadwT9ticDwqmBKHlI3RWBo0l5QgbzEDichqaP2aVQ/640",
+                "hash": "thumbnail_external_1754790889641_o7ujz5j81",
+                "mime": "image/jpg",
+                "name": "thumbnail_good-night-sleep.jpg",
                 "path": null,
-                "width": 234,
-                "height": 156,
                 "size": 6.56,
-                "sizeInBytes": 6557,
-                "url": "http://mmbiz.qpic.cn/mmbiz_jpg/csdG5U636b35RymsFeD7t6CfG8kcpR5ib77JkdUiamdia0JVQCiadwT9ticDwqmBKHlI3RWBo0l5QgbzEDichqaP2aVQ/640"
+                "width": 234,
+                "height": 175,
+                "sizeInBytes": 6557
               }
             },
-            "hash": "good-night-sleep_hash",
-            "ext": ".jpg",
-            "mime": "image/jpeg",
-            "size": 40.46,
-            "previewUrl": null,
             "provider": "external",
-            "provider_metadata": null,
-            "createdAt": "2025-08-03T12:02:39.850Z",
-            "updatedAt": "2025-08-03T12:02:39.850Z"
+            "createdAt": "2025-08-10T01:54:49.641Z",
+            "updatedAt": "2025-08-10T01:54:49.642Z",
+            "previewUrl": null,
+            "alternativeText": "good-night-sleep",
+            "provider_metadata": null
           },
           "children": [
             {
-              "type": "text",
-              "text": ""
+              "text": "",
+              "type": "text"
             }
           ]
         },
@@ -91,16 +94,18 @@
           "children": [
             {
               "type": "text",
-              "text": "现在，换个角度考虑。"
+              "text": "现在，换个角度考虑。",
+              "format": 0
             },
             {
               "type": "text",
               "text": "任何人在任何时候都可能会失眠",
-              "bold": true
+              "format": 1
             },
             {
               "type": "text",
-              "text": "。当我们遭遇压力、疾病、分离、伤痛、失业等等突发事件的时候，自己生活的平衡会被打破，失眠也会随之出现。这些突如其来的变动会发生在每个人的生活中，所以失眠也会伴随每个人一生反复不断的出现。"
+              "text": "。当我们遭遇压力、疾病、分离、伤痛、失业等等突发事件的时候，自己生活的平衡会被打破，失眠也会随之出现。这些突如其来的变动会发生在每个人的生活中，所以失眠也会伴随每个人一生反复不断的出现。",
+              "format": 0
             }
           ]
         },
@@ -109,7 +114,8 @@
           "children": [
             {
               "type": "text",
-              "text": "用客观理性的态度看待失眠会给我们带来最正确的见解："
+              "text": "用客观理性的态度看待失眠会给我们带来最正确的见解：",
+              "format": 0
             }
           ]
         },
@@ -119,11 +125,12 @@
             {
               "type": "text",
               "text": "失眠只是我们当前身体和精神状态的自然反应，它是一件平常事",
-              "bold": true
+              "format": 1
             },
             {
               "type": "text",
-              "text": "。"
+              "text": "。",
+              "format": 0
             }
           ]
         },
@@ -132,7 +139,8 @@
           "children": [
             {
               "type": "text",
-              "text": "在漫长的一生中，每个人都会经历起起伏伏。当我们工作顺利、生活健康，身心处于均衡的状态，睡眠很少出现问题。然而事情并非永远一帆风顺，人生苦乐参半，一个人总会遇到各种各样的麻烦和苦恼，当身心处于低谷，失眠就会出现。"
+              "text": "在漫长的一生中，每个人都会经历起起伏伏。当我们工作顺利、生活健康，身心处于均衡的状态，睡眠很少出现问题。然而事情并非永远一帆风顺，人生苦乐参半，一个人总会遇到各种各样的麻烦和苦恼，当身心处于低谷，失眠就会出现。",
+              "format": 0
             }
           ]
         },
@@ -142,25 +150,22 @@
             {
               "type": "text",
               "text": "所以说失眠只是一个信号、一个表象、一个结果",
-              "bold": true
+              "format": 1
             },
             {
               "type": "text",
-              "text": "。如果把它当做造成一切痛苦的源头，付诸许多努力去摆脱失眠，反而会让自己失去更多，也会更深的陷入失眠（阅读『"
-            },
-            {
-              "type": "link",
-              "url": "/tutorial/5b1f2114f4612c136e02a079",
-              "children": [
-                {
-                  "type": "text",
-                  "text": "慢性失眠，来自我们的精心培育"
-                }
-              ]
+              "text": "。如果把它当做造成一切痛苦的源头，付诸许多努力去摆脱失眠，反而会让自己失去更多，也会更深的陷入失眠（阅读『",
+              "format": 0
             },
             {
               "type": "text",
-              "text": "』）。我们要把它当做一件平常事：晚上睡不好而已，生活还应该继续，我们要努力去解决生活和工作中的实际问题和麻烦。"
+              "text": "慢性失眠，来自我们的精心培育",
+              "format": 0
+            },
+            {
+              "type": "text",
+              "text": "』）。我们要把它当做一件平常事：晚上睡不好而已，生活还应该继续，我们要努力去解决生活和工作中的实际问题和麻烦。",
+              "format": 0
             }
           ]
         },
@@ -169,34 +174,33 @@
           "children": [
             {
               "type": "text",
-              "text": "通过这样的方式去思考失眠，让我们把对待失眠的态度从疾病转变为生活中的一个平常烦恼。为了解决这个烦恼，我们需要了解造成失眠背后的原因，并主动解决自身存在的问题。下面几篇文章会帮助你思考并给出具体的解决方案。"
+              "text": "通过这样的方式去思考失眠，让我们把对待失眠的态度从疾病转变为生活中的一个平常烦恼。为了解决这个烦恼，我们需要了解造成失眠背后的原因，并主动解决自身存在的问题。下面几篇文章会帮助你思考并给出具体的解决方案。",
+              "format": 0
             }
           ]
         },
         {
           "type": "list",
           "format": "unordered",
+          "listType": "bullet",
           "children": [
             {
               "type": "list-item",
               "children": [
                 {
                   "type": "text",
-                  "text": "『"
-                },
-                {
-                  "type": "link",
-                  "url": "/tutorial/5b1f2114f4612c136e02a079",
-                  "children": [
-                    {
-                      "type": "text",
-                      "text": "慢性失眠，来自于我们的精心培育"
-                    }
-                  ]
+                  "text": "『",
+                  "format": 0
                 },
                 {
                   "type": "text",
-                  "text": "』"
+                  "text": "慢性失眠，来自于我们的精心培育",
+                  "format": 0
+                },
+                {
+                  "type": "text",
+                  "text": "』",
+                  "format": 0
                 }
               ]
             },
@@ -205,21 +209,18 @@
               "children": [
                 {
                   "type": "text",
-                  "text": "『"
-                },
-                {
-                  "type": "link",
-                  "url": "/tutorial/5b1f2260f4612c136e02a07a",
-                  "children": [
-                    {
-                      "type": "text",
-                      "text": "面对失眠应该无为而治"
-                    }
-                  ]
+                  "text": "『",
+                  "format": 0
                 },
                 {
                   "type": "text",
-                  "text": "』"
+                  "text": "面对失眠应该无为而治",
+                  "format": 0
+                },
+                {
+                  "type": "text",
+                  "text": "』",
+                  "format": 0
                 }
               ]
             },
@@ -228,21 +229,18 @@
               "children": [
                 {
                   "type": "text",
-                  "text": "『"
-                },
-                {
-                  "type": "link",
-                  "url": "/tutorial/5b46d7b0bf28873e046e1af3",
-                  "children": [
-                    {
-                      "type": "text",
-                      "text": "接受负面情绪，拿起当下生活"
-                    }
-                  ]
+                  "text": "『",
+                  "format": 0
                 },
                 {
                   "type": "text",
-                  "text": "』"
+                  "text": "接受负面情绪，拿起当下生活",
+                  "format": 0
+                },
+                {
+                  "type": "text",
+                  "text": "』",
+                  "format": 0
                 }
               ]
             },
@@ -251,21 +249,18 @@
               "children": [
                 {
                   "type": "text",
-                  "text": "『"
-                },
-                {
-                  "type": "link",
-                  "url": "/tutorial/5b39b41cbd3e203cbff9a501",
-                  "children": [
-                    {
-                      "type": "text",
-                      "text": "真的感受到活着 才能真的睡着"
-                    }
-                  ]
+                  "text": "『",
+                  "format": 0
                 },
                 {
                   "type": "text",
-                  "text": "』"
+                  "text": "真的感受到活着 才能真的睡着",
+                  "format": 0
+                },
+                {
+                  "type": "text",
+                  "text": "』",
+                  "format": 0
                 }
               ]
             }
@@ -276,15 +271,18 @@
           "children": [
             {
               "type": "text",
-              "text": "有必要强调：睡吧有很多文章，这些文章并不是让大家阅读的，而是需要按照其中的意见行动。没有行动就没有正面能量的发生，也不可能对自己的想法和认识产生任何好的影响。我们必须通过行动把自己拉出泥潭。"
+              "text": "有必要强调：睡吧有很多文章，这些文章并不是让大家阅读的，而是需要按照其中的意见行动。没有行动就没有正面能量的发生，也不可能对自己的想法和认识产生任何好的影响。我们必须通过行动把自己拉出泥潭。",
+              "format": 0
             }
           ]
         }
       ],
       "altId": "5b1f1514c501f8f90e463d15",
+      "type": "tutorial",
       "publishedAt": "2018-06-12T00:34:28.901Z",
       "createdAt": "2018-06-12T00:34:28.901Z",
-      "updatedAt": "2025-07-18T19:33:21.672Z"
+      "updatedAt": "2025-07-18T19:33:21.672Z",
+      "category": "insomnia-must-read"
     }
   }
 ]

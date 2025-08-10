@@ -17,7 +17,15 @@
     "build:service": "cd service && npm run build",
     "build:web": "cd web && npm run build",
     "install:all": "npm install && cd service && npm install && cd ../web && npm install",
-    "clean": "rm -rf node_modules service/node_modules web/node_modules shared/node_modules"
+    "clean": "rm -rf node_modules service/node_modules web/node_modules shared/node_modules",
+
+    "migration:export": "cd service && npm run migration:export",
+    "migration:transform": "cd service && npm run migration:transform",
+    "migration:import": "cd service && npm run migration:import",
+    "migration:import-categories": "cd service && npm run migration:import-categories",
+    "migration:full": "cd service && npm run migration:full",
+    "migration:test-single": "cd service && npm run migration:test-single",
+    "migration:test-import": "cd service && npm run migration:test-import"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

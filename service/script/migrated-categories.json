@@ -1,0 +1,58 @@
+[
+  {
+    "data": {
+      "name": "失眠者必读",
+      "description": "描述失眠的定义",
+      "weight": 1,
+      "key": "insomnia-must-read",
+      "createdAt": "2018-06-12T01:19:38.985Z",
+      "updatedAt": "2020-07-13T23:46:18.913Z"
+    }
+  },
+  {
+    "data": {
+      "name": "常见问题",
+      "weight": 3,
+      "key": "common-questions",
+      "createdAt": "2018-06-12T01:20:30.038Z",
+      "updatedAt": "2020-07-13T23:45:24.457Z"
+    }
+  },
+  {
+    "data": {
+      "name": "改善生活",
+      "description": "讲解如何改善自己的生活和工作",
+      "weight": 5,
+      "key": "improve-life",
+      "createdAt": "2018-06-29T07:29:59.270Z",
+      "updatedAt": "2020-07-13T23:45:44.223Z"
+    }
+  },
+  {
+    "data": {
+      "name": "专题",
+      "weight": 4,
+      "key": "special-topics",
+      "createdAt": "2018-06-12T01:20:34.269Z",
+      "updatedAt": "2020-07-13T23:45:36.900Z"
+    }
+  },
+  {
+    "data": {
+      "name": "误区",
+      "weight": 2,
+      "key": "misconceptions",
+      "createdAt": "2018-06-12T01:20:21.543Z",
+      "updatedAt": "2020-07-13T23:45:17.433Z"
+    }
+  },
+  {
+    "data": {
+      "name": "基础知识",
+      "weight": 6,
+      "key": "basic-knowledge",
+      "createdAt": "2018-12-27T08:17:04.659Z",
+      "updatedAt": "2020-07-13T23:45:51.239Z"
+    }
+  }
+]

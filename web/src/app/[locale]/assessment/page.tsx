@@ -43,8 +43,8 @@ export default function AssessmentPage() {
               </div>
               
               <div className="text-center">
-                <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-md font-medium hover:bg-blue-700 transition-colors">
-                  开始评估
+                <button className="w-full bg-primary-600 text-white py-3 px-6 rounded-md font-medium hover:bg-primary-700 transition-colors">
+                  {t('startAssessment')}
                 </button>
                 <p className="text-sm text-gray-500 mt-2">
                   评估大约需要 5-10 分钟完成

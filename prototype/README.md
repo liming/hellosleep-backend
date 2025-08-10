@@ -71,7 +71,7 @@ This prototype showcases the design and content structure for the new HelloSleep
 4. **Connect** - Join community discussions
 
 ## 🔄 **Next Steps**
-
+ 
 After reviewing this prototype, we can:
 1. **Refine the design** based on your feedback
 2. **Build the React app** with proper i18n
