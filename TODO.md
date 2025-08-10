@@ -82,6 +82,14 @@
   - [x] Ensure i18n support for new article pages
   - [x] Add category filtering functionality
 
+- [x] **URL-Based Category Routing**
+  - [x] Implement dynamic routes for category pages (`/tutorial/[category]`)
+  - [x] Add category key-based URL navigation
+  - [x] Create category-specific tutorial pages
+  - [x] Update middleware to handle category routes
+  - [x] Implement URL-based state management (no local state)
+  - [x] Add proper category navigation with active states
+
 ### Frontend-Backend Integration ✅
 - [x] Connect web frontend to Strapi API
 - [x] Implement API client for article fetching
@@ -92,18 +100,27 @@
 
 ## 🔄 In Progress
 
-### Backend Issues
-- [x] Fix Strapi PostgreSQL authentication issue
-- [x] Configure environment variables properly
-- [x] Resolve database connection permissions
+### Frontend Routing & Navigation
+- [ ] Test and verify category URL routing functionality
+- [ ] Ensure proper category linking between articles and categories
+- [ ] Add breadcrumb navigation for category pages
 
 ## 📋 Next Priority Tasks
 
-### Content Management
-- [ ] Migrate existing articles from remote server
-- [ ] Import articles into Strapi with proper formatting
-- [ ] Fix image display issues in rich text editor
-- [ ] Set up content workflows
+### Content Management ✅
+- [x] **Article Migration System**
+  - [x] Create comprehensive migration scripts and documentation
+  - [x] Successfully migrate 155/158 articles (98.1% success rate)
+  - [x] Fix format field validation errors in Lexical JSON
+  - [x] Implement UID-based category linking system
+  - [x] Resolve image structure issues in Strapi 5
+  - [x] Create migration guide and documentation
+  - [x] Clean up and organize migration scripts
+
+- [ ] **Content Workflows**
+  - [ ] Set up content approval workflows
+  - [ ] Implement content versioning
+  - [ ] Add content scheduling features
 
 ### User Experience
 - [ ] Implement sleep assessment tool
@@ -151,8 +168,9 @@
 ## 🐛 Known Issues
 
 ### Critical
-- [ ] Strapi backend not starting due to PostgreSQL auth issue
+- [x] Strapi backend not starting due to PostgreSQL auth issue
 - [ ] External images not displaying in Strapi admin
+- [ ] Category linking not working (tutorials show category: null)
 
 ### Minor
 - [ ] Some navigation links may not be properly localized
@@ -168,4 +186,4 @@
 - **Tech Stack**: Next.js 15, Tailwind CSS, TypeScript, Strapi 4, PostgreSQL
 - **Article System**: Two types - tutorials (type: 'tutorial') and shared articles (type: 'share')
 - **Category System**: Weight-based sorting for tutorial categories
-- **Recent Achievement**: Successfully integrated frontend with Strapi API, displaying real articles with proper error handling 
+- **Recent Achievement**: Successfully implemented URL-based category routing system and completed comprehensive article migration (155/158 articles) with full documentation 

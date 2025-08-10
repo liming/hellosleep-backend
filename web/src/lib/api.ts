@@ -42,6 +42,7 @@ export interface Category {
   documentId: string;
   name: string;
   slug?: string;
+  key?: string; // UID key for category
   weight: number; // For sorting
   description?: string;
   createdAt: string;
@@ -183,6 +184,25 @@ export async function fetchTutorialsByCategory(categoryId: number): Promise<Stra
       category: {
         id: {
           $eq: categoryId
+        }
+      }
+    },
+    populate: 'category',
+    sort: 'date:desc'
+  });
+}
+
+// Fetch tutorials by category key
+export async function fetchTutorialsByCategoryKey(categoryKey: string): Promise<StrapiResponse<Article>> {
+  console.log('fetchTutorialsByCategoryKey called with categoryKey:', categoryKey);
+  return fetchArticles({
+    filters: {
+      type: {
+        $eq: 'tutorial'
+      },
+      category: {
+        key: {
+          $eq: categoryKey
         }
       }
     },

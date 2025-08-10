@@ -1,72 +1,73 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
-import { fetchCategories, fetchTutorials, type Category, type Article } from '@/lib/api';
+import { fetchCategories, fetchTutorialsByCategoryKey, type Category, type Article } from '@/lib/api';
 
-export default function TutorialPage() {
+export default function TutorialCategoryPage() {
   const { t } = useTranslation();
+  const params = useParams();
   const router = useRouter();
+  const categoryKey = params.category as string;
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [tutorials, setTutorials] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
 
   useEffect(() => {
-    console.log('TutorialPage: useEffect triggered');
+    console.log('TutorialCategoryPage: useEffect triggered with categoryKey:', categoryKey);
     
     async function loadData() {
       try {
-        console.log('TutorialPage: Starting to load data');
+        console.log('TutorialCategoryPage: Starting to load data');
         setLoading(true);
         setError(null);
         
-        console.log('TutorialPage: About to fetch categories and tutorials');
+        // Fetch categories first to validate the category key
+        const categoriesResponse = await fetchCategories();
+        console.log('TutorialCategoryPage: Categories fetched successfully');
         
-        // Fetch tutorials first, then try to fetch categories
-        const tutorialsResponse = await fetchTutorials();
-        console.log('TutorialPage: Tutorials fetched successfully');
+        const validCategories = categoriesResponse.data.filter(category => 
+          category && category.name
+        );
+        setCategories(validCategories);
         
-        let categoriesResponse = null;
-        try {
-          categoriesResponse = await fetchCategories();
-          console.log('TutorialPage: Categories fetched successfully');
-        } catch (categoryError) {
-          console.log('TutorialPage: Categories fetch failed, continuing without categories');
+        // Find the current category by key
+        const category = validCategories.find(cat => cat.key === categoryKey);
+        if (!category) {
+          console.error('TutorialCategoryPage: Category not found for key:', categoryKey);
+          setError('Category not found');
+          setLoading(false);
+          return;
         }
         
-        console.log('TutorialPage: API calls completed');
-        console.log('Tutorials response:', tutorialsResponse);
-        console.log('Categories response:', categoriesResponse);
+        setCurrentCategory(category);
+        console.log('TutorialCategoryPage: Found category:', category);
         
-        // Filter out any null or undefined tutorials
+        // Fetch tutorials for this category
+        const tutorialsResponse = await fetchTutorialsByCategoryKey(categoryKey);
+        console.log('TutorialCategoryPage: Tutorials fetched successfully');
+        
         const validTutorials = tutorialsResponse.data.filter(tutorial => 
           tutorial && tutorial.title
         );
-        console.log('Valid tutorials:', validTutorials);
+        console.log('TutorialCategoryPage: Valid tutorials:', validTutorials);
         
         setTutorials(validTutorials);
-        if (categoriesResponse) {
-          console.log('Setting categories:', categoriesResponse.data);
-          // Filter out any null or undefined categories
-          const validCategories = categoriesResponse.data.filter(category => 
-            category && category.name
-          );
-          console.log('Valid categories:', validCategories);
-          setCategories(validCategories);
-        }
       } catch (err) {
-        console.error('TutorialPage: Failed to load tutorial data:', err);
+        console.error('TutorialCategoryPage: Failed to load tutorial data:', err);
         setError('Failed to load tutorials. Please try again later.');
       } finally {
-        console.log('TutorialPage: Setting loading to false');
+        console.log('TutorialCategoryPage: Setting loading to false');
         setLoading(false);
       }
     }
 
     loadData();
-  }, []);
+  }, [categoryKey]);
 
   const handleCategoryClick = (category: Category | null) => {
     if (category) {
@@ -76,7 +77,14 @@ export default function TutorialPage() {
     }
   };
 
-  console.log('TutorialPage: Rendering with', { loading, error, categoriesCount: categories.length, tutorialsCount: tutorials.length });
+  console.log('TutorialCategoryPage: Rendering with', { 
+    loading, 
+    error, 
+    categoryKey, 
+    currentCategory, 
+    categoriesCount: categories.length, 
+    tutorialsCount: tutorials.length 
+  });
 
   if (loading) {
     return (
@@ -104,10 +112,10 @@ export default function TutorialPage() {
             <h2 className="text-xl font-semibold text-brand-text-dark mb-2">Error Loading Tutorials</h2>
             <p className="text-gray-600">{error}</p>
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => router.push('/tutorial')}
               className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
             >
-              Try Again
+              Back to Tutorials
             </button>
           </div>
         </div>
@@ -120,20 +128,24 @@ export default function TutorialPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-brand-text-dark sm:text-5xl">
-            {t('knowledgeBaseTitle')}
+            {currentCategory?.name || 'Tutorials'}
           </h1>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('knowledgeBaseDesc')}
+            {currentCategory?.description || t('knowledgeBaseDesc')}
           </p>
         </div>
 
-        {/* Category Navigation - only show if categories are available */}
+        {/* Category Navigation */}
         {categories.length > 0 && (
           <div className="mb-8">
             <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={() => handleCategoryClick(null)}
-                className="px-4 py-2 rounded-md font-medium transition-colors bg-primary-600 text-white"
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  !currentCategory
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
               >
                 All Categories
               </button>
@@ -141,7 +153,11 @@ export default function TutorialPage() {
                 <button
                   key={category.id}
                   onClick={() => handleCategoryClick(category)}
-                  className="px-4 py-2 rounded-md font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                    currentCategory?.id === category.id
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
                 >
                   {category.name || 'Unnamed Category'}
                 </button>
@@ -153,7 +169,7 @@ export default function TutorialPage() {
         {/* Tutorials Grid */}
         {tutorials.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {tutorials.map((tutorial: Article) => (
+            {tutorials.map((tutorial) => (
               <div key={tutorial.id} className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   {tutorial.title || 'Untitled Tutorial'}
@@ -177,7 +193,7 @@ export default function TutorialPage() {
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-600">
-              No tutorials available at the moment.
+              No tutorials found in this category.
             </p>
           </div>
         )}

@@ -11,8 +11,19 @@ export function middleware(request: NextRequest) {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  // If the pathname doesn't have a locale prefix, redirect to the default locale
+  // Only redirect to default locale if the path doesn't exist at root level
+  // This allows /tutorial, /share, etc. to work directly
   if (!pathnameHasLocale && pathname !== '/') {
+    // Check if this is a known route that should work without locale
+    const knownRoutes = ['/tutorial', '/share', '/help', '/blog', '/assessment', '/about'];
+    const knownRoutePrefixes = ['/tutorial/'];
+    
+    if (knownRoutes.includes(pathname) || knownRoutePrefixes.some(prefix => pathname.startsWith(prefix))) {
+      // Let the route work as-is (it will use the default locale internally)
+      return NextResponse.next();
+    }
+    
+    // For other routes, redirect to default locale
     const newPathname = `/${defaultLocale}${pathname}`;
     return NextResponse.redirect(new URL(newPathname, request.url));
   }
