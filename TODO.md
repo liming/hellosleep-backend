@@ -101,8 +101,8 @@
 ## 🔄 In Progress
 
 ### Frontend Routing & Navigation
-- [ ] Test and verify category URL routing functionality
-- [ ] Ensure proper category linking between articles and categories
+- [x] Test and verify category URL routing functionality
+- [x] Ensure proper category linking between articles and categories
 - [ ] Add breadcrumb navigation for category pages
 
 ## 📋 Next Priority Tasks
@@ -110,12 +110,13 @@
 ### Content Management ✅
 - [x] **Article Migration System**
   - [x] Create comprehensive migration scripts and documentation
-  - [x] Successfully migrate 155/158 articles (98.1% success rate)
+  - [x] Successfully migrate 155/158 articles (97.8% success rate)
   - [x] Fix format field validation errors in Lexical JSON
   - [x] Implement UID-based category linking system
   - [x] Resolve image structure issues in Strapi 5
   - [x] Create migration guide and documentation
   - [x] Clean up and organize migration scripts
+  - [x] Document failed articles for future resolution
 
 - [ ] **Content Workflows**
   - [ ] Set up content approval workflows
@@ -170,7 +171,8 @@
 ### Critical
 - [x] Strapi backend not starting due to PostgreSQL auth issue
 - [ ] External images not displaying in Strapi admin
-- [ ] Category linking not working (tutorials show category: null)
+- [x] Category linking not working (tutorials show category: null) - **RESOLVED**: Strapi 5 uses `documentId` instead of `id` for relations
+- [ ] 3 articles failed to import due to invalid internal links - **DOCUMENTED**: See `service/script/FAILED_ARTICLES.md`
 
 ### Minor
 - [ ] Some navigation links may not be properly localized
@@ -186,4 +188,6 @@
 - **Tech Stack**: Next.js 15, Tailwind CSS, TypeScript, Strapi 4, PostgreSQL
 - **Article System**: Two types - tutorials (type: 'tutorial') and shared articles (type: 'share')
 - **Category System**: Weight-based sorting for tutorial categories
-- **Recent Achievement**: Successfully implemented URL-based category routing system and completed comprehensive article migration (155/158 articles) with full documentation 
+- **Recent Achievement**: Successfully implemented URL-based category routing system and completed comprehensive article migration (155/158 articles) with full documentation
+- **Critical Discovery**: Strapi 5 API structure fundamentally different from Strapi 4 - uses `documentId` for relations and data not nested under `attributes`
+- **Frontend Fix**: Resolved category filtering issue by fixing nested filter parameter handling in API client 

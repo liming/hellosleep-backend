@@ -83,9 +83,18 @@ export async function fetchArticles(params?: {
     Object.keys(filters).forEach(key => {
       const value = filters[key];
       if (typeof value === 'object' && value !== null) {
-        // Handle nested filters like { $eq: 'tutorial' }
+        // Handle nested filters like { $eq: 'tutorial' } or { key: { $eq: 'value' } }
         Object.keys(value).forEach(operator => {
-          searchParams.append(`filters[${key}][${operator}]`, value[operator]);
+          const operatorValue = value[operator];
+          if (typeof operatorValue === 'object' && operatorValue !== null) {
+            // Handle double-nested filters like { key: { $eq: 'value' } }
+            Object.keys(operatorValue).forEach(subOperator => {
+              searchParams.append(`filters[${key}][${operator}][${subOperator}]`, operatorValue[subOperator]);
+            });
+          } else {
+            // Handle single-nested filters like { $eq: 'tutorial' }
+            searchParams.append(`filters[${key}][${operator}]`, operatorValue);
+          }
         });
       } else {
         searchParams.append(`filters[${key}]`, value);

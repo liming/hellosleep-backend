@@ -4,11 +4,11 @@ const path = require('path');
 // Load environment variables from .env file
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-// Function to fetch category IDs from Strapi
-async function fetchCategoryIds(STRAPI_URL, API_TOKEN) {
+// Function to fetch category documentIds from Strapi
+async function fetchCategoryDocumentIds(STRAPI_URL, API_TOKEN) {
   try {
-    console.log('🔍 Fetching category IDs from Strapi...');
-    const response = await fetch(`${STRAPI_URL}/api/categories?populate=*`, {
+    console.log('🔍 Fetching category documentIds from Strapi...');
+    const response = await fetch(`${STRAPI_URL}/api/categories`, {
       headers: {
         'Authorization': `Bearer ${API_TOKEN}`,
         'Content-Type': 'application/json'
@@ -20,18 +20,18 @@ async function fetchCategoryIds(STRAPI_URL, API_TOKEN) {
     }
     
     const data = await response.json();
-    const categoryKeyToIdMapping = new Map();
+    const categoryKeyToDocumentIdMapping = new Map();
     
     data.data.forEach(category => {
       const key = category.key;
-      const id = category.id;
-      categoryKeyToIdMapping.set(key, id);
-      console.log(`📂 Found category: ${category.name} (ID: ${id}, Key: ${key})`);
+      const documentId = category.documentId;
+      categoryKeyToDocumentIdMapping.set(key, documentId);
+      console.log(`📂 Found category: ${category.name} (DocumentID: ${documentId}, Key: ${key})`);
     });
     
-    return categoryKeyToIdMapping;
+    return categoryKeyToDocumentIdMapping;
   } catch (error) {
-    console.error('❌ Failed to fetch category IDs:', error.message);
+    console.error('❌ Failed to fetch category documentIds:', error.message);
     return new Map();
   }
 }
@@ -45,21 +45,32 @@ async function testImportSingleMigrated() {
     const STRAPI_URL = 'http://localhost:1337';
     const API_TOKEN = process.env.LOCAL_API_TOKEN || process.env.STRAPI_API_TOKEN || process.env.STRAPI_TOKEN;
     
-    // Load the single migrated article
-    const singleMigratedPath = path.join(__dirname, 'single-migrated-article.json');
+    // Load the migrated articles and find a tutorial
+    const migratedPath = path.join(__dirname, 'migrated-remote-articles-improved.json');
     
-    if (!fs.existsSync(singleMigratedPath)) {
-      console.error('❌ Single migrated article file not found. Please run single-migration-test first.');
-      console.log('💡 Run: node single-migration-test.js');
+    if (!fs.existsSync(migratedPath)) {
+      console.error('❌ Migrated articles file not found. Please run improved-migration first.');
+      console.log('💡 Run: node improved-migration.js');
       process.exit(1);
     }
     
-    const singleMigratedArticles = JSON.parse(fs.readFileSync(singleMigratedPath, 'utf8'));
-    console.log(`📦 Found ${singleMigratedArticles.length} article from single migration`);
+    const migratedArticles = JSON.parse(fs.readFileSync(migratedPath, 'utf8'));
+    console.log(`📦 Found ${migratedArticles.length} migrated articles`);
     
-    // Take the first (and only) article
-    const testArticle = singleMigratedArticles[0];
-    console.log(`📝 Testing with article: "${testArticle.data.title}"`);
+    // Find a tutorial article with category
+    const tutorialArticle = migratedArticles.find(article => 
+      article.data.type === 'tutorial' && article.data.category
+    );
+    
+    if (!tutorialArticle) {
+      console.error('❌ No tutorial article with category found in migrated data.');
+      console.log('💡 Please ensure you have tutorial articles with categories in your migrated data.');
+      process.exit(1);
+    }
+    
+    console.log(`📝 Testing with tutorial: "${tutorialArticle.data.title}"`);
+    console.log(`📂 Category: ${tutorialArticle.data.category}`);
+    console.log(`📄 Type: ${tutorialArticle.data.type}`);
     
     // Helper function to make API requests
     async function makeApiRequest(endpoint, method = 'GET', data = null) {
@@ -110,16 +121,16 @@ async function testImportSingleMigrated() {
       process.exit(1);
     }
     
-    // Fetch category IDs for mapping
-    const categoryKeyToIdMapping = await fetchCategoryIds(STRAPI_URL, API_TOKEN);
+    // Fetch category documentIds for mapping
+    const categoryKeyToDocumentIdMapping = await fetchCategoryDocumentIds(STRAPI_URL, API_TOKEN);
     
-    // Handle category mapping (key to ID)
-    let categoryId = null;
-    if (testArticle.data.category) {
-      const categoryKey = testArticle.data.category;
-      if (categoryKeyToIdMapping.has(categoryKey)) {
-        categoryId = categoryKeyToIdMapping.get(categoryKey);
-        console.log(`📂 Mapped category key "${categoryKey}" to ID: ${categoryId}`);
+    // Handle category mapping (key to documentId)
+    let categoryDocumentId = null;
+    if (tutorialArticle.data.category) {
+      const categoryKey = tutorialArticle.data.category;
+      if (categoryKeyToDocumentIdMapping.has(categoryKey)) {
+        categoryDocumentId = categoryKeyToDocumentIdMapping.get(categoryKey);
+        console.log(`📂 Mapped category key "${categoryKey}" to DocumentID: ${categoryDocumentId}`);
       } else {
         console.log(`⚠️  Category key "${categoryKey}" not found in Strapi`);
       }
@@ -128,39 +139,39 @@ async function testImportSingleMigrated() {
     // Prepare the article data for import
     const importData = {
       data: {
-        title: testArticle.data.title + '-test',
-        excerpt: testArticle.data.excerpt,
-        date: testArticle.data.date,
-        like: testArticle.data.like,
-        coverUrl: testArticle.data.coverUrl,
-        body: testArticle.data.body,
-        altId: testArticle.data.altId + '-test-' + Date.now(), // Add timestamp to avoid conflicts
-        type: testArticle.data.type || 'tutorial',
+        title: tutorialArticle.data.title + '-test',
+        excerpt: tutorialArticle.data.excerpt,
+        date: tutorialArticle.data.date,
+        like: tutorialArticle.data.like,
+        coverUrl: tutorialArticle.data.coverUrl,
+        body: tutorialArticle.data.body,
+        altId: tutorialArticle.data.altId + '-test-' + Date.now(), // Add timestamp to avoid conflicts
+        type: tutorialArticle.data.type || 'tutorial',
         // Include category if mapped
-        ...(categoryId && { category: categoryId }),
+        ...(categoryDocumentId && { category: categoryDocumentId }),
         // Include sharing component if it exists
-        ...(testArticle.data.sharing && { sharing: testArticle.data.sharing }),
+        ...(tutorialArticle.data.sharing && { sharing: tutorialArticle.data.sharing }),
         // Note: createdAt and updatedAt will be set by Strapi
       }
     };
     
-    console.log('📤 Sending single migrated article to Strapi...');
+    console.log('📤 Sending tutorial article to Strapi...');
     console.log(`🔗 URL: ${STRAPI_URL}/api/articles`);
-    console.log(`📄 Title: ${testArticle.data.title}`);
-    console.log(`🆔 AltId: ${testArticle.data.altId}`);
-    console.log(`📁 Type: ${testArticle.data.type || 'tutorial'}`);
-    console.log(`🤝 Sharing: ${testArticle.data.sharing ? '✅ Yes' : '❌ No'}`);
-    if (testArticle.data.sharing) {
-      console.log(`   Contributor: ${testArticle.data.sharing.contributor}`);
-      console.log(`   UserLink: ${testArticle.data.sharing.userLink || 'None'}`);
+    console.log(`📄 Title: ${tutorialArticle.data.title}`);
+    console.log(`🆔 AltId: ${tutorialArticle.data.altId}`);
+    console.log(`📁 Type: ${tutorialArticle.data.type || 'tutorial'}`);
+    console.log(`🤝 Sharing: ${tutorialArticle.data.sharing ? '✅ Yes' : '❌ No'}`);
+    if (tutorialArticle.data.sharing) {
+      console.log(`   Contributor: ${tutorialArticle.data.sharing.contributor}`);
+      console.log(`   UserLink: ${tutorialArticle.data.sharing.userLink || 'None'}`);
     }
-    console.log(`📂 Category: ${testArticle.data.category ? '✅ Yes (Key: ' + testArticle.data.category + ')' : '❌ No'}`);
+    console.log(`📂 Category: ${tutorialArticle.data.category ? '✅ Yes (Key: ' + tutorialArticle.data.category + ')' : '❌ No'}`);
     
     // Analyze content structure
-    const hasImages = testArticle.data.body.some(block => block.type === 'image');
-    const hasList = testArticle.data.body.some(block => block.type === 'list');
-    const hasHeadings = testArticle.data.body.some(block => block.type === 'heading');
-    const hasQuotes = testArticle.data.body.some(block => block.type === 'quote');
+    const hasImages = tutorialArticle.data.body.some(block => block.type === 'image');
+    const hasList = tutorialArticle.data.body.some(block => block.type === 'list');
+    const hasHeadings = tutorialArticle.data.body.some(block => block.type === 'heading');
+    const hasQuotes = tutorialArticle.data.body.some(block => block.type === 'quote');
     
     console.log(`🖼️  Images: ${hasImages ? '✅ Yes' : '❌ No'}`);
     console.log(`📋 Lists: ${hasList ? '✅ Yes' : '❌ No'}`);
@@ -168,14 +179,14 @@ async function testImportSingleMigrated() {
     console.log(`💬 Quotes: ${hasQuotes ? '✅ Yes' : '❌ No'}`);
     
     if (hasList) {
-      const listBlocks = testArticle.data.body.filter(block => block.type === 'list');
+      const listBlocks = tutorialArticle.data.body.filter(block => block.type === 'list');
       listBlocks.forEach((listBlock, index) => {
         console.log(`📋 List ${index + 1}: ${listBlock.listType || listBlock.format}, items: ${listBlock.children.length}`);
       });
     }
     
     if (hasImages) {
-      const imageBlocks = testArticle.data.body.filter(block => block.type === 'image');
+      const imageBlocks = tutorialArticle.data.body.filter(block => block.type === 'image');
       console.log(`🖼️  Found ${imageBlocks.length} image(s)`);
       imageBlocks.forEach((imageBlock, index) => {
         console.log(`  Image ${index + 1}: ${imageBlock.image?.name || 'unnamed'}`);
@@ -184,7 +195,7 @@ async function testImportSingleMigrated() {
     
     // Show a sample of the body structure
     console.log('\n📄 Body structure preview:');
-    testArticle.data.body.slice(0, 3).forEach((block, index) => {
+    tutorialArticle.data.body.slice(0, 3).forEach((block, index) => {
       console.log(`  ${index + 1}. ${block.type} - ${block.children?.length || 0} children`);
     });
     
@@ -217,7 +228,7 @@ async function testImportSingleMigrated() {
         
         // Show first few body blocks for debugging
         console.log('\n📋 First few body blocks for debugging:');
-        testArticle.data.body.slice(0, 5).forEach((block, index) => {
+        tutorialArticle.data.body.slice(0, 5).forEach((block, index) => {
           console.log(`Block ${index}:`, JSON.stringify(block, null, 2));
         });
       }

@@ -7,10 +7,10 @@ This guide documents the complete process of migrating articles from a remote St
 ## Migration Statistics
 
 - **Total Articles**: 158
-- **Successfully Migrated**: 155 (98.1%)
-- **Failed**: 3 (1.9% - due to invalid internal links)
+- **Successfully Migrated**: 155 (97.8%)
+- **Failed**: 3 (2.2% - due to invalid internal links)
 - **Categories**: 6 (already existed in Strapi)
-- **Migration Date**: August 10, 2025
+- **Migration Date**: August 11, 2025
 
 ## Technical Challenges Resolved
 
@@ -48,6 +48,85 @@ This guide documents the complete process of migrating articles from a remote St
 **Solution**: 
 - Updated schema to use `sharing` component (single, not repeatable)
 - Migrated `contributor` and `userLink` data to new structure
+
+### 5. Strapi 5 API Structure Changes (CRITICAL DISCOVERY)
+
+**Problem**: Category relations were showing as `null` despite correct migration data. Individual article API endpoints (`/api/articles/{id}`) were returning 404 for PUT/DELETE operations.
+
+**Root Cause**: Strapi 5 uses a completely different API structure compared to Strapi 4:
+- **Data Location**: Data is directly in the root object, NOT nested under `attributes`
+- **Relations**: Use `documentId` instead of `id` for relations
+- **API Endpoints**: Individual content type endpoints may have different behavior
+
+**Solution**: 
+- Updated all scripts to use `documentId` for category relations
+- Modified API calls to access data directly from root object
+- Updated category mapping to use `documentId` instead of `id`
+
+**Key Differences**:
+```json
+// Strapi 4 Structure
+{
+  "data": {
+    "id": 1,
+    "attributes": {
+      "title": "Article Title",
+      "category": 5
+    }
+  }
+}
+
+// Strapi 5 Structure  
+{
+  "data": [
+    {
+      "id": 797,
+      "documentId": "fkesuh3kcvnop46eeukr215m",
+      "title": "Article Title",
+      "category": {
+        "id": 28,
+        "documentId": "d8s802golyt2u852p5uc3rm5",
+        "name": "Category Name"
+      }
+    }
+  ]
+}
+```
+
+**Important Notes**:
+- Always use `documentId` for relations in Strapi 5
+- Data is not nested under `attributes` in Strapi 5
+- Individual content type endpoints may have restricted access
+- Category relations work correctly when using `documentId`
+
+### 6. Failed Articles Due to Invalid Internal Links
+
+**Problem**: 3 articles failed to import due to validation errors related to invalid internal links in their content.
+
+**Failed Articles**:
+1. **"写给失眠的学生 - 学会换气，才能游向更广阔的世界"**
+   - **Error**: `Please specify a valid link`
+   - **Invalid Link**: `5b35dfcbd49e3a40708f7f78`
+   - **Location**: `body[24].children[1].url`
+
+2. **"走出失眠 | 更生会讲座"**
+   - **Error**: `Please specify a valid link`
+   - **Invalid Link**: `tutorial/5b46e991bf28873e046e1af8`
+   - **Location**: `body[11].children[1].url`
+
+3. **"怎样对待恼人的噪音？"**
+   - **Error**: `Please specify a valid link`
+   - **Invalid Link**: `t/category/5b35dff7d49e3a40708f7f79`
+   - **Location**: `body[31].children[1].children[1].url`
+
+**Root Cause**: These articles contain internal links that reference non-existent articles or categories from the original Strapi 3 system. The links use old IDs or malformed URLs that don't exist in the new system.
+
+**Solution Options**:
+1. **Manual Content Fix**: Edit the articles in Strapi admin to remove or fix the invalid links
+2. **Migration Script Enhancement**: Add link validation and cleanup to the migration script
+3. **Content Review**: Review and update the internal linking strategy for the new system
+
+**Status**: These articles need manual intervention to fix the internal links before they can be imported.
 
 ## Migration Process
 

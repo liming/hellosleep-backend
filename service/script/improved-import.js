@@ -37,6 +37,29 @@ async function makeApiRequest(endpoint, method = 'GET', data = null) {
   }
 }
 
+// Fetch existing categories from Strapi
+async function fetchExistingCategories() {
+  console.log('📂 Fetching existing categories from Strapi...');
+  
+  try {
+    const response = await makeApiRequest('/categories');
+    const categoryKeyToDocumentIdMapping = new Map();
+    
+    response.data.forEach(category => {
+      const key = category.key;
+      const documentId = category.documentId;
+      categoryKeyToDocumentIdMapping.set(key, documentId);
+      console.log(`📂 Found existing category: ${category.name} (DocumentID: ${documentId}, Key: ${key})`);
+    });
+    
+    console.log(`✅ Found ${categoryKeyToDocumentIdMapping.size} existing categories.`);
+    return categoryKeyToDocumentIdMapping;
+  } catch (error) {
+    console.error('❌ Failed to fetch existing categories:', error.message);
+    return new Map();
+  }
+}
+
 // Import categories first
 async function importCategories() {
   console.log('📂 Starting category import...');
@@ -50,7 +73,7 @@ async function importCategories() {
   const categories = JSON.parse(fs.readFileSync(categoriesPath, 'utf8'));
   console.log(`📦 Found ${categories.length} categories to import`);
   
-  const categoryKeyToIdMapping = new Map(); // Maps category key to Strapi ID
+  const categoryKeyToDocumentIdMapping = new Map(); // Maps category key to Strapi documentId
   
   for (let i = 0; i < categories.length; i++) {
     const category = categories[i];
@@ -68,11 +91,11 @@ async function importCategories() {
       };
       
       const result = await makeApiRequest('/categories', 'POST', categoryData);
-      const newId = result.data.id;
+      const newDocumentId = result.data.documentId;
       const categoryKey = category.data.key;
       
-      categoryKeyToIdMapping.set(categoryKey, newId);
-      console.log(`✅ Category imported with ID: ${newId} (Key: ${categoryKey})`);
+      categoryKeyToDocumentIdMapping.set(categoryKey, newDocumentId);
+      console.log(`✅ Category imported with DocumentID: ${newDocumentId} (Key: ${categoryKey})`);
       
       // Add small delay to avoid overwhelming the server
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -82,12 +105,12 @@ async function importCategories() {
     }
   }
   
-  console.log(`✅ Category import completed. ${categoryKeyToIdMapping.size} categories imported.`);
-  return categoryKeyToIdMapping;
+  console.log(`✅ Category import completed. ${categoryKeyToDocumentIdMapping.size} categories imported.`);
+  return categoryKeyToDocumentIdMapping;
 }
 
 // Import articles with category relations
-async function importArticles(categoryKeyToIdMapping) {
+async function importArticles(categoryKeyToDocumentIdMapping) {
   console.log('📄 Starting article import...');
   
   const articlesPath = path.join(__dirname, 'migrated-remote-articles-improved.json');
@@ -113,13 +136,13 @@ async function importArticles(categoryKeyToIdMapping) {
       // Prepare article data for import
       const articleData = { ...article.data };
       
-      // Handle category relation (using key to find ID)
+      // Handle category relation (using key to find documentId)
       if (articleData.category) {
         const categoryKey = articleData.category;
-        if (categoryKeyToIdMapping.has(categoryKey)) {
-          const categoryId = categoryKeyToIdMapping.get(categoryKey);
-          articleData.category = categoryId;
-          console.log(`📂 Linking article to category ID: ${categoryId} (Key: ${categoryKey})`);
+        if (categoryKeyToDocumentIdMapping.has(categoryKey)) {
+          const categoryDocumentId = categoryKeyToDocumentIdMapping.get(categoryKey);
+          articleData.category = categoryDocumentId;
+          console.log(`📂 Linking article to category DocumentID: ${categoryDocumentId} (Key: ${categoryKey})`);
         } else {
           console.log(`⚠️  Category key not found in mapping: ${categoryKey}`);
           delete articleData.category;
@@ -206,10 +229,10 @@ async function runImport() {
       console.log('\n🎉 Categories import completed!');
       return categoryKeyToIdMapping;
     } else {
-      // Import categories first, then articles
-      console.log('📂 Running full import (categories + articles)...');
-      const categoryKeyToIdMapping = await importCategories();
-      await importArticles(categoryKeyToIdMapping);
+      // Use existing categories, then import articles
+      console.log('📂 Running articles import with existing categories...');
+      const categoryKeyToDocumentIdMapping = await fetchExistingCategories();
+      await importArticles(categoryKeyToDocumentIdMapping);
       console.log('\n🎉 Import process completed!');
     }
     
