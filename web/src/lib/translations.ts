@@ -28,6 +28,9 @@ export const translations = {
     latestArticlesSubtitle: 'Real experiences from the community and professional guidance',
     viewMoreArticles: 'View More Articles',
     
+    // Article metadata
+    byAuthor: 'By:',
+    
     // Footer
     copyright: '© 2024 HelloSleep. All rights reserved.',
     
@@ -62,6 +65,9 @@ export const translations = {
     latestArticlesTitle: '最新文章',
     latestArticlesSubtitle: '来自社区的真实经验和专业指导',
     viewMoreArticles: '查看更多文章',
+    
+    // Article metadata
+    byAuthor: '作者：',
     
     // Footer
     copyright: '© 2024 睡吧. 版权所有.',

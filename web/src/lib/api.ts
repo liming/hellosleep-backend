@@ -224,4 +224,31 @@ export async function fetchTutorialsByCategoryKey(categoryKey: string): Promise<
     populate: 'category',
     sort: 'date:desc'
   });
+}
+
+// Fetch a single article by documentId
+export async function fetchArticle(articleId: string): Promise<{ data: Article }> {
+  console.log('fetchArticle called with articleId:', articleId);
+  
+  // First, find the article by documentId using a filter
+  const url = `${API_BASE_URL}/api/articles?filters[documentId][$eq]=${articleId}&populate=*`;
+  console.log('Fetching article from:', url);
+  
+  const response = await fetch(url, {
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch article: ${response.status} ${response.statusText}`);
+  }
+
+  const result = await response.json();
+  console.log('Article search result:', result);
+  
+  if (!result.data || result.data.length === 0) {
+    throw new Error(`Article with documentId ${articleId} not found`);
+  }
+  
+  // Return the first (and should be only) article found
+  return { data: result.data[0] };
 } 

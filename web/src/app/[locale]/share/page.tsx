@@ -83,18 +83,18 @@ export default function SharePage() {
             {articles.map((article) => (
               <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold text-brand-text-dark mb-2">
-                    {article.title}
-                  </h3>
-                  {article.excerpt && (
-                    <p className="text-gray-600 text-sm mb-4">
-                      {article.excerpt}
-                    </p>
-                  )}
-                  <div className="flex items-center text-sm text-gray-500">
+                  <a 
+                    href={`/article/${article.documentId}`}
+                    className="block hover:no-underline"
+                  >
+                    <h3 className="text-lg font-semibold text-brand-text-dark mb-2 hover:text-brand-primary transition-colors">
+                      {article.title}
+                    </h3>
+                  </a>
+                  <div className="flex items-center text-sm text-gray-500 mb-3">
                     {article.sharing?.contributor && (
                       <>
-                        <span>By: </span>
+                        <span>{t('byAuthor')} </span>
                         {article.sharing.userLink ? (
                           <a
                             href={article.sharing.userLink}
@@ -133,6 +133,11 @@ export default function SharePage() {
                       </a>
                     )}
                   </div>
+                  {article.excerpt && (
+                    <p className="text-gray-600 text-sm">
+                      {article.excerpt}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

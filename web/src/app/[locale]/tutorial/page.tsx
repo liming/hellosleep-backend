@@ -155,14 +155,19 @@ export default function TutorialPage() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {tutorials.map((tutorial: Article) => (
               <div key={tutorial.id} className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  {tutorial.title || 'Untitled Tutorial'}
-                </h3>
-                {tutorial.excerpt && (
-                  <p className="text-gray-600 text-sm">
-                    {tutorial.excerpt}
-                  </p>
-                )}
+                <a 
+                  href={`/article/${tutorial.documentId}`}
+                  className="block hover:no-underline"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 hover:text-brand-primary transition-colors">
+                    {tutorial.title || 'Untitled Tutorial'}
+                  </h3>
+                  {tutorial.excerpt && (
+                    <p className="text-gray-600 text-sm">
+                      {tutorial.excerpt}
+                    </p>
+                  )}
+                </a>
               </div>
             ))}
           </div>
