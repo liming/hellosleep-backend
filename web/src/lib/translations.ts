@@ -31,6 +31,29 @@ export const translations = {
     // Article metadata
     byAuthor: 'By:',
     
+    // Sleep Assessment
+    sleepAssessmentTitle: 'Sleep Assessment',
+    sleepAssessmentDesc: 'Understand your sleep patterns and get personalized recommendations through our comprehensive assessment.',
+    assessmentStep1Title: 'Answer Questions',
+    assessmentStep1Desc: 'Complete a series of questions about your sleep patterns and lifestyle.',
+    assessmentStep2Title: 'Get Analysis',
+    assessmentStep2Desc: 'Receive detailed analysis of your sleep quality and potential issues.',
+    assessmentStep3Title: 'Get Recommendations',
+    assessmentStep3Desc: 'Get personalized advice and strategies to improve your sleep.',
+    assessmentCategoriesTitle: 'Assessment Categories',
+    assessmentCategory1: 'Sleep Quality',
+    assessmentCategory1Desc: 'Evaluate your sleep duration, quality, and patterns.',
+    assessmentCategory2: 'Sleep Problems',
+    assessmentCategory2Desc: 'Identify specific sleep issues and their frequency.',
+    assessmentCategory3: 'Lifestyle Factors',
+    assessmentCategory3Desc: 'Assess daily habits that affect your sleep.',
+    assessmentCategory4: 'Health & Stress',
+    assessmentCategory4Desc: 'Evaluate stress levels and health conditions.',
+    assessmentStarting: 'Starting...',
+    assessmentTimeEstimate: 'Takes approximately 5-10 minutes',
+    assessmentPrivacyNote: 'Your responses are confidential and will only be used to provide personalized recommendations.',
+    assessmentHelpLink: 'Need help? Learn more about the assessment',
+    
     // Footer
     copyright: '© 2024 HelloSleep. All rights reserved.',
     
@@ -68,6 +91,29 @@ export const translations = {
     
     // Article metadata
     byAuthor: '作者：',
+    
+    // Sleep Assessment
+    sleepAssessmentTitle: '睡眠评估',
+    sleepAssessmentDesc: '通过全面的评估了解您的睡眠模式并获得个性化建议。',
+    assessmentStep1Title: '回答问题',
+    assessmentStep1Desc: '完成一系列关于睡眠模式和生活方式的问答。',
+    assessmentStep2Title: '获得分析',
+    assessmentStep2Desc: '获得睡眠质量和潜在问题的详细分析。',
+    assessmentStep3Title: '获得建议',
+    assessmentStep3Desc: '获得改善睡眠的个性化建议和策略。',
+    assessmentCategoriesTitle: '评估类别',
+    assessmentCategory1: '睡眠质量',
+    assessmentCategory1Desc: '评估您的睡眠时长、质量和模式。',
+    assessmentCategory2: '睡眠问题',
+    assessmentCategory2Desc: '识别具体的睡眠问题及其频率。',
+    assessmentCategory3: '生活方式因素',
+    assessmentCategory3Desc: '评估影响睡眠的日常习惯。',
+    assessmentCategory4: '健康与压力',
+    assessmentCategory4Desc: '评估压力水平和健康状况。',
+    assessmentStarting: '启动中...',
+    assessmentTimeEstimate: '大约需要5-10分钟',
+    assessmentPrivacyNote: '您的回答将被保密，仅用于提供个性化建议。',
+    assessmentHelpLink: '需要帮助？了解更多关于评估的信息',
     
     // Footer
     copyright: '© 2024 睡吧. 版权所有.',
