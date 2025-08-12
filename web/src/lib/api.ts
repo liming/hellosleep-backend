@@ -18,6 +18,11 @@ const getHeaders = () => {
   return headers;
 };
 
+export interface Sharing {
+  contributor: string;
+  userLink?: string;
+}
+
 export interface Article {
   id: number;
   documentId: string;
@@ -35,6 +40,7 @@ export interface Article {
   originUrl?: string; // Present for shared articles, absent for tutorials
   like?: number;
   category?: Category;
+  sharing?: Sharing;
 }
 
 export interface Category {
@@ -177,7 +183,7 @@ export async function fetchSharedArticles(): Promise<StrapiResponse<Article>> {
         $eq: 'share'
       }
     },
-    populate: 'category',
+    populate: '*',
     sort: 'date:desc'
   });
 }

@@ -159,18 +159,10 @@ export default function TutorialPage() {
                   {tutorial.title || 'Untitled Tutorial'}
                 </h3>
                 {tutorial.excerpt && (
-                  <p className="text-gray-600 text-sm mb-4">
+                  <p className="text-gray-600 text-sm">
                     {tutorial.excerpt}
                   </p>
                 )}
-                <div className="flex items-center text-sm text-gray-500">
-                  <span>
-                    {tutorial.date 
-                      ? new Date(tutorial.date).toLocaleDateString()
-                      : 'No date'
-                    }
-                  </span>
-                </div>
               </div>
             ))}
           </div>

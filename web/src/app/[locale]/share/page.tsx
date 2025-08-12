@@ -92,13 +92,24 @@ export default function SharePage() {
                     </p>
                   )}
                   <div className="flex items-center text-sm text-gray-500">
-                    <span>
-                      {article.date 
-                        ? new Date(article.date).toLocaleDateString()
-                        : 'No date'
-                      }
-                    </span>
-                    {article.originUrl && (
+                    {article.sharing?.contributor && (
+                      <>
+                        <span>By: </span>
+                        {article.sharing.userLink ? (
+                          <a
+                            href={article.sharing.userLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-brand-primary hover:text-primary-600 font-medium"
+                          >
+                            {article.sharing.contributor}
+                          </a>
+                        ) : (
+                          <span className="font-medium">{article.sharing.contributor}</span>
+                        )}
+                      </>
+                    )}
+                    {article.originUrl && article.sharing?.contributor && (
                       <>
                         <span className="mx-2">•</span>
                         <a
@@ -110,6 +121,16 @@ export default function SharePage() {
                           Original Source
                         </a>
                       </>
+                    )}
+                    {article.originUrl && !article.sharing?.contributor && (
+                      <a
+                        href={article.originUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-primary hover:text-primary-600"
+                      >
+                        Original Source
+                      </a>
                     )}
                   </div>
                 </div>
