@@ -15,6 +15,7 @@
     "migration:import-categories": "node script/improved-import.js categories",
     "migration:test-single": "node script/single-migration-test.js",
     "migration:test-import": "node script/single-import-test.js",
+    "migration:download-images": "node script/download-external-images.js",
     "migration:full": "npm run migration:export && npm run migration:transform && npm run migration:import"
   },
   "devDependencies": {},

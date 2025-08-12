@@ -25,7 +25,8 @@
     "migration:import-categories": "cd service && npm run migration:import-categories",
     "migration:full": "cd service && npm run migration:full",
     "migration:test-single": "cd service && npm run migration:test-single",
-    "migration:test-import": "cd service && npm run migration:test-import"
+    "migration:test-import": "cd service && npm run migration:test-import",
+    "migration:download-images": "cd service && npm run migration:download-images"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

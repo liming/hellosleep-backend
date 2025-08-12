@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
 import { fetchArticle, type Article } from '@/lib/api';
+import RichTextRenderer from '@/components/RichTextRenderer';
 
 export default function ArticlePage() {
   const { t } = useTranslation();
@@ -122,28 +123,20 @@ export default function ArticlePage() {
               )}
             </div>
 
-            {/* Article Excerpt */}
-            {article.excerpt && (
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {article.excerpt}
-              </p>
-            )}
+
           </div>
         </div>
 
         {/* Article Content */}
         <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="prose prose-lg max-w-none">
-            {/* Rich text content will be rendered here */}
-            <div className="text-gray-800 leading-relaxed">
-              {/* For now, we'll display a placeholder since rich text rendering needs to be implemented */}
-              <p className="text-gray-600 italic">
-                Article content will be displayed here. Rich text rendering for Lexical JSON format needs to be implemented.
-              </p>
-              <p className="text-sm text-gray-500 mt-4">
-                Article ID: {article.id} | Type: {article.type}
-              </p>
-            </div>
+          <div className="text-gray-800 leading-relaxed">
+            {article.body ? (
+              <RichTextRenderer content={article.body} />
+            ) : (
+              <div className="text-gray-600 italic">
+                No content available for this article.
+              </div>
+            )}
           </div>
         </div>
 
