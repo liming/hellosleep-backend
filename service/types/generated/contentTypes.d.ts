@@ -475,6 +475,66 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBookletBooklet extends Struct.CollectionTypeSchema {
+  collectionName: 'booklets';
+  info: {
+    description: 'AI-generated recommendation booklets for sleep assessment patterns';
+    displayName: 'Booklet';
+    pluralName: 'booklets';
+    singularName: 'booklet';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assessmentAnswers: Schema.Attribute.JSON;
+    category: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'ai-recommendations'>;
+    confidence: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1;
+          min: 0;
+        },
+        number
+      >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    lastUsed: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::booklet.booklet'
+    > &
+      Schema.Attribute.Private;
+    metadata: Schema.Attribute.JSON;
+    patternHash: Schema.Attribute.UID<'title'>;
+    publishedAt: Schema.Attribute.DateTime;
+    recommendations: Schema.Attribute.JSON;
+    tags: Schema.Attribute.JSON;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    type: Schema.Attribute.Enumeration<
+      ['ai-booklet', 'manual-booklet', 'legacy-booklet']
+    > &
+      Schema.Attribute.DefaultTo<'ai-booklet'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    usageCount: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    userProfile: Schema.Attribute.JSON;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -1050,6 +1110,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::article.article': ApiArticleArticle;
+      'api::booklet.booklet': ApiBookletBooklet;
       'api::category.category': ApiCategoryCategory;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

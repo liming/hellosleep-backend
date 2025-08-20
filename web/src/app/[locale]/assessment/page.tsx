@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { assessmentEngine } from '@/lib/assessment-engine';
+import { enhancedAssessmentEngine } from '@/lib/enhanced-assessment-engine';
 import { getAllSectionsOrdered } from '@/data/assessment-questions';
 import type { AssessmentQuestion } from '@/data/assessment-questions';
+import type { EnhancedAssessmentResult } from '@/lib/enhanced-assessment-engine';
 
 export default function AssessmentPage() {
   const { t } = useTranslation();
@@ -13,6 +15,106 @@ export default function AssessmentPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [visibleQuestions, setVisibleQuestions] = useState<AssessmentQuestion[]>([]);
   const [sections] = useState(getAllSectionsOrdered());
+  const [assessmentResult, setAssessmentResult] = useState<EnhancedAssessmentResult | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isTestMode, setIsTestMode] = useState(false);
+
+  // Test data scenarios for quick assessment testing
+  const testScenarios = {
+    // Scenario 1: Moderate sleep issues (most common)
+    moderate: {
+      name: '测试用户A',
+      email: 'test@example.com',
+      birthday: '1990-01-01',
+      gender: 'male',
+      status: 'work',
+      howlong: 'midterm',
+      getupregular: 'no',
+      hourstosleep: '8',
+      hourstofallinsleep: '6',
+      hourstonoonnap: '0.5',
+      noise: 'no',
+      noisereason: 'neighbour',
+      sport: 'little',
+      sunshine: 'little',
+      pressure: 'best',
+      lively: 'normal',
+      bedroom: 'yes',
+      bed: 'yes',
+      distraction: 'yes',
+      effeciency: 'yes',
+      unsociable: 'no',
+      irresponsible: 'no',
+      inactive: 'no',
+      excessive_rest: 'no',
+      complain: 'no',
+      ignore: 'no',
+      medicine: 'no'
+    },
+    
+    // Scenario 2: Severe sleep issues
+    severe: {
+      name: '测试用户B',
+      email: 'test@example.com',
+      birthday: '1985-06-15',
+      gender: 'female',
+      status: 'work',
+      howlong: 'longterm',
+      getupregular: 'no',
+      hourstosleep: '10',
+      hourstofallinsleep: '4',
+      hourstonoonnap: '2',
+      noise: 'no',
+      noisereason: 'snore',
+      sport: 'none',
+      sunshine: 'none',
+      pressure: 'best',
+      lively: 'little',
+      bedroom: 'yes',
+      bed: 'yes',
+      distraction: 'yes',
+      effeciency: 'yes',
+      unsociable: 'yes',
+      irresponsible: 'yes',
+      inactive: 'yes',
+      excessive_rest: 'yes',
+      complain: 'yes',
+      ignore: 'yes',
+      medicine: 'yes'
+    },
+    
+    // Scenario 3: Good sleep habits
+    good: {
+      name: '测试用户C',
+      email: 'test@example.com',
+      birthday: '1995-12-20',
+      gender: 'male',
+      status: 'work',
+      howlong: 'shortterm',
+      getupregular: 'yes',
+      hourstosleep: '7',
+      hourstofallinsleep: '7',
+      hourstonoonnap: '0',
+      noise: 'yes',
+      sport: 'best',
+      sunshine: 'best',
+      pressure: 'normal',
+      lively: 'best',
+      bedroom: 'no',
+      bed: 'no',
+      distraction: 'no',
+      effeciency: 'no',
+      unsociable: 'no',
+      irresponsible: 'no',
+      inactive: 'no',
+      excessive_rest: 'no',
+      complain: 'no',
+      ignore: 'no',
+      medicine: 'no'
+    }
+  };
+
+  const testAnswers = testScenarios.moderate; // Default test scenario
 
   // Initialize visible questions when component mounts
   useEffect(() => {
@@ -31,14 +133,26 @@ export default function AssessmentPage() {
     }));
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestionIndex < visibleQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Assessment complete
-      const result = assessmentEngine.processAssessment(answers);
-      assessmentEngine.saveResult(result);
-      setCurrentScreen('results');
+      // Assessment complete - use AI-powered assessment
+      setIsProcessing(true);
+      try {
+        const result = await enhancedAssessmentEngine.processAssessmentWithAI(answers);
+        enhancedAssessmentEngine.saveEnhancedResult(result);
+        setAssessmentResult(result);
+        setCurrentScreen('results');
+      } catch (error) {
+        console.error('Assessment processing failed:', error);
+        // Fallback to basic assessment
+        const basicResult = assessmentEngine.processAssessment(answers);
+        assessmentEngine.saveResult(basicResult);
+        setCurrentScreen('results');
+      } finally {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -48,7 +162,7 @@ export default function AssessmentPage() {
     }
   };
 
-  const canProceed = currentQuestion && answers[currentQuestion.id];
+  const canProceed = currentQuestion && answers[currentQuestion.id] && !isProcessing;
 
   const renderLandingScreen = () => (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
@@ -147,6 +261,46 @@ export default function AssessmentPage() {
             开始评估
           </button>
           <p className="text-sm text-gray-500 mt-4">大约需要5-10分钟</p>
+          
+          {/* Test Mode Buttons */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-sm text-gray-500 mb-3">开发者测试模式</p>
+            <div className="space-y-2">
+              <button 
+                onClick={() => {
+                  setIsTestMode(true);
+                  setAnswers(testScenarios.moderate);
+                  setCurrentScreen('questions');
+                }}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
+              >
+                🧪 测试场景1: 中度睡眠问题
+              </button>
+              <button 
+                onClick={() => {
+                  setIsTestMode(true);
+                  setAnswers(testScenarios.severe);
+                  setCurrentScreen('questions');
+                }}
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
+              >
+                🧪 测试场景2: 严重睡眠问题
+              </button>
+              <button 
+                onClick={() => {
+                  setIsTestMode(true);
+                  setAnswers(testScenarios.good);
+                  setCurrentScreen('questions');
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
+              >
+                🧪 测试场景3: 良好睡眠习惯
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-2">
+              使用预设数据快速测试AI评估结果
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -166,6 +320,26 @@ export default function AssessmentPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
         <div className="max-w-2xl mx-auto">
+          {isProcessing && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-8 text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">正在生成个性化评估结果...</p>
+                <p className="text-sm text-gray-500 mt-2">这可能需要几秒钟时间</p>
+              </div>
+            </div>
+          )}
+          {/* Test Mode Indicator */}
+          {isTestMode && (
+            <div className="mb-4 p-3 bg-green-100 border border-green-200 rounded-lg">
+              <div className="flex items-center">
+                <span className="text-green-600 mr-2">🧪</span>
+                <span className="text-sm font-medium text-green-800">测试模式已启用</span>
+                <span className="text-xs text-green-600 ml-2">(使用预设数据)</span>
+              </div>
+            </div>
+          )}
+          
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
@@ -298,7 +472,14 @@ export default function AssessmentPage() {
                     : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
-                {currentQuestionIndex === visibleQuestions.length - 1 ? '查看结果' : '下一题'}
+                {isProcessing ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    处理中...
+                  </div>
+                ) : (
+                  currentQuestionIndex === visibleQuestions.length - 1 ? '查看结果' : '下一题'
+                )}
               </button>
             </div>
           </div>
@@ -312,115 +493,174 @@ export default function AssessmentPage() {
     );
   };
 
-  const renderResultsScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            您的睡眠评估结果
-          </h1>
-          <p className="text-xl text-gray-600">
-            基于您的回答，我们为您生成了个性化的睡眠分析
-          </p>
+  const renderResultsScreen = () => {
+    if (!assessmentResult) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">正在生成个性化评估结果...</p>
+          </div>
         </div>
+      );
+    }
 
-        {/* Overall Score */}
+    const { personalizedSummary, aiRecommendations, insights, recommendationSource, confidence } = assessmentResult;
+    // Focus on root causes, not scores
+    const urgencyLevel = personalizedSummary.urgency;
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              您的睡眠评估结果
+            </h1>
+            <p className="text-xl text-gray-600">
+              基于您的回答，我们为您生成了个性化的睡眠分析
+            </p>
+            {/* AI Source Indicator */}
+            <div className="mt-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+              {recommendationSource === 'cache' && '🎯 智能缓存推荐'}
+              {recommendationSource === 'ai' && '🤖 AI 生成推荐'}
+              {recommendationSource === 'fallback' && '📋 基础推荐'}
+              <span className="ml-2">({Math.round(confidence * 100)}% 置信度)</span>
+            </div>
+            
+            {/* Test Mode Indicator */}
+            {isTestMode && (
+              <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                🧪 测试模式 - 使用预设数据
+              </div>
+            )}
+          </div>
+
+          {/* Assessment Overview */}
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">评估完成</h2>
+              <div className={`inline-flex items-center px-4 py-2 rounded-full text-lg font-medium mb-6 ${
+                urgencyLevel === 'high' ? 'bg-red-100 text-red-800' :
+                urgencyLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-green-100 text-green-800'
+              }`}>
+                {urgencyLevel === 'high' ? '🔴 需要重点关注' :
+                 urgencyLevel === 'medium' ? '🟡 有改善空间' :
+                 '🟢 状态良好'}
+              </div>
+              <p className="text-lg text-gray-600">
+                我们已根据您的回答分析了根本原因，并提供针对性的改善建议
+              </p>
+            </div>
+          </div>
+
+        {/* Primary Issues */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <div className="text-center">
-            <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl font-bold text-blue-600">6.5</span>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">睡眠质量评分</h2>
-            <p className="text-gray-600 mb-4">中等水平 - 有改善空间</p>
-            <div className="w-full bg-gray-200 rounded-full h-3 max-w-md mx-auto">
-              <div className="bg-blue-600 h-3 rounded-full" style={{ width: '65%' }}></div>
-            </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">主要问题</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {personalizedSummary.primaryIssues.map((issue, index) => (
+              <div key={index} className="flex items-center p-3 bg-red-50 rounded-lg">
+                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-red-600 text-sm">⚠️</span>
+                </div>
+                <span className="text-gray-700">{issue}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Detailed Analysis */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Sleep Quality */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-green-600">🌙</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">睡眠质量</h3>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">睡眠时长</span>
-                <span className="font-medium">6.5小时</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">入睡时间</span>
-                <span className="font-medium">30分钟</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">睡眠效率</span>
-                <span className="font-medium">75%</span>
-              </div>
+        {/* AI Insights */}
+        {insights.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">AI 洞察</h2>
+            <div className="space-y-4">
+              {insights.map((insight, index) => (
+                <div key={index} className="flex items-start p-4 bg-blue-50 rounded-lg">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                    <span className="text-blue-600 text-xs">💡</span>
+                  </div>
+                  <p className="text-gray-700">{insight}</p>
+                </div>
+              ))}
             </div>
           </div>
+        )}
 
-          {/* Sleep Problems */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-red-600">😴</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">睡眠问题</h3>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">入睡困难</span>
-                <span className="font-medium text-orange-600">经常</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">夜间醒来</span>
-                <span className="font-medium text-green-600">偶尔</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">早醒</span>
-                <span className="font-medium text-green-600">很少</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Recommendations */}
+        {/* AI Recommendations */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">个性化建议</h2>
           <div className="space-y-6">
-            <div className="flex items-start">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                <span className="text-blue-600 font-bold">1</span>
+            {aiRecommendations.recommendations.map((recommendation, index) => (
+              <div key={recommendation.id} className="border border-gray-200 rounded-lg p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-4 ${
+                      recommendation.priority === 'high' ? 'bg-red-100' :
+                      recommendation.priority === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
+                    }`}>
+                      <span className={`font-bold text-sm ${
+                        recommendation.priority === 'high' ? 'text-red-600' :
+                        recommendation.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                      }`}>
+                        {index + 1}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{recommendation.title}</h3>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          recommendation.priority === 'high' ? 'bg-red-100 text-red-800' :
+                          recommendation.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                        }`}>
+                          {recommendation.priority === 'high' ? '高优先级' :
+                           recommendation.priority === 'medium' ? '中优先级' : '低优先级'}
+                        </span>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          {Math.round(recommendation.confidence * 100)}% 置信度
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-gray-600 mb-4">{recommendation.description}</p>
+                
+                {recommendation.reasoning && (
+                  <div className="bg-blue-50 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>为什么推荐：</strong> {recommendation.reasoning}
+                    </p>
+                  </div>
+                )}
+                
+                {recommendation.actions && recommendation.actions.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-gray-900">具体行动：</h4>
+                    {recommendation.actions.map((action, actionIndex) => (
+                      <div key={actionIndex} className="bg-gray-50 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="font-medium text-gray-900">{action.title}</h5>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            action.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+                            action.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                          }`}>
+                            {action.difficulty === 'easy' ? '简单' :
+                             action.difficulty === 'medium' ? '中等' : '困难'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">{action.description}</p>
+                        <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+                          <span>⏱️ {action.timeRequired}</span>
+                          <span>🔄 {action.frequency}</span>
+                          <span>📈 {action.expectedImpact}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">建立规律的睡眠时间</h3>
-                <p className="text-gray-600">每天在同一时间上床睡觉和起床，即使在周末也要保持这个习惯。</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                <span className="text-blue-600 font-bold">2</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">改善睡眠环境</h3>
-                <p className="text-gray-600">保持卧室安静、黑暗和凉爽，温度控制在18-22°C之间。</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                <span className="text-blue-600 font-bold">3</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">减少睡前使用电子设备</h3>
-                <p className="text-gray-600">睡前1小时避免使用手机、电脑等电子设备，蓝光会影响褪黑激素分泌。</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -435,6 +675,8 @@ export default function AssessmentPage() {
                 setCurrentScreen('landing');
                 setAnswers({});
                 setCurrentQuestionIndex(0);
+                setAssessmentResult(null);
+                setIsTestMode(false);
               }}
               className="text-blue-600 hover:text-blue-700"
             >
@@ -448,6 +690,7 @@ export default function AssessmentPage() {
       </div>
     </div>
   );
+  };
 
   return (
     <div>

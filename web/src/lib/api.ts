@@ -69,6 +69,49 @@ export interface StrapiResponse<T> {
   };
 }
 
+// Generic API request function
+export async function makeApiRequest(
+  endpoint: string, 
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', 
+  data?: any, 
+  options?: {
+    params?: Record<string, any>;
+  }
+): Promise<any> {
+  const url = new URL(`${API_BASE_URL}/api${endpoint}`);
+  
+  // Add query parameters
+  if (options?.params) {
+    Object.entries(options.params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.append(key, value.toString());
+      }
+    });
+  }
+  
+  const config: RequestInit = {
+    method,
+    headers: getHeaders(),
+  };
+  
+  if (data && (method === 'POST' || method === 'PUT')) {
+    config.body = JSON.stringify(data);
+  }
+  
+  try {
+    const response = await fetch(url.toString(), config);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`API request error for ${endpoint}:`, error);
+    throw error;
+  }
+}
+
 // Fetch articles from Strapi
 export async function fetchArticles(params?: {
   filters?: Record<string, any>;

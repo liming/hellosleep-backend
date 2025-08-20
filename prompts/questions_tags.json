@@ -1,0 +1,756 @@
+{
+    "version": 1,
+    "data": [
+      {
+        "name": "basicinfo",
+        "text": "基本信息",
+        "page": "single",
+        "data": [
+          {
+            "name": "name",
+            "text": "昵称",
+            "type": "text",
+            "placeHolder": "输入你的昵称"
+          },
+          {
+            "name": "email",
+            "text": "邮箱",
+            "type": "email",
+            "placeHolder": "输入你的邮箱"
+          },
+          {
+            "text": "生日",
+            "name": "birthday",
+            "type": "date",
+            "options": {
+              "type": "date",
+              "min": "1940",
+              "max": "2009",
+              "defaultDate": "1990"
+            }
+          },
+          {
+            "text": "性别",
+            "name": "gender",
+            "type": "radio",
+            "data": [
+              {
+                "text": "男",
+                "value": "male"
+              },
+              {
+                "text": "女",
+                "value": "female"
+              }
+            ]
+          },
+          {
+            "text": "你的状态",
+            "name": "status",
+            "type": "select",
+            "data": [
+              {
+                "text": "工作",
+                "value": "work"
+              },
+              {
+                "text": "上学",
+                "value": "study"
+              },
+              {
+                "text": "待业",
+                "value": "unemployed"
+              },
+              {
+                "text": "孕期",
+                "value": "prenatal"
+              },
+              {
+                "text": "产后",
+                "value": "postnatal"
+              },
+              {
+                "text": "退休",
+                "value": "retire"
+              }
+            ]
+          },
+          {
+            "text": "失眠持续了多久？",
+            "name": "howlong",
+            "type": "select",
+            "data": [
+              {
+                "text": "少于一个月",
+                "value": "shortterm"
+              },
+              {
+                "text": "少于一年",
+                "value": "midterm"
+              },
+              {
+                "text": "多于一年",
+                "value": "longterm"
+              },
+              {
+                "text": "多于五年",
+                "value": "verylongterm"
+              }
+            ]
+          },
+          {
+            "text": "你认为自己失眠出现的原因是什么？",
+            "name": "reason",
+            "type": "textarea",
+            "placeHolder": "失眠原因……"
+          }
+        ]
+      },
+      {
+        "name": "sleephabit",
+        "text": "睡眠相关",
+        "page": "multiple",
+        "data": [
+          {
+            "name": "sleepregular",
+            "text": "你的作息时间规律吗？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "规律",
+                "value": "yes"
+              },
+              {
+                "text": "不规律",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "sleeptime",
+            "text": "通常几点睡觉？",
+            "placeHolder": "睡觉时间",
+            "depends": {
+              "question": "sleepregular",
+              "value": "yes"
+            },
+            "type": "date",
+            "options": {
+              "type": "time",
+              "defaultDate": "23:00"
+            }
+          },
+          {
+            "name": "getuptime",
+            "text": "通常几点起床？",
+            "placeHolder": "起床时间",
+            "depends": {
+              "question": "sleepregular",
+              "value": "yes"
+            },
+            "type": "date",
+            "options": {
+              "type": "time",
+              "defaultDate": "7:00"
+            }
+          },
+          {
+            "name": "hourstosleep",
+            "text": "晚上试图睡觉时间有多少？",
+            "depends": {
+              "question": "sleepregular",
+              "value": "no"
+            },
+            "type": "range",
+            "options": {
+              "min": 0,
+              "max": 15,
+              "start": 7,
+              "unit": "小时"
+            }
+          },
+          {
+            "name": "hourstofallinsleep",
+            "text": "晚上的实际睡眠时间有多少？",
+            "type": "range",
+            "options": {
+              "min": 0,
+              "max": 10,
+              "start": 5,
+              "unit": "小时"
+            }
+          },
+          {
+            "name": "hourstonoonnap",
+            "text": "午睡时间多长？",
+            "description": "这里指的是试图午睡的时间。",
+            "type": "range",
+            "options": {
+              "min": 0,
+              "max": 3,
+              "start": 0,
+              "step": 0.5,
+              "unit": "小时"
+            }
+          },
+          {
+            "name": "noise",
+            "text": "你的睡眠环境安静吗？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "安静",
+                "value": "yes"
+              },
+              {
+                "text": "不安静",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "noisereason",
+            "depends": {
+              "category": "sleephabit",
+              "question": "noise",
+              "value": "no"
+            },
+            "text": "影响睡眠环境的因素是什么？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "伴侣打呼噜",
+                "value": "snore"
+              },
+              {
+                "text": "邻居吵闹",
+                "value": "neighbour"
+              },
+              {
+                "text": "室友吵闹",
+                "value": "roommate"
+              },
+              {
+                "text": "其他",
+                "value": "others"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "liftstyle",
+        "text": "生活状态",
+        "page": "multiple",
+        "data": [
+          {
+            "name": "sport",
+            "text": "你会有规律的运动吗？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "有规律",
+                "value": "best"
+              },
+              {
+                "text": "正常",
+                "value": "normal"
+              },
+              {
+                "text": "不多",
+                "value": "little"
+              },
+              {
+                "text": "不会",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "name": "sunshine",
+            "text": "你是不是很少接触阳光？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "很多",
+                "value": "best"
+              },
+              {
+                "text": "正常",
+                "value": "normal"
+              },
+              {
+                "text": "不多",
+                "value": "little"
+              },
+              {
+                "text": "几乎没有",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "name": "pressure",
+            "text": "生活很有压力吗？（来自于生活和工作的压力，而不是睡眠的压力）",
+            "type": "radio",
+            "data": [
+              {
+                "text": "很大压力",
+                "value": "best"
+              },
+              {
+                "text": "正常",
+                "value": "normal"
+              },
+              {
+                "text": "很少",
+                "value": "little"
+              },
+              {
+                "text": "几乎没有",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "name": "lively",
+            "text": "生活很丰富活跃吗？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "非常",
+                "value": "best"
+              },
+              {
+                "text": "正常",
+                "value": "normal"
+              },
+              {
+                "text": "不太丰富",
+                "value": "little"
+              },
+              {
+                "text": "很枯燥",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "name": "bedroom",
+            "text": "你总是长时间呆在卧室吗？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "bed",
+            "text": "你总是长时间呆在床上吗？（比如玩手机）",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "working_study",
+        "text": "工作状态",
+        "page": "multiple",
+        "data": [
+          {
+            "name": "distraction",
+            "text": "你是不是很难专心工作（或学习）？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "effeciency",
+            "text": "你的工作（或学习）效率是不是很低？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "unsociable",
+            "text": "你是不是很少和同事（或同学）交流？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "shiftwork",
+            "text": "你的工作需要倒班吗？",
+            "depends": {
+              "question": "status",
+              "value": "work"
+            },
+            "type": "radio",
+            "data": [
+              {
+                "text": "需要",
+                "value": "yes"
+              },
+              {
+                "text": "不需要",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "holiday",
+            "text": "你的失眠发生在寒暑假吗",
+            "depends": {
+              "question": "status",
+              "value": "study"
+            },
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "bedtimeearly",
+            "text": "你总是比室友睡得早吗？",
+            "depends": {
+              "question": "status",
+              "value": "study"
+            },
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "attitude",
+        "text": "对待失眠的方式",
+        "page": "multiple",
+        "data": [
+          {
+            "name": "irresponsible",
+            "text": "失眠后你是不是刻意减少或者放弃工作/学习？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "inactive",
+            "text": "失眠后你是不是减少或放弃很多社交活动或者运动？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "excessive_rest",
+            "text": "失眠后你是不是总是在找机会休息？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "complain",
+            "text": "你会不会总是抱怨或者哭诉失眠",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "ignore",
+            "text": "失眠后你是不是很少关心亲人和朋友？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          },
+          {
+            "name": "medicine",
+            "text": "你是不是去看病或者服用了安眠的药物？",
+            "type": "radio",
+            "data": [
+              {
+                "text": "是",
+                "value": "yes"
+              },
+              {
+                "text": "不是",
+                "value": "no"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "name": "postnatal",
+        "text": "产后",
+        "calc": {
+          "question": "status",
+          "value": "postnatal"
+        }
+      },
+      {
+        "name": "susceptible",
+        "text": "放弃为失眠努力",
+        "calc": {
+          "func": "isAffected",
+          "input": ["irresponsible", "inactive", "excessive_rest", "complain", "ignore", "medicine"]
+        }
+      },
+      {
+        "name": "complain",
+        "text": "终止抱怨",
+        "calc": {
+          "question": "complain",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "prenatal",
+        "text": "孕期",
+        "calc": {
+          "question": "status",
+          "value": "prenatal"
+        }
+      },
+      {
+        "name": "study",
+        "text": "改善学生生活",
+        "calc": {
+          "question": "status",
+          "value": "study"
+        }
+      },
+      {
+        "name": "boring",
+        "text": "尝试有趣生活",
+        "calc": {
+          "question": "lively",
+          "value": "none"
+        }
+      },
+      {
+        "name": "idle",
+        "text": "充实生活",
+        "calc": {
+          "func": "isIdle",
+          "input": ["pressure", "lively"]
+        }
+      },
+      {
+        "name": "neighbour_noise",
+        "text": "尝试合理沟通",
+        "calc": {
+          "question": "noisereason",
+          "value": "neighbour"
+        }
+      },
+      {
+        "name": "roommate_noise",
+        "text": "尝试合理沟通",
+        "calc": {
+          "question": "noisereason",
+          "value": "roommate"
+        }
+      },
+      {
+        "name": "bedmate_snore",
+        "text": "打鼾",
+        "calc": {
+          "question": "noisereason",
+          "value": "snore"
+        }
+      },
+      {
+        "name": "unhealthy",
+        "text": "健康的生活方式",
+        "calc": {
+          "func": "isHealthy",
+          "input": ["sport", "sunshine"]
+        }
+      },
+      {
+        "name": "stress",
+        "text": "合理对待压力",
+        "calc": {
+          "question": "pressure",
+          "value": "best"
+        }
+      },
+      {
+        "name": "sleep_non_efficiency",
+        "text": "合理提高睡眠效率",
+        "calc": {
+          "func": "calcSleepEfficiency",
+          "input": ["sleeptime", "getuptime", "hourstosleep", "hourstofallinsleep"]
+        }
+      },
+      {
+        "name": "getup_irregularly",
+        "text": "规划作息，按时早起",
+        "calc": {
+          "question": "sleepregular",
+          "value": "no"
+        }
+      },
+      {
+        "name": "stimulation",
+        "text": "合理利用卧室",
+        "calc": {
+          "func": "isStimuli",
+          "input": ["bedroom", "bed"]
+        }
+      },
+      {
+        "name": "distraction",
+        "text": "有效集中精力",
+        "calc": {
+          "question": "distraction",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "unsociable",
+        "text": "打开心扉",
+        "calc": {
+          "question": "unsociable",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "shiftwork",
+        "text": "适应作息",
+        "calc": {
+          "question": "shiftwork",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "holiday",
+        "text": "假期综合症",
+        "calc": {
+          "question": "holiday",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "conflict_routine",
+        "text": "合理规划作息",
+        "calc": {
+          "question": "bedtimeearly",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "medicine",
+        "text": "药物",
+        "calc": {
+          "question": "medicine",
+          "value": "yes"
+        }
+      },
+      {
+        "name": "selfish",
+        "text": "自我",
+        "calc": {
+          "question": "ignore",
+          "value": "yes"
+        }
+      }
+    ]
+  }
+  
