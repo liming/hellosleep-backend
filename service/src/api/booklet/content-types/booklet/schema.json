@@ -5,7 +5,7 @@
     "singularName": "booklet",
     "pluralName": "booklets",
     "displayName": "Booklet",
-    "description": "AI-generated recommendation booklets for sleep assessment patterns"
+    "description": "Static recommendation booklets for sleep assessment patterns"
   },
   "options": {
     "draftAndPublish": true

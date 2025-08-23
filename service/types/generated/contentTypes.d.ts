@@ -478,7 +478,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
 export interface ApiBookletBooklet extends Struct.CollectionTypeSchema {
   collectionName: 'booklets';
   info: {
-    description: 'AI-generated recommendation booklets for sleep assessment patterns';
+    description: 'Static recommendation booklets for sleep assessment patterns';
     displayName: 'Booklet';
     pluralName: 'booklets';
     singularName: 'booklet';
@@ -517,9 +517,9 @@ export interface ApiBookletBooklet extends Struct.CollectionTypeSchema {
     tags: Schema.Attribute.JSON;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     type: Schema.Attribute.Enumeration<
-      ['ai-booklet', 'manual-booklet', 'legacy-booklet']
+      ['static-booklet', 'manual-booklet', 'legacy-booklet']
     > &
-      Schema.Attribute.DefaultTo<'ai-booklet'>;
+      Schema.Attribute.DefaultTo<'static-booklet'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
