@@ -28,7 +28,7 @@ export interface StaticTag {
   name: string;
   text: string;
   description: string;
-  category: 'sleep' | 'lifestyle' | 'work' | 'student' | 'special' | 'behavior';
+  category: 'sleep' | 'lifestyle' | 'work' | 'student' | 'special' | 'behavior' | 'environment';
   priority: 'high' | 'medium' | 'low';
   calc: {
     type: 'simple' | 'function' | 'complex';

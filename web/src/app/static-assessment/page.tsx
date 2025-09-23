@@ -71,7 +71,7 @@ export default function StaticAssessmentPage() {
     const result = staticAssessmentEngine.processAssessment(answers);
     console.log('Static assessment result:', result);
     console.log('Calculated tags:', result.calculatedTags);
-    console.log('Matched booklets:', result.matchedBooklets);
+    console.log('Mapped facts count:', result.bookletFacts.length);
     setShowResults(true);
   };
 
@@ -226,7 +226,7 @@ export default function StaticAssessmentPage() {
             }}
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
           >
-            快速测试 - 加载会触发静态手册的答案
+            快速测试 - 加载会触发建议的答案
           </button>
         </div>
       </div>

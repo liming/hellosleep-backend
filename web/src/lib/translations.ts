@@ -70,6 +70,27 @@ export const translations = {
     
     // Ferry metaphor
     ferryMetaphor: 'Crossing the river of insomnia',
+    
+    // About Page
+    aboutTitle: 'About HelloSleep',
+    aboutSubtitle: 'Our mission is to help you overcome insomnia with science-based, practical guidance.',
+    ourMission: 'Our Mission',
+    missionDesc: 'We aim to make reliable sleep knowledge accessible to everyone and provide actionable tools to rebuild healthy sleep.',
+    whatWeOffer: 'What We Offer',
+    scienceBasedArticles: 'Science-based articles and knowledge base',
+    comprehensiveAssessment: 'Comprehensive sleep assessment',
+    personalizedRecommendations: 'Personalized recommendations based on your situation',
+    expertInsights: 'Expert insights and proven strategies',
+    ourApproach: 'Our Approach',
+    approachDesc: 'We focus on addressing the root causes of insomnia through lifestyle, behavior, and mindset adjustments, not quick fixes.',
+    getStarted: 'Get Started',
+    getStartedDesc: 'Try our sleep assessment to receive tailored guidance for your situation.',
+
+    // Articles Page
+    articlesTitle: 'Articles',
+    articlesSubtitle: 'Curated insights and stories about sleep and recovery',
+    comingSoon: 'Coming soon',
+    articlesPlaceholder: 'Articles will be available here shortly.',
   },
   zh: {
     // Header
@@ -142,6 +163,27 @@ export const translations = {
     
     // Ferry metaphor
     ferryMetaphor: '渡过失眠的河流',
+    
+    // About Page
+    aboutTitle: '关于睡吧',
+    aboutSubtitle: '我们的使命是以科学且可实践的方法帮助您走出失眠。',
+    ourMission: '我们的使命',
+    missionDesc: '我们致力于让可靠的睡眠知识触手可及，并提供可落地的工具，帮助您重建健康睡眠。',
+    whatWeOffer: '我们提供',
+    scienceBasedArticles: '基于科学的文章与知识库',
+    comprehensiveAssessment: '全面的睡眠评估',
+    personalizedRecommendations: '基于个人情况的个性化建议',
+    expertInsights: '专家洞见与实践策略',
+    ourApproach: '我们的方法',
+    approachDesc: '我们聚焦于通过生活方式、行为与心态的调整，解决失眠的根本原因，而非追求快速但短暂的解决方案。',
+    getStarted: '开始使用',
+    getStartedDesc: '进行睡眠评估以获得更贴合您情况的指导。',
+
+    // Articles Page
+    articlesTitle: '文章',
+    articlesSubtitle: '关于睡眠与恢复的精选洞见与故事',
+    comingSoon: '敬请期待',
+    articlesPlaceholder: '文章很快会在这里展示。',
   },
 };
 

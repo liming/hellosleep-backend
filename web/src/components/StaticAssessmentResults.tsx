@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { staticAssessmentEngine, type AssessmentResult } from '@/lib/static-assessment-engine';
-import { type StaticBooklet } from '@/data/static-assessment-booklets';
 import { getTagByName } from '@/data/static-assessment-questions';
 
 interface StaticAssessmentResultsProps {
@@ -116,7 +115,7 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             <div className="text-sm text-gray-600">
               <p><strong>调试信息:</strong></p>
               <p>计算的标签: {result.calculatedTags.join(', ')}</p>
-              <p>匹配的手册数量: {result.matchedBooklets.length}</p>
+              <p>匹配的建议数量: {result.bookletFacts.length}</p>
             </div>
           </div>
         )}
@@ -128,25 +127,32 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             <div className="text-sm text-yellow-700">
               <p><strong>调试信息:</strong></p>
               <p>可用标签总数: {staticAssessmentEngine.getAllTags().length}</p>
-              <p>可用手册总数: {staticAssessmentEngine.getAllBooklets().length}</p>
               <p>您的答案: {Object.keys(answers).length} 个问题</p>
             </div>
           </div>
         )}
 
-        {/* Booklets */}
-        {result.matchedBooklets.length > 0 ? (
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">个性化建议</h2>
-            {result.matchedBooklets.map((booklet) => (
-              <BookletCard key={booklet.id} booklet={booklet} />
-            ))}
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <p className="text-gray-600">暂无匹配的建议内容</p>
+        {/* Booklet Facts mapped from answers */}
+        {result.bookletFacts && result.bookletFacts.length > 0 && (
+          <div className="space-y-4 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">重点建议</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {result.bookletFacts.map((fact) => (
+                <div key={fact.tag} className="bg-white rounded-lg shadow-sm p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{fact.description}</h3>
+                      <p className="text-sm text-gray-600">{fact.content}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
+        {/* Booklets */}
+        {/* Removed booklet list; replaced by booklet facts above */}
 
         {/* Assessment Summary */}
         <div className="bg-white rounded-lg shadow-sm p-6 mt-6">
@@ -158,7 +164,7 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             </div>
             <div>
               <p className="text-sm text-gray-600">匹配的建议数量</p>
-              <p className="text-lg font-semibold">{result.matchedBooklets.length}</p>
+              <p className="text-lg font-semibold">{result.bookletFacts.length}</p>
             </div>
           </div>
         </div>
@@ -177,134 +183,11 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
                 ))}
               </div>
             </div>
-            <div>
-              <h3 className="font-medium text-gray-900 mb-2">可用手册 ({staticAssessmentEngine.getAllBooklets().length})</h3>
-              <div className="text-sm text-gray-600 max-h-40 overflow-y-auto">
-                {staticAssessmentEngine.getAllBooklets().map(booklet => (
-                  <div key={booklet.id} className="mb-1">
-                    <span className="font-medium">{booklet.tag}</span>: {booklet.title}
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Removed booklet debug list */}
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-function BookletCard({ booklet }: { booklet: StaticBooklet }) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-      <div className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {booklet.title}
-            </h3>
-            <p className="text-sm text-gray-600 mb-2">
-              标签: {booklet.tag} | 优先级: {booklet.priority} | 难度: {booklet.difficulty}
-            </p>
-            <p className="text-sm text-gray-500 mb-4">
-              {booklet.description}
-            </p>
-          </div>
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="ml-4 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-          >
-            {expanded ? '收起' : '展开'}
-          </button>
-        </div>
-
-        {expanded && (
-          <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
-            {/* Summary */}
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">概述</h4>
-              <p className="text-gray-700">{booklet.content.summary}</p>
-            </div>
-
-            {/* Problem */}
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">问题分析</h4>
-              <p className="text-gray-700">{booklet.content.problem}</p>
-            </div>
-
-            {/* Solution */}
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">解决方案</h4>
-              <p className="text-gray-700">{booklet.content.solution}</p>
-            </div>
-
-            {/* Steps */}
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">实施步骤</h4>
-              <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                {booklet.content.steps.map((step, index) => (
-                  <li key={index}>{step}</li>
-                ))}
-              </ol>
-            </div>
-
-            {/* Tips */}
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">实用建议</h4>
-              <ul className="list-disc list-inside space-y-1 text-gray-700">
-                {booklet.content.tips.map((tip, index) => (
-                  <li key={index}>{tip}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Warnings */}
-            {booklet.content.warnings && booklet.content.warnings.length > 0 && (
-              <div>
-                <h4 className="font-medium text-red-900 mb-2">注意事项</h4>
-                <ul className="list-disc list-inside space-y-1 text-red-700">
-                  {booklet.content.warnings.map((warning, index) => (
-                    <li key={index}>{warning}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Resources */}
-            {booklet.content.resources && booklet.content.resources.length > 0 && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-2">相关资源</h4>
-                <div className="space-y-2">
-                  {booklet.content.resources.map((resource, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded">
-                      <h5 className="font-medium text-gray-900">{resource.title}</h5>
-                      <p className="text-sm text-gray-600">{resource.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Meta Information */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-              <div>
-                <span className="text-sm font-medium text-gray-900">预计时间:</span>
-                <p className="text-sm text-gray-600">{booklet.estimatedTime}</p>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-900">预期效果:</span>
-                <p className="text-sm text-gray-600">{booklet.expectedOutcome}</p>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-900">严重程度:</span>
-                <p className="text-sm text-gray-600">{booklet.severity}</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+ 

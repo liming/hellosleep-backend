@@ -23,18 +23,18 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         calculatedTags: result.calculatedTags,
-        matchedBooklets: result.matchedBooklets.map(booklet => ({
-          id: booklet.id,
-          tag: booklet.tag,
-          factName: booklet.fact.name,
-          factDescription: booklet.fact.description.zh,
-          content: booklet.content
+        bookletFacts: result.bookletFacts.map(fact => ({
+          tag: fact.tag,
+          factName: fact.factName,
+          description: fact.description,
+          content: fact.content,
+          tutorialLink: fact.tutorialLink,
         })),
         completedAt: result.completedAt,
         summary: {
           totalAnswers: Object.keys(answers).length,
           totalTags: result.calculatedTags.length,
-          totalBooklets: result.matchedBooklets.length
+          totalFacts: result.bookletFacts.length
         }
       }
     });
@@ -55,7 +55,6 @@ export async function GET() {
     
     // Get statistics
     const allTags = staticAssessmentEngine.getAllTags();
-    const allBooklets = staticAssessmentEngine.getAllBooklets();
     
     return NextResponse.json({
       success: true,
@@ -63,7 +62,6 @@ export async function GET() {
         latestResult,
         statistics: {
           totalTags: allTags.length,
-          totalBooklets: allBooklets.length,
           availableTags: allTags.map(tag => ({
             name: tag.name,
             text: tag.text

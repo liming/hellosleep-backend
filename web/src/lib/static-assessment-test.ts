@@ -15,7 +15,7 @@ const testScenarios = [
       lively: 'normal',
       bedroom: 'yes',
       bed: 'yes'
-    }
+    } as Record<string, string>
   },
   {
     name: '学生用户 - 假期综合症',
@@ -32,7 +32,7 @@ const testScenarios = [
       bed: 'yes',
       holiday: 'yes',
       bedtimeearly: 'yes'
-    }
+    } as Record<string, string>
   },
   {
     name: '工作用户 - 压力大且不健康',
@@ -49,7 +49,7 @@ const testScenarios = [
       bedroom: 'no',
       bed: 'no',
       shiftwork: 'no'
-    }
+    } as Record<string, string>
   },
   {
     name: '产后用户 - 放弃努力',
@@ -70,7 +70,7 @@ const testScenarios = [
       complain: 'yes',
       ignore: 'yes',
       medicine: 'yes'
-    }
+    } as Record<string, string>
   },
   {
     name: '噪音问题用户',
@@ -88,7 +88,7 @@ const testScenarios = [
       bed: 'no',
       noise: 'no',
       noisereason: 'neighbour'
-    }
+    } as Record<string, string>
   }
 ];
 
@@ -107,15 +107,15 @@ export function runStaticAssessmentTests() {
       const result = staticAssessmentEngine.processAssessment(scenario.answers);
       
       console.log('🏷️  计算的标签:', result.calculatedTags);
-      console.log('📚 匹配的手册数量:', result.matchedBooklets.length);
+      console.log('🧾 建议数量:', result.bookletFacts.length);
       
-      if (result.matchedBooklets.length > 0) {
-        console.log('📖 匹配的手册:');
-        result.matchedBooklets.forEach((booklet, i) => {
-          console.log(`  ${i + 1}. ${booklet.fact.description.zh} (标签: ${booklet.tag})`);
+      if (result.bookletFacts.length > 0) {
+        console.log('📝 建议列表:');
+        result.bookletFacts.forEach((fact, i) => {
+          console.log(`  ${i + 1}. ${fact.description} (标签: ${fact.tag})`);
         });
       } else {
-        console.log('⚠️  没有匹配的手册');
+        console.log('⚠️  没有建议');
       }
 
       // Validate result
@@ -130,11 +130,11 @@ export function runStaticAssessmentTests() {
       console.log('📊 完成进度:', `${progress}%`);
 
       totalTests++;
-      if (result.calculatedTags.length > 0 || result.matchedBooklets.length > 0) {
+      if (result.calculatedTags.length > 0 || result.bookletFacts.length > 0) {
         passedTests++;
         console.log('✅ 测试通过\n');
       } else {
-        console.log('❌ 测试失败 - 没有生成标签或手册\n');
+        console.log('❌ 测试失败 - 没有生成标签或建议\n');
       }
 
     } catch (error) {
@@ -157,26 +157,11 @@ export function runStaticAssessmentTests() {
   const allTags = staticAssessmentEngine.getAllTags();
   console.log(`📋 总标签数: ${allTags.length}`);
   
-  // Test booklet retrieval
-  const allBooklets = staticAssessmentEngine.getAllBooklets();
-  console.log(`📚 总手册数: ${allBooklets.length}`);
-  
-  // Test specific tag
-  const prenatalTag = staticAssessmentEngine.getTagByName('prenatal');
-  if (prenatalTag) {
-    console.log('🏷️  孕期标签:', prenatalTag.text);
-  }
-  
-  // Test specific booklet
-  const bookletsForTag = staticAssessmentEngine.getBookletsByTag('prenatal');
-  console.log(`📖 孕期相关手册数: ${bookletsForTag.length}`);
-
   return {
     totalTests,
     passedTests,
     successRate: (passedTests / totalTests) * 100,
     totalTags: allTags.length,
-    totalBooklets: allBooklets.length
   };
 }
 

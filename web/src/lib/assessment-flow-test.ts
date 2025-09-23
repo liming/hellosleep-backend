@@ -1,19 +1,16 @@
 import { StaticAssessmentEngine } from './static-assessment-engine';
 import { staticQuestions, staticTags } from '@/data/static-assessment-questions';
-import { staticBooklets } from '@/data/static-assessment-booklets';
 
 interface TestScenario {
   name: string;
   description: string;
   answers: Record<string, string>;
   expectedTags?: string[];
-  expectedBooklets?: string[];
 }
 
 interface TestResult {
   scenario: TestScenario;
   calculatedTags: string[];
-  matchedBooklets: string[];
   passed: boolean;
   issues: string[];
 }
@@ -56,7 +53,6 @@ export class AssessmentFlowTester {
   private testScenario(scenario: TestScenario): TestResult {
     const result = this.engine.processAssessment(scenario.answers);
     const calculatedTags = result.calculatedTags;
-    const matchedBooklets = result.matchedBooklets.map(b => b.id);
     
     const issues: string[] = [];
     let passed = true;
@@ -71,29 +67,9 @@ export class AssessmentFlowTester {
       }
     }
 
-    // Check if expected booklets were matched
-    if (scenario.expectedBooklets) {
-      for (const expectedBooklet of scenario.expectedBooklets) {
-        if (!matchedBooklets.includes(expectedBooklet)) {
-          issues.push(`Missing expected booklet: ${expectedBooklet}`);
-          passed = false;
-        }
-      }
-    }
-
-    // Check if all calculated tags have associated booklets
-    for (const tag of calculatedTags) {
-      const bookletsForTag = this.engine.getBookletsByTag(tag);
-      if (bookletsForTag.length === 0) {
-        issues.push(`Tag ${tag} has no associated booklets`);
-        passed = false;
-      }
-    }
-
     return {
       scenario,
       calculatedTags,
-      matchedBooklets,
       passed,
       issues
     };
@@ -126,8 +102,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: [],
-        expectedBooklets: []
+        expectedTags: []
       },
 
       // Sleep inefficiency scenario
@@ -156,8 +131,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse'],
-        expectedBooklets: ['rest_quality_guide', 'vitality_enhancement_guide', 'living_space_guide']
+        expectedTags: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse']
       },
 
       // Irregular schedule scenario
@@ -182,8 +156,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['irregular_schedule'],
-        expectedBooklets: ['life_rhythm_guide']
+        expectedTags: ['irregular_schedule']
       },
 
       // Poor sleep quality scenario
@@ -209,8 +182,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['poor_sleep_quality'],
-        expectedBooklets: ['life_satisfaction_guide']
+        expectedTags: ['poor_sleep_quality']
       },
 
       // Unhealthy lifestyle scenario
@@ -235,8 +207,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['unhealthy_lifestyle'],
-        expectedBooklets: ['vitality_enhancement_guide']
+        expectedTags: ['unhealthy_lifestyle']
       },
 
       // Idle lifestyle scenario
@@ -261,8 +232,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['idle_lifestyle', 'bedroom_overuse'],
-        expectedBooklets: ['meaningful_activities_guide', 'living_space_guide']
+        expectedTags: ['idle_lifestyle', 'bedroom_overuse']
       },
 
       // Bedroom overuse scenario
@@ -287,8 +257,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['bedroom_overuse'],
-        expectedBooklets: ['living_space_guide']
+        expectedTags: ['bedroom_overuse']
       },
 
       // Prenatal scenario
@@ -313,8 +282,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['prenatal'],
-        expectedBooklets: ['prenatal_wellness_guide']
+        expectedTags: ['prenatal']
       },
 
       // Postnatal scenario
@@ -339,8 +307,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['postnatal'],
-        expectedBooklets: ['postnatal_life_guide']
+        expectedTags: ['postnatal']
       },
 
       // Student issues scenario
@@ -367,8 +334,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['student_issues'],
-        expectedBooklets: ['student_life_guide']
+        expectedTags: ['student_issues']
       },
 
       // Shift work scenario
@@ -394,8 +360,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['shift_work'],
-        expectedBooklets: ['shift_work_life_guide']
+        expectedTags: ['shift_work']
       },
 
       // Maladaptive behaviors scenario
@@ -420,8 +385,7 @@ export class AssessmentFlowTester {
           ignore: 'yes',
           medicine: 'yes'
         },
-        expectedTags: ['maladaptive_behaviors', 'bedroom_overuse', 'excessive_complaining', 'medication_use'],
-        expectedBooklets: ['life_balance_guide', 'living_space_guide', 'positive_focus_guide', 'natural_lifestyle_guide']
+        expectedTags: ['maladaptive_behaviors', 'bedroom_overuse', 'excessive_complaining', 'medication_use']
       },
 
       // Excessive complaining scenario
@@ -446,8 +410,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['excessive_complaining'],
-        expectedBooklets: ['positive_focus_guide']
+        expectedTags: ['excessive_complaining']
       },
 
       // Medication use scenario
@@ -472,8 +435,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'yes'
         },
-        expectedTags: ['medication_use'],
-        expectedBooklets: ['natural_lifestyle_guide']
+        expectedTags: ['medication_use']
       },
 
       // Noise problem scenario
@@ -499,8 +461,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['noise_problem'],
-        expectedBooklets: ['peaceful_environment_guide']
+        expectedTags: ['noise_problem']
       },
 
       // Partner snoring scenario
@@ -526,8 +487,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['partner_snoring'],
-        expectedBooklets: ['relationship_harmony_guide']
+        expectedTags: ['partner_snoring']
       },
 
       // Complex scenario - Multiple issues
@@ -554,8 +514,7 @@ export class AssessmentFlowTester {
           ignore: 'yes',
           medicine: 'yes'
         },
-        expectedTags: ['irregular_schedule', 'poor_sleep_quality', 'unhealthy_lifestyle', 'bedroom_overuse', 'partner_snoring', 'maladaptive_behaviors', 'excessive_complaining', 'medication_use'],
-        expectedBooklets: ['life_rhythm_guide', 'life_satisfaction_guide', 'vitality_enhancement_guide', 'living_space_guide', 'relationship_harmony_guide', 'life_balance_guide', 'positive_focus_guide', 'natural_lifestyle_guide']
+        expectedTags: ['irregular_schedule', 'poor_sleep_quality', 'unhealthy_lifestyle', 'bedroom_overuse', 'partner_snoring', 'maladaptive_behaviors', 'excessive_complaining', 'medication_use']
       }
     ];
   }
@@ -582,17 +541,12 @@ export class AssessmentFlowTester {
         console.log(`\n${result.scenario.name}:`);
         console.log(`  Expected Tags: ${result.scenario.expectedTags?.join(', ') || 'None'}`);
         console.log(`  Calculated Tags: ${result.calculatedTags.join(', ') || 'None'}`);
-        console.log(`  Expected Booklets: ${result.scenario.expectedBooklets?.join(', ') || 'None'}`);
-        console.log(`  Matched Booklets: ${result.matchedBooklets.join(', ') || 'None'}`);
         console.log(`  Issues: ${result.issues.join(', ')}`);
       });
     }
 
     // Tag coverage analysis
     this.analyzeTagCoverage(results);
-
-    // Booklet coverage analysis
-    this.analyzeBookletCoverage(results);
   }
 
   /**
@@ -618,56 +572,6 @@ export class AssessmentFlowTester {
 
     console.log('\nCalculated Tags:', calculatedTagsList.join(', '));
     console.log('Expected Tags:', expectedTagsList.join(', '));
-
-    // Check for tags without booklets
-    const tagsWithoutBooklets: string[] = [];
-    calculatedTagsList.forEach(tag => {
-      const booklets = this.engine.getBookletsByTag(tag);
-      if (booklets.length === 0) {
-        tagsWithoutBooklets.push(tag);
-      }
-    });
-
-    if (tagsWithoutBooklets.length > 0) {
-      console.log('\n⚠️ Tags without booklets:', tagsWithoutBooklets.join(', '));
-    } else {
-      console.log('\n✅ All calculated tags have associated booklets');
-    }
-  }
-
-  /**
-   * Analyze booklet coverage across all tests
-   */
-  private analyzeBookletCoverage(results: TestResult[]): void {
-    console.log('\n📚 Booklet Coverage Analysis');
-    console.log('==========================');
-
-    const allMatchedBooklets = new Set<string>();
-    const allExpectedBooklets = new Set<string>();
-
-    results.forEach(result => {
-      result.matchedBooklets.forEach(booklet => allMatchedBooklets.add(booklet));
-      result.scenario.expectedBooklets?.forEach(booklet => allExpectedBooklets.add(booklet));
-    });
-
-    console.log(`Total Unique Booklets Matched: ${allMatchedBooklets.size}`);
-    console.log(`Total Unique Booklets Expected: ${allExpectedBooklets.size}`);
-
-    const matchedBookletsList = Array.from(allMatchedBooklets).sort();
-    const expectedBookletsList = Array.from(allExpectedBooklets).sort();
-
-    console.log('\nMatched Booklets:', matchedBookletsList.join(', '));
-    console.log('Expected Booklets:', expectedBookletsList.join(', '));
-
-    // Check for unused booklets
-    const allBooklets = this.engine.getAllBooklets().map(b => b.id);
-    const unusedBooklets = allBooklets.filter(booklet => !allMatchedBooklets.has(booklet));
-
-    if (unusedBooklets.length > 0) {
-      console.log('\n⚠️ Unused booklets:', unusedBooklets.join(', '));
-    } else {
-      console.log('\n✅ All booklets were matched in tests');
-    }
   }
 }
 

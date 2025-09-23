@@ -1,6 +1,6 @@
 import calculationFunctions from '@/data/static-assessment-calculations';
 import { staticQuestions, staticTags, type StaticQuestion, type StaticTag } from '@/data/static-assessment-questions';
-import { staticBooklets, type StaticBooklet } from '@/data/static-assessment-booklets';
+import { mapAnswersToBookletFacts, prioritizeBookletFacts, type BookletFact } from '@/data/assessment-booklets-mapping';
 
 export interface AssessmentAnswer {
   questionId: string;
@@ -13,7 +13,7 @@ export interface Tag {
   name: string;
   text: string;
   description: string;
-  category: 'sleep' | 'lifestyle' | 'work' | 'student' | 'special' | 'behavior';
+  category: 'sleep' | 'lifestyle' | 'work' | 'student' | 'special' | 'behavior' | 'environment';
   priority: 'high' | 'medium' | 'low';
   calc: {
     type: 'simple' | 'function' | 'complex';
@@ -31,46 +31,18 @@ export interface Tag {
   severity: 'mild' | 'moderate' | 'severe';
 }
 
-export interface Booklet {
-  id: string;
-  tag: string;
-  title: string;
-  description: string;
-  category: 'sleep' | 'lifestyle' | 'work' | 'student' | 'special' | 'behavior' | 'environment';
-  priority: 'high' | 'medium' | 'low';
-  severity: 'mild' | 'moderate' | 'severe';
-  content: {
-    summary: string;
-    problem: string;
-    solution: string;
-    steps: string[];
-    tips: string[];
-    warnings?: string[];
-    resources?: {
-      title: string;
-      description: string;
-      url?: string;
-    }[];
-  };
-  estimatedTime: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  expectedOutcome: string;
-}
-
 export interface AssessmentResult {
   answers: Record<string, string>;
   calculatedTags: string[];
-  matchedBooklets: StaticBooklet[];
+  bookletFacts: BookletFact[];
   completedAt: Date;
 }
 
 export class StaticAssessmentEngine {
   private questionsTags: StaticTag[];
-  private booklets: StaticBooklet[];
 
   constructor() {
     this.questionsTags = staticTags;
-    this.booklets = staticBooklets;
   }
 
   /**
@@ -78,12 +50,13 @@ export class StaticAssessmentEngine {
    */
   processAssessment(answers: Record<string, string>): AssessmentResult {
     const calculatedTags = this.calculateTags(answers);
-    const matchedBooklets = this.findBookletsByTags(calculatedTags);
+    const mappedFacts = mapAnswersToBookletFacts(answers);
+    const prioritizedFacts = prioritizeBookletFacts(mappedFacts, answers);
 
     return {
       answers,
       calculatedTags,
-      matchedBooklets,
+      bookletFacts: prioritizedFacts,
       completedAt: new Date()
     };
   }
@@ -157,21 +130,7 @@ export class StaticAssessmentEngine {
   /**
    * Find booklets that match the calculated tags
    */
-  private findBookletsByTags(tags: string[]): Booklet[] {
-    const matchedBooklets: Booklet[] = [];
-
-    for (const tag of tags) {
-      const bookletsForTag = this.booklets.filter(booklet => booklet.tag === tag);
-      matchedBooklets.push(...bookletsForTag);
-    }
-
-    // Remove duplicates based on booklet ID
-    const uniqueBooklets = matchedBooklets.filter((booklet, index, self) => 
-      index === self.findIndex(b => b.id === booklet.id)
-    );
-
-    return uniqueBooklets;
-  }
+  // Booklet matching removed in favor of mapping-based booklet facts
 
   /**
    * Get all available tags
@@ -181,31 +140,10 @@ export class StaticAssessmentEngine {
   }
 
   /**
-   * Get all available booklets
-   */
-  getAllBooklets(): StaticBooklet[] {
-    return this.booklets;
-  }
-
-  /**
-   * Get booklets for a specific tag
-   */
-  getBookletsByTag(tag: string): StaticBooklet[] {
-    return this.booklets.filter(booklet => booklet.tag === tag);
-  }
-
-  /**
    * Get tag information by name
    */
   getTagByName(tagName: string): StaticTag | undefined {
     return this.questionsTags.find(tag => tag.name === tagName);
-  }
-
-  /**
-   * Get booklet by ID
-   */
-  getBookletById(bookletId: string): StaticBooklet | undefined {
-    return this.booklets.find(booklet => booklet.id === bookletId);
   }
 
   /**
@@ -306,7 +244,6 @@ export class StaticAssessmentEngine {
   exportDataForDatabase() {
     return {
       tags: this.questionsTags,
-      booklets: this.booklets,
       calculationFunctions: Object.keys(calculationFunctions)
     };
   }

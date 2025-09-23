@@ -459,37 +459,37 @@ export default function AssessmentPage() {
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between">
-            <div className="flex space-x-8">
-              <button
-                onClick={() => setCurrentScreen('landing')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                  currentScreen === 'landing'
+          <div className="flex space-x-8">
+            <button
+              onClick={() => setCurrentScreen('landing')}
+              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                currentScreen === 'landing'
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                首页
-              </button>
-              <button
-                onClick={() => setCurrentScreen('questions')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                  currentScreen === 'questions'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              首页
+            </button>
+            <button
+              onClick={() => setCurrentScreen('questions')}
+              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                currentScreen === 'questions'
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                问题页面
-              </button>
-              <button
-                onClick={() => setCurrentScreen('results')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                  currentScreen === 'results'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              问题页面
+            </button>
+            <button
+              onClick={() => setCurrentScreen('results')}
+              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                currentScreen === 'results'
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                结果页面
-              </button>
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              结果页面
+            </button>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -514,4 +514,4 @@ export default function AssessmentPage() {
       {currentScreen === 'results' && renderResultsScreen()}
     </div>
   );
-}
+} 
