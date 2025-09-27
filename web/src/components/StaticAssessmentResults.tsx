@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { staticAssessmentEngine, type AssessmentResult } from '@/lib/static-assessment-engine';
-import { getTagByName } from '@/data/static-assessment-questions';
 
 interface StaticAssessmentResultsProps {
   answers: Record<string, string>;
@@ -91,31 +90,26 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">识别的问题标签</h2>
             <div className="flex flex-wrap gap-2 mb-4">
-              {result.calculatedTags.map((tagName) => {
-                const tag = getTagByName(tagName);
-                return (
-                  <span
-                    key={tagName}
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      tag?.priority === 'high' 
-                        ? 'bg-red-100 text-red-800' 
-                        : tag?.priority === 'medium'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-blue-100 text-blue-800'
-                    }`}
-                  >
-                    {tag?.text || tagName}
-                    {tag?.priority && (
-                      <span className="ml-1 text-xs">({tag.priority})</span>
-                    )}
-                  </span>
-                );
-              })}
+              {result.calculatedTags.map((tag) => (
+                <span
+                  key={tag.name}
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    tag.priority === 'high' 
+                      ? 'bg-red-100 text-red-800' 
+                      : tag.priority === 'medium'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
+                  {tag.text}
+                  <span className="ml-1 text-xs">({tag.priority})</span>
+                </span>
+              ))}
             </div>
             <div className="text-sm text-gray-600">
               <p><strong>调试信息:</strong></p>
-              <p>计算的标签: {result.calculatedTags.join(', ')}</p>
-              <p>匹配的建议数量: {result.bookletFacts.length}</p>
+              <p>计算的标签: {result.calculatedTags.map(t => t.name).join(', ')}</p>
+              <p>匹配的建议数量: {result.calculatedTags.length}</p>
             </div>
           </div>
         )}
@@ -132,17 +126,27 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
           </div>
         )}
 
-        {/* Booklet Facts mapped from answers */}
-        {result.bookletFacts && result.bookletFacts.length > 0 && (
+        {/* Recommendations from calculated tags */}
+        {result.calculatedTags.length > 0 && (
           <div className="space-y-4 mb-6">
             <h2 className="text-xl font-semibold text-gray-900">重点建议</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {result.bookletFacts.map((fact) => (
-                <div key={fact.tag} className="bg-white rounded-lg shadow-sm p-4">
+              {result.calculatedTags.map((tag) => (
+                <div key={tag.name} className="bg-white rounded-lg shadow-sm p-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{fact.description}</h3>
-                      <p className="text-sm text-gray-600">{fact.content}</p>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{tag.recommendation.title}</h3>
+                      <p className="text-sm text-gray-600">{tag.recommendation.content}</p>
+                      {tag.recommendation.tutorialLink && (
+                        <a 
+                          href={tag.recommendation.tutorialLink}
+                          className="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          查看详细教程 →
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -164,7 +168,7 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             </div>
             <div>
               <p className="text-sm text-gray-600">匹配的建议数量</p>
-              <p className="text-lg font-semibold">{result.bookletFacts.length}</p>
+              <p className="text-lg font-semibold">{result.calculatedTags.length}</p>
             </div>
           </div>
         </div>

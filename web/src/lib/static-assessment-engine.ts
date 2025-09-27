@@ -1,6 +1,5 @@
 import calculationFunctions from '@/data/static-assessment-calculations';
 import { staticQuestions, staticTags, type StaticQuestion, type StaticTag } from '@/data/static-assessment-questions';
-import { mapAnswersToBookletFacts, prioritizeBookletFacts, type BookletFact } from '@/data/assessment-booklets-mapping';
 
 export interface AssessmentAnswer {
   questionId: string;
@@ -9,7 +8,6 @@ export interface AssessmentAnswer {
 }
 
 export interface Tag {
-  id: string;
   name: string;
   text: string;
   description: string;
@@ -27,14 +25,17 @@ export interface Tag {
       operator?: 'equals' | 'not_equals' | 'greater_than' | 'less_than';
     }>;
   };
-  interventions: string[];
   severity: 'mild' | 'moderate' | 'severe';
+  recommendation: {
+    title: string;
+    content: string;
+    tutorialLink?: string;
+  };
 }
 
 export interface AssessmentResult {
   answers: Record<string, string>;
-  calculatedTags: string[];
-  bookletFacts: BookletFact[];
+  calculatedTags: Tag[];
   completedAt: Date;
 }
 
@@ -46,17 +47,14 @@ export class StaticAssessmentEngine {
   }
 
   /**
-   * Process assessment answers and return results with tags and booklets
+   * Process assessment answers and return results with tags and recommendations
    */
   processAssessment(answers: Record<string, string>): AssessmentResult {
     const calculatedTags = this.calculateTags(answers);
-    const mappedFacts = mapAnswersToBookletFacts(answers);
-    const prioritizedFacts = prioritizeBookletFacts(mappedFacts, answers);
 
     return {
       answers,
       calculatedTags,
-      bookletFacts: prioritizedFacts,
       completedAt: new Date()
     };
   }
@@ -64,16 +62,20 @@ export class StaticAssessmentEngine {
   /**
    * Calculate tags based on assessment answers using the calculation functions
    */
-  private calculateTags(answers: Record<string, string>): string[] {
-    const activeTags: string[] = [];
+  private calculateTags(answers: Record<string, string>): Tag[] {
+    const activeTags: Tag[] = [];
 
     for (const tag of this.questionsTags) {
       if (this.evaluateTag(tag, answers)) {
-        activeTags.push(tag.name);
+        activeTags.push(tag);
       }
     }
 
-    return activeTags;
+    // Sort by priority (high to low)
+    return activeTags.sort((a, b) => {
+      const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    });
   }
 
   /**

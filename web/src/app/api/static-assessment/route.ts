@@ -22,19 +22,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        calculatedTags: result.calculatedTags,
-        bookletFacts: result.bookletFacts.map(fact => ({
-          tag: fact.tag,
-          factName: fact.factName,
-          description: fact.description,
-          content: fact.content,
-          tutorialLink: fact.tutorialLink,
+        calculatedTags: result.calculatedTags.map(tag => ({
+          name: tag.name,
+          text: tag.text,
+          description: tag.description,
+          category: tag.category,
+          priority: tag.priority,
+          severity: tag.severity,
+          recommendation: tag.recommendation
         })),
         completedAt: result.completedAt,
         summary: {
           totalAnswers: Object.keys(answers).length,
           totalTags: result.calculatedTags.length,
-          totalFacts: result.bookletFacts.length
+          totalRecommendations: result.calculatedTags.length
         }
       }
     });
