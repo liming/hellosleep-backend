@@ -400,7 +400,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '合理提高睡眠效率',
       content: '对失眠的人最重要的是提高自己的睡眠效率，而不是花很长时间努力睡觉却翻来覆去无法入睡。请阅读并实践『如何提高睡眠效率』，让自己避免躺在床上却无法入睡的时间。',
-      tutorialLink: '/tutorial/5b35bd8fd49e3a40708f7f66'
+      tutorialLink: '/article/g5cdnwrbtd8y9lr84vnt1693'
     }
   },
   {
@@ -418,7 +418,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '按时早起',
       content: '常常因为睡得不好而补觉，这是很糟糕的做法。在早晨补觉会有两种后果：1. 推迟一天的生活，从而推迟晚上入睡的时间。会发现自己很晚也没有充足的困意。2. 打乱生活节奏，打乱自己的计划。按时早起是一天的节拍器，它定义了我们一天的生活和作息时间。所以，不论晚上睡得如何，按时早起是必须的。',
-      tutorialLink: '/tutorial/5b35dfcbd49e3a40708f7f78'
+      tutorialLink: '/article/u0wryasakus7fooak57kx1zl'
     }
   },
   {
@@ -436,7 +436,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '改善睡眠环境',
       content: '睡眠质量差往往与睡眠环境、生活习惯和心理状态有关。建议保持卧室安静、黑暗、凉爽，避免在床上进行非睡眠活动，建立规律的睡前仪式，放松心情。',
-      tutorialLink: '/tutorial/5b39c2a5bd3e203cbff9a506'
+      tutorialLink: '/article/c11i32ibrcteqrb0ce228zkx'
     }
   },
 
@@ -456,7 +456,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '健康的生活方式',
       content: '许多人认为失眠只是心理问题，实际上我们的身心紧密相联，任何身体上的不适都会产生心理变化，任何心理问题也都对身体有间接影响。失眠终归是我们身心不健康的产物，想要走出失眠，就要改善自己的身心状态。通常，缺乏运动、缺少阳光、不自制的生活会侵蚀自己的身体，我们需要长期规律的锻炼和健康的生活方式让自己的身体保持良好状态。',
-      tutorialLink: '/tutorial/5ba0e09ec0322b7710b10709'
+      tutorialLink: '/article/e9rwh72tv2duvzuj0v5p3zpw'
     }
   },
   {
@@ -474,7 +474,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '充实生活',
       content: '睡眠最根本的目的，是为了消除一天劳作带来的疲劳，恢复我们身体和精神的能量。理解睡眠是一种需求，我们就应该明白为什么清闲的生活反而更容易失眠。因为无所事事的状态中大脑和身体的活跃度非常低，一直处于休息的状态，所以到了入睡的时间难以产生困意。',
-      tutorialLink: '/tutorial/5b39aed3bd3e203cbff9a500'
+      tutorialLink: '/article/v56rvd5dunn3ksi8jekukvyr'
     }
   },
   {
@@ -492,7 +492,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '合理利用卧室',
       content: '几乎每个失眠患者无一例外都会采取错误的手段对待失眠，其一是在床上呆更长的时间，以便延长自己的睡眠时间；其二是不停得翻来覆去寻找合适的姿势入睡。这样做的是不正确的，后果很严重。因为我们在床上花了许多"无法入睡"的时间，渐渐的床铺会成为一个"睡不着觉"的存在。',
-      tutorialLink: '/tutorial/5b39c2a5bd3e203cbff9a506'
+      tutorialLink: '/article/c11i32ibrcteqrb0ce228zkx'
     }
   },
 
@@ -512,7 +512,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '孕期',
       content: '几乎每个准妈妈都会失眠。怀孕的中后期因为生理上的种种变化，以及生活和工作的种种变化，失眠会成为家常便饭。虽然每个准吗啊都希望消除孕期失眠，但是这并不现实，而且没有必要，你需要做的只是承受暂时的失眠，健康和规律的度过每一天的生活。',
-      tutorialLink: '/tutorial/5b46db09bf28873e046e1af4'
+      tutorialLink: '/article/u7c9ql8s5v6k6wpqg7in9x85'
     }
   },
   {
@@ -530,7 +530,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '产后',
       content: '产后妈妈是最常见的失眠人群。在睡吧进行咨询的10个人中大概4个会是产后妈妈。所以，妈妈们，你们并不孤单，也不必惊慌失措。',
-      tutorialLink: '/tutorial/5b46e556bf28873e046e1af6'
+      tutorialLink: '/article/eejvu3vc2iu7fce35x3eo869'
     }
   },
   {
@@ -548,7 +548,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '改善大学生活',
       content: '失眠是身心状态不佳的表现，是不均衡生活的产物。大学生活中，许多学生缺乏目标，生活非常散漫，很难让自己保持健康、均衡、活跃的生活状态，失眠就不足为奇了。',
-      tutorialLink: '/tutorial/5b39987cbd3e203cbff9a4f6'
+      tutorialLink: '/article/sa9yqxtu6s64e95b5ev2udgv'
     }
   },
   {
@@ -566,7 +566,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '适应作息',
       content: '「并不是工作和生活的形式让一个人失眠，而是错误的对待自己的工作和生活让一个人失眠」。一定要弄明白这两点的区别。同样的工作，有些人积极和主动，有些人懒散和被动，就会有很大区别。事实上，因为倒班失眠求助的人非常少，并不是今天上白班明天上夜班的人就容易失眠。',
-      tutorialLink: '/tutorial/5b39b41cbd3e203cbff9a501'
+      tutorialLink: '/article/lclrz6kaneqk59scj95dz4vc'
     }
   },
 
@@ -586,7 +586,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '放弃为失眠努力',
       content: '可以想象，失眠就像是一根柱子，而失眠所带来的焦虑和担忧就像是一根绳子，这根绳子一端绑在柱子上，一端套在脖子上，我们就这样被栓住，每天都在围绕失眠转圈。一方面为失眠做各种各样的努力，另一方面也为失眠放弃了许多自己的责任。当我们的生活被失眠所左右，就会逐渐陷入慢性失眠。',
-      tutorialLink: '/tutorial/5b1f2114f4612c136e02a079'
+      tutorialLink: '/article/kqlrwhal1t4x650mmgjajiwk'
     }
   },
   {
@@ -604,7 +604,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '终止抱怨',
       content: '许多人失眠之后，都会先给自己最亲近的人抱怨或者哭诉。而试想当自己的家人、朋友或者同事日复一日听到无精打采的你说自己睡不着，他们会有怎样的反应呢？事实上，当我们说出来：失眠很痛苦，我很绝望。失眠的痛苦不仅在我们心中扎根，而且在听到或者看到这句话的人心中扎根。',
-      tutorialLink: '/tutorial/5b46e497bf28873e046e1af5'
+      tutorialLink: '/article/ianc38uy3d2tyiz3dpsqbvoo'
     }
   },
   {
@@ -622,7 +622,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '药物',
       content: '药物对治失眠非常流行，却并不能带来明显的效果。通常安眠药在开始的几天是好用的，但是效果会越来越不明显，而当我们停止服用安眠药，失眠会更加严重。主要原因是因为药物只是针对失眠的现象，并不对治造成失眠的根本原因。',
-      tutorialLink: '/tutorial/5b46f292bf28873e046e1b00'
+      tutorialLink: '/article/i865rmsgjmelf8evdf8ucqzb'
     }
   },
 
@@ -642,7 +642,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '尝试合理沟通',
       content: '远亲不如近邻，每一个邻居都是自己的至亲。当我们的睡眠被自己的邻里所打扰，最不应该做的事情是去指责和对峙。在我们抱怨邻居不顾及他人感受的时候，也应该考虑自己是不是很好的维持邻里之间的关系。',
-      tutorialLink: '/tutorial/5d8821b0ae87d938157bb233'
+      tutorialLink: '/article/5d8821b0ae87d938157bb233'
     }
   },
   {
@@ -660,7 +660,7 @@ export const staticTags: StaticTag[] = [
     recommendation: {
       title: '合理对待噪音',
       content: '这世界上有20%的成年人打鼾，成年男子打鼾的几率是25%，随着年龄的增长打呼噜的比例也会不断增加。所以我们每个人都有很大几率遇到打呼噜的室友或者伴侣。有些人因为呼噜声睡不着，却并不是每个人都被困扰。我们完全可以通过自身的调整走出对呼噜声的执着。',
-      tutorialLink: '/tutorial/5d8821b0ae87d938157bb233'
+      tutorialLink: '/article/5d8821b0ae87d938157bb233'
     }
   }
 ];
