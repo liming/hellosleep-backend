@@ -1,0 +1,120 @@
+---
+alwaysApply: true
+---
+
+# Strapi API Patterns
+
+## API Configuration
+- **Base URL**: `http://localhost:1337`
+- **Authentication**: Bearer token from `service/.env` as `LOCAL_API_TOKEN`
+- **API Version**: Strapi 5 (no `attributes` nesting, use `documentId` instead of `id`)
+
+## Common curl Commands
+
+### Fetch Articles
+```bash
+# Basic fetch
+curl "http://localhost:1337/api/articles" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Filter by type
+curl "http://localhost:1337/api/articles?filters%5Btype%5D%5B%24eq%5D=tutorial" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Filter by altId (legacy support)
+curl "http://localhost:1337/api/articles?filters%5BaltId%5D%5B%24eq%5D=5b46db09bf28873e046e1af4" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# With pagination
+curl "http://localhost:1337/api/articles?pagination%5BpageSize%5D=100" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Fetch Categories
+```bash
+# Get all categories sorted by weight
+curl "http://localhost:1337/api/categories?sort=weight:asc" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## API Proxy Pattern
+- **File**: `web/src/app/api/articles/route.ts`
+- **Purpose**: Avoid CORS issues for client-side calls
+- **Usage**: Frontend calls `/api/articles` instead of direct Strapi API
+
+## Response Structure
+- **Data**: Direct access (no `attributes` nesting)
+- **Relations**: Use `documentId` instead of `id`
+- **Pagination**: Standard Strapi pagination meta
+
+## Common Filter Patterns
+- `filters[type][$eq]=tutorial` - Tutorial articles
+- `filters[type][$eq]=share` - Share articles  
+- `filters[altId][$eq]=LEGACY_ID` - Find by legacy altId
+- `filters[category][documentId][$eq]=CAT_ID` - Filter by category
+- `populate=category` - Include category data
+
+## Best Practices
+1. Use API proxy for client-side calls
+2. Handle errors gracefully
+3. Use populate sparingly
+4. Implement pagination for large datasets
+5. Validate response data before use
+# Strapi API Patterns
+
+## API Configuration
+- **Base URL**: `http://localhost:1337`
+- **Authentication**: Bearer token from `service/.env` as `LOCAL_API_TOKEN`
+- **API Version**: Strapi 5 (no `attributes` nesting, use `documentId` instead of `id`)
+
+## Common curl Commands
+
+### Fetch Articles
+```bash
+# Basic fetch
+curl "http://localhost:1337/api/articles" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Filter by type
+curl "http://localhost:1337/api/articles?filters%5Btype%5D%5B%24eq%5D=tutorial" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Filter by altId (legacy support)
+curl "http://localhost:1337/api/articles?filters%5BaltId%5D%5B%24eq%5D=5b46db09bf28873e046e1af4" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# With pagination
+curl "http://localhost:1337/api/articles?pagination%5BpageSize%5D=100" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Fetch Categories
+```bash
+# Get all categories sorted by weight
+curl "http://localhost:1337/api/categories?sort=weight:asc" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## API Proxy Pattern
+- **File**: `web/src/app/api/articles/route.ts`
+- **Purpose**: Avoid CORS issues for client-side calls
+- **Usage**: Frontend calls `/api/articles` instead of direct Strapi API
+
+## Response Structure
+- **Data**: Direct access (no `attributes` nesting)
+- **Relations**: Use `documentId` instead of `id`
+- **Pagination**: Standard Strapi pagination meta
+
+## Common Filter Patterns
+- `filters[type][$eq]=tutorial` - Tutorial articles
+- `filters[type][$eq]=share` - Share articles  
+- `filters[altId][$eq]=LEGACY_ID` - Find by legacy altId
+- `filters[category][documentId][$eq]=CAT_ID` - Filter by category
+- `populate=category` - Include category data
+
+## Best Practices
+1. Use API proxy for client-side calls
+2. Handle errors gracefully
+3. Use populate sparingly
+4. Implement pagination for large datasets
+5. Validate response data before use

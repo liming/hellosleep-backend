@@ -1,0 +1,19 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+## Project Overview
+HelloSleep is a sleep assessment and education platform built with a monorepo architecture. The project helps users understand and improve their sleep through personalized assessments and educational content.
+
+## Architecture
+- **Monorepo Structure**: `service/` (Strapi backend), `web/` (Next.js frontend), `shared/` (common utilities)
+- **Backend**: Strapi 5 with PostgreSQL
+- **Frontend**: Next.js 15 with App Router, TypeScript, Tailwind CSS
+- **Database**: PostgreSQL with Strapi 5 (uses `documentId` instead of `id` for relations)
+
+## Key Features
+- **Assessment System**: Rule-based calculations with 15 tags and unified StaticTag structure
+- **Article System**: Tutorial and share articles with category-based organization
+- **Tutorial Link System**: `/article/{documentId}` format with legacy redirect support

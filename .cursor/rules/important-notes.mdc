@@ -1,0 +1,42 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# Important Notes
+
+## Strapi 5 Differences
+- Uses `documentId` instead of `id` for relations
+- Data is not nested under `attributes`
+- API structure fundamentally different from Strapi 4
+
+## Environment Setup
+- **Strapi**: `http://localhost:1337`
+- **Next.js**: `http://localhost:3000`
+- **Database**: PostgreSQL with Strapi 5
+- **API Token**: Stored in `service/.env` as `LOCAL_API_TOKEN`
+
+## Common Commands
+```bash
+# Start development servers
+npm run dev
+
+# Start individual services
+cd service && npm run develop
+cd web && npm run dev
+
+# Build and test
+npm run build
+npm run test
+```
+
+## Critical Issues
+- API proxy is essential for client-side Strapi calls to avoid CORS
+- Assessment system uses static, rule-based calculations (no AI)
+- Tutorial links have been migrated to new format but need route conflict resolution
+
+## Documentation
+- **TODO.md**: Main project TODO list with completed tasks and current priorities
+- **Always update TODO.md** when completing tasks or changing priorities
+- **Cursor Rules**: Located in `.cursor/rules/` directory with `.mdc` extension

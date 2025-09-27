@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+# Development Guidelines
+
+## Code Style
+- TypeScript strict mode
+- Tailwind CSS for styling
+- Next.js App Router patterns
+- Strapi 5 API structure (no `attributes` nesting, use `documentId`)
+
+## API Patterns
+- Use API proxy routes to avoid CORS issues
+- Bearer token authentication for Strapi
+- Handle loading states and error boundaries
+- Use proper TypeScript interfaces
+
+## Assessment Logic
+- Tags are calculated based on user answers
+- Each tag has a recommendation with title, content, and tutorialLink
+- Priority-based sorting (high, medium, low)
+- Category-based organization

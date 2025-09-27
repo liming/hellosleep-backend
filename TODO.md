@@ -100,12 +100,18 @@
 
 ## 🔄 In Progress
 
+### Tutorial System Issues
+- [ ] **Route Conflict Resolution**
+  - [ ] Fix route conflict between /tutorial/[altId] and /tutorial/[category]
+  - [ ] Test tutorial redirects work correctly after fixing route conflict
+  - [ ] Ensure backward compatibility for old tutorial links
+
 ### Frontend Routing & Navigation
 - [x] Test and verify category URL routing functionality
 - [x] Ensure proper category linking between articles and categories
 - [ ] Add breadcrumb navigation for category pages
 
-### Assessment System
+### Assessment System ✅
 - [x] Complete sleep assessment implementation with wireframe design
 - [x] Remove wireframe reference page (cleanup completed)
 - [x] **Static Assessment System**
@@ -141,6 +147,21 @@
 - [x] Test assessment flow end-to-end
 - [x] Validate static assessment algorithms
 - [x] Configure assessment system and test integration
+- [x] **Assessment System Refactoring**
+  - [x] Unified tag and booklet facts into single StaticTag structure
+  - [x] Removed redundant id and interventions fields from tags
+  - [x] Integrated recommendation content directly into tags
+  - [x] Updated assessment engine to use unified tag-based recommendations
+  - [x] Modified API responses to return full Tag objects with recommendations
+  - [x] Updated UI components to display recommendations from tags
+  - [x] Removed old booklet matching system and assessment-booklets-mapping.ts
+  - [x] Cleaned up migration-related pages and models
+- [x] **Tutorial Link System**
+  - [x] Created API proxy for articles to avoid CORS issues
+  - [x] Added /tutorial/[altId] redirect route for backward compatibility
+  - [x] Updated all 15 tutorial links from /tutorial/{altId} to /article/{documentId}
+  - [x] Mapped altId to documentId using Strapi database lookup
+  - [x] Assessment recommendations now link directly to correct article pages
 
 ## 📋 Next Priority Tasks
 
@@ -240,4 +261,6 @@
 - **Frontend Fix**: Resolved category filtering issue by fixing nested filter parameter handling in API client
 - **Assessment Milestone**: Completed full sleep assessment implementation with wireframe design, interactive navigation, and real data integration
 - **AI Enhancement**: Implemented AI-powered recommendation system replacing hard-coded calculations with dynamic, personalized suggestions
-- **Cost Optimization**: Created AI training data system with pattern matching and caching, reducing AI API calls by 90%+ while maintaining quality 
+- **Cost Optimization**: Created AI training data system with pattern matching and caching, reducing AI API calls by 90%+ while maintaining quality
+- **Assessment Refactoring**: Successfully unified tag and booklet facts into single StaticTag structure, removing redundant fields and simplifying the recommendation system
+- **Tutorial Link Migration**: Updated all assessment tutorial links from /tutorial/{altId} to /article/{documentId} format, with API proxy for CORS handling and backward compatibility redirect route 
