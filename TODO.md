@@ -165,6 +165,48 @@
 
 ## 📋 Next Priority Tasks
 
+### Assessment System Migration to Database
+- [ ] **Review Assessment Data**
+  - [ ] Review the assessment data structure and content
+  - [ ] Analyze current static data in `static-assessment-questions.ts`
+  - [ ] Document data relationships and dependencies
+  - [ ] Plan database schema for questions and tags
+
+- [ ] **Create Strapi Data Models**
+  - [ ] Create related data models in Strapi 5 admin panel
+  - [ ] Design database schema for assessment questions
+  - [ ] Design database schema for assessment tags
+  - [ ] Set up proper relationships between questions and tags
+  - [ ] Configure content types with proper validation
+
+- [ ] **Migrate Data to Database**
+  - [ ] Migrate the assessment data from code to remote databases
+  - [ ] Create migration scripts for questions data
+  - [ ] Create migration scripts for tags and recommendations
+  - [ ] Test data integrity and relationships
+  - [ ] Validate all migrated data
+
+- [ ] **Update Code for API Integration**
+  - [ ] Change code to support getting assessment data from backend API
+  - [ ] Update assessment engine to fetch data from Strapi
+  - [ ] Modify frontend components to use API data
+  - [ ] Implement proper error handling for API calls
+  - [ ] Add loading states for dynamic data
+
+- [ ] **Test Whole System**
+  - [ ] Test the whole assessment system end-to-end
+  - [ ] Verify all questions load correctly from database
+  - [ ] Test tag calculations with database data
+  - [ ] Validate recommendation system works with API data
+  - [ ] Perform comprehensive system testing
+
+- [ ] **Deploy Changes**
+  - [ ] Deploy the changes to production
+  - [ ] Update production database with assessment data
+  - [ ] Configure production API endpoints
+  - [ ] Monitor system performance after deployment
+  - [ ] Document deployment process
+
 ### Content Management ✅
 - [x] **Article Migration System**
   - [x] Create comprehensive migration scripts and documentation
