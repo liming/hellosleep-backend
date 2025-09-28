@@ -8,7 +8,7 @@ import {
   getQuestionsBySection,
   shouldShowQuestion,
   getVisibleQuestions
-} from '@/data/assessment-questions';
+} from '@/data/static-assessment-questions';
 import { 
   getRecommendationsForAnswers, 
   calculateTotalScore,

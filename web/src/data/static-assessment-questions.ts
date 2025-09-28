@@ -8,6 +8,7 @@ export interface StaticQuestion {
   category: 'basic_info' | 'sleep_habits' | 'lifestyle' | 'work_study' | 'attitude' | 'environment';
   required: boolean;
   options?: Array<{
+    id?: string; // Legacy compatibility
     value: string;
     text: string;
     score?: number;
@@ -21,6 +22,8 @@ export interface StaticQuestion {
   max?: number;
   step?: number;
   unit?: string;
+  weight?: number; // Legacy compatibility
+  hint?: string; // Legacy compatibility
 }
 
 export interface StaticTag {
@@ -58,12 +61,12 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'basic_info',
     required: true,
     options: [
-      { value: 'work', text: '工作', score: 3 },
-      { value: 'study', text: '上学', score: 2 },
-      { value: 'unemployed', text: '待业', score: 1 },
-      { value: 'prenatal', text: '孕期', score: 4 },
-      { value: 'postnatal', text: '产后', score: 4 },
-      { value: 'retire', text: '退休', score: 3 }
+      { id: 'work', value: 'work', text: '工作', score: 3 },
+      { id: 'study', value: 'study', text: '上学', score: 2 },
+      { id: 'unemployed', value: 'unemployed', text: '待业', score: 1 },
+      { id: 'prenatal', value: 'prenatal', text: '孕期', score: 4 },
+      { id: 'postnatal', value: 'postnatal', text: '产后', score: 4 },
+      { id: 'retire', value: 'retire', text: '退休', score: 3 }
     ]
   },
   {
@@ -73,11 +76,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'basic_info',
     required: true,
     options: [
-      { value: '18-25', text: '18-25岁', score: 2 },
-      { value: '26-35', text: '26-35岁', score: 3 },
-      { value: '36-45', text: '36-45岁', score: 4 },
-      { value: '46-55', text: '46-55岁', score: 3 },
-      { value: '55+', text: '55岁以上', score: 2 }
+      { id: '18-25', value: '18-25', text: '18-25岁', score: 2 },
+      { id: '26-35', value: '26-35', text: '26-35岁', score: 3 },
+      { id: '36-45', value: '36-45', text: '36-45岁', score: 4 },
+      { id: '46-55', value: '46-55', text: '46-55岁', score: 3 },
+      { id: '55+', value: '55+', text: '55岁以上', score: 2 }
     ]
   },
 
@@ -89,8 +92,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'sleep_habits',
     required: true,
     options: [
-      { value: 'yes', text: '规律', score: 3 },
-      { value: 'no', text: '不规律', score: 1 }
+      { id: 'yes', value: 'yes', text: '规律', score: 3 },
+      { id: 'no', value: 'no', text: '不规律', score: 1 }
     ]
   },
   {
@@ -148,11 +151,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'sleep_habits',
     required: true,
     options: [
-      { value: 'excellent', text: '很好', score: 5 },
-      { value: 'good', text: '良好', score: 4 },
-      { value: 'fair', text: '一般', score: 3 },
-      { value: 'poor', text: '较差', score: 2 },
-      { value: 'very_poor', text: '很差', score: 1 }
+      { id: 'excellent', value: 'excellent', text: '很好', score: 5 },
+      { id: 'good', value: 'good', text: '良好', score: 4 },
+      { id: 'fair', value: 'fair', text: '一般', score: 3 },
+      { id: 'poor', value: 'poor', text: '较差', score: 2 },
+      { id: 'very_poor', value: 'very_poor', text: '很差', score: 1 }
     ]
   },
 
@@ -164,11 +167,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'lifestyle',
     required: true,
     options: [
-      { value: 'best', text: '有规律且强度适中', score: 5 },
-      { value: 'good', text: '有规律但强度较低', score: 4 },
-      { value: 'normal', text: '偶尔运动', score: 3 },
-      { value: 'little', text: '很少运动', score: 2 },
-      { value: 'none', text: '不运动', score: 1 }
+      { id: 'best', value: 'best', text: '有规律且强度适中', score: 5 },
+      { id: 'good', value: 'good', text: '有规律但强度较低', score: 4 },
+      { id: 'normal', value: 'normal', text: '偶尔运动', score: 3 },
+      { id: 'little', value: 'little', text: '很少运动', score: 2 },
+      { id: 'none', value: 'none', text: '不运动', score: 1 }
     ]
   },
   {
@@ -178,11 +181,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'lifestyle',
     required: true,
     options: [
-      { value: 'best', text: '2小时以上', score: 5 },
-      { value: 'good', text: '1-2小时', score: 4 },
-      { value: 'normal', text: '30分钟-1小时', score: 3 },
-      { value: 'little', text: '15-30分钟', score: 2 },
-      { value: 'none', text: '很少接触', score: 1 }
+      { id: 'best', value: 'best', text: '2小时以上', score: 5 },
+      { id: 'good', value: 'good', text: '1-2小时', score: 4 },
+      { id: 'normal', value: 'normal', text: '30分钟-1小时', score: 3 },
+      { id: 'little', value: 'little', text: '15-30分钟', score: 2 },
+      { id: 'none', value: 'none', text: '很少接触', score: 1 }
     ]
   },
   {
@@ -192,11 +195,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'lifestyle',
     required: true,
     options: [
-      { value: 'very_high', text: '压力很大', score: 1 },
-      { value: 'high', text: '压力较大', score: 2 },
-      { value: 'normal', text: '压力适中', score: 3 },
-      { value: 'low', text: '压力较小', score: 4 },
-      { value: 'very_low', text: '压力很小', score: 5 }
+      { id: 'very_high', value: 'very_high', text: '压力很大', score: 1 },
+      { id: 'high', value: 'high', text: '压力较大', score: 2 },
+      { id: 'normal', value: 'normal', text: '压力适中', score: 3 },
+      { id: 'low', value: 'low', text: '压力较小', score: 4 },
+      { id: 'very_low', value: 'very_low', text: '压力很小', score: 5 }
     ]
   },
   {
@@ -206,11 +209,11 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'lifestyle',
     required: true,
     options: [
-      { value: 'very_active', text: '非常丰富活跃', score: 5 },
-      { value: 'active', text: '比较丰富活跃', score: 4 },
-      { value: 'normal', text: '一般', score: 3 },
-      { value: 'inactive', text: '不太活跃', score: 2 },
-      { value: 'very_inactive', text: '很单调', score: 1 }
+      { id: 'very_active', value: 'very_active', text: '非常丰富活跃', score: 5 },
+      { id: 'active', value: 'active', text: '比较丰富活跃', score: 4 },
+      { id: 'normal', value: 'normal', text: '一般', score: 3 },
+      { id: 'inactive', value: 'inactive', text: '不太活跃', score: 2 },
+      { id: 'very_inactive', value: 'very_inactive', text: '很单调', score: 1 }
     ]
   },
 
@@ -222,8 +225,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'environment',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -233,8 +236,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'environment',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -244,8 +247,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'environment',
     required: true,
     options: [
-      { value: 'yes', text: '安静', score: 3 },
-      { value: 'no', text: '不安静', score: 1 }
+      { id: 'yes', value: 'yes', text: '安静', score: 3 },
+      { id: 'no', value: 'no', text: '不安静', score: 1 }
     ]
   },
   {
@@ -259,11 +262,11 @@ export const staticQuestions: StaticQuestion[] = [
       value: 'no'
     },
     options: [
-      { value: 'snore', text: '伴侣打呼噜', score: 1 },
-      { value: 'neighbour', text: '邻居吵闹', score: 1 },
-      { value: 'roommate', text: '室友吵闹', score: 1 },
-      { value: 'traffic', text: '交通噪音', score: 1 },
-      { value: 'others', text: '其他', score: 1 }
+      { id: 'snore', value: 'snore', text: '伴侣打呼噜', score: 1 },
+      { id: 'neighbour', value: 'neighbour', text: '邻居吵闹', score: 1 },
+      { id: 'roommate', value: 'roommate', text: '室友吵闹', score: 1 },
+      { id: 'traffic', value: 'traffic', text: '交通噪音', score: 1 },
+      { id: 'others', value: 'others', text: '其他', score: 1 }
     ]
   },
 
@@ -279,8 +282,8 @@ export const staticQuestions: StaticQuestion[] = [
       value: 'work'
     },
     options: [
-      { value: 'yes', text: '需要', score: 1 },
-      { value: 'no', text: '不需要', score: 3 }
+      { id: 'yes', value: 'yes', text: '需要', score: 1 },
+      { id: 'no', value: 'no', text: '不需要', score: 3 }
     ]
   },
   {
@@ -294,8 +297,8 @@ export const staticQuestions: StaticQuestion[] = [
       value: 'study'
     },
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -309,8 +312,8 @@ export const staticQuestions: StaticQuestion[] = [
       value: 'study'
     },
     options: [
-      { value: 'yes', text: '是', score: 2 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 2 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
 
@@ -322,8 +325,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -333,8 +336,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -344,8 +347,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -355,8 +358,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -366,8 +369,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   },
   {
@@ -377,8 +380,8 @@ export const staticQuestions: StaticQuestion[] = [
     category: 'attitude',
     required: true,
     options: [
-      { value: 'yes', text: '是', score: 1 },
-      { value: 'no', text: '不是', score: 3 }
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
     ]
   }
 ];
@@ -685,3 +688,104 @@ export function getQuestionById(id: string): StaticQuestion | undefined {
 export function getTagByName(name: string): StaticTag | undefined {
   return staticTags.find(t => t.name === name);
 }
+
+// Legacy compatibility functions for assessment-questions.ts
+export interface AssessmentSection {
+  id: string;
+  name: string;
+  description: string;
+  order: number;
+  questions: string[]; // Question IDs in this section
+}
+
+// Create sections based on categories
+export const assessmentSections: AssessmentSection[] = [
+  {
+    id: 'basic_info',
+    name: 'basic_info',
+    description: '基本信息',
+    order: 0,
+    questions: ['status', 'age_group']
+  },
+  {
+    id: 'sleep_habits',
+    name: 'sleep_habits',
+    description: '睡眠习惯',
+    order: 1,
+    questions: ['sleepregular', 'sleeptime', 'getuptime', 'hourstosleep', 'hourstofallinsleep', 'sleep_quality']
+  },
+  {
+    id: 'lifestyle',
+    name: 'lifestyle',
+    description: '生活状态',
+    order: 2,
+    questions: ['sport', 'sunshine', 'pressure', 'lively']
+  },
+  {
+    id: 'environment',
+    name: 'environment',
+    description: '睡眠环境',
+    order: 3,
+    questions: ['bedroom', 'bed', 'noise', 'noisereason']
+  },
+  {
+    id: 'work_study',
+    name: 'work_study',
+    description: '工作和学习',
+    order: 4,
+    questions: ['shiftwork', 'holiday', 'bedtimeearly']
+  },
+  {
+    id: 'attitude',
+    name: 'attitude',
+    description: '对待失眠的方式',
+    order: 5,
+    questions: ['irresponsible', 'inactive', 'excessive_rest', 'complain', 'ignore', 'medicine']
+  }
+];
+
+// Legacy compatibility functions
+export function getAllQuestionsOrdered(): StaticQuestion[] {
+  // Sort questions by category order, then by their position in the array
+  const categoryOrder = ['basic_info', 'sleep_habits', 'lifestyle', 'environment', 'work_study', 'attitude'];
+  return [...staticQuestions].sort((a, b) => {
+    const aIndex = categoryOrder.indexOf(a.category);
+    const bIndex = categoryOrder.indexOf(b.category);
+    if (aIndex !== bIndex) {
+      return aIndex - bIndex;
+    }
+    // If same category, maintain original order
+    return staticQuestions.indexOf(a) - staticQuestions.indexOf(b);
+  });
+}
+
+export function getAllSectionsOrdered(): AssessmentSection[] {
+  return [...assessmentSections].sort((a, b) => a.order - b.order);
+}
+
+export function getQuestionsBySection(sectionId: string): StaticQuestion[] {
+  return staticQuestions.filter(q => q.category === sectionId);
+}
+
+export function shouldShowQuestion(
+  question: StaticQuestion,
+  answers: Record<string, string>
+): boolean {
+  if (!question.depends) {
+    return true;
+  }
+
+  const dependentAnswer = answers[question.depends.questionId];
+  return dependentAnswer === question.depends.value;
+}
+
+export function getVisibleQuestions(
+  questions: StaticQuestion[],
+  answers: Record<string, string>
+): StaticQuestion[] {
+  return questions.filter(question => shouldShowQuestion(question, answers));
+}
+
+// Legacy type aliases for compatibility
+export type AssessmentQuestion = StaticQuestion;
+export const assessmentQuestions = staticQuestions;

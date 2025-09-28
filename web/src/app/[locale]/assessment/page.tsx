@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { staticAssessmentEngine } from '@/lib/static-assessment-engine';
-import { getAllSectionsOrdered, getAllQuestionsOrdered, getVisibleQuestions } from '@/data/assessment-questions';
-import type { AssessmentQuestion } from '@/data/assessment-questions';
+import { getAllSectionsOrdered, getAllQuestionsOrdered, getVisibleQuestions } from '@/data/static-assessment-questions';
+import type { AssessmentQuestion } from '@/data/static-assessment-questions';
 import type { AssessmentResult } from '@/lib/static-assessment-engine';
 import StaticAssessmentResults from '@/components/StaticAssessmentResults';
 
