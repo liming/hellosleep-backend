@@ -113,7 +113,7 @@ export interface SearchFilters {
   category?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   readingTime?: 'short' | 'medium' | 'long';
-  tags?: string[];
+  issues?: string[];
   search?: string;
 }
 

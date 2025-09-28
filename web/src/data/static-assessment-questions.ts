@@ -23,7 +23,7 @@ export interface StaticQuestion {
   unit?: string;
 }
 
-export interface StaticTag {
+export interface StaticIssue {
   id: string;
   name: string;
   text: string;
@@ -380,8 +380,8 @@ export const staticQuestions: StaticQuestion[] = [
   }
 ];
 
-export const staticTags: StaticTag[] = [
-  // Sleep-related tags
+export const staticIssues: StaticIssue[] = [
+  // Sleep-related issues
   {
     id: 'sleep_inefficiency',
     name: 'sleep_inefficiency',
@@ -428,7 +428,7 @@ export const staticTags: StaticTag[] = [
     severity: 'moderate'
   },
 
-  // Lifestyle tags
+  // Lifestyle issues
   {
     id: 'unhealthy_lifestyle',
     name: 'unhealthy_lifestyle',
@@ -475,7 +475,7 @@ export const staticTags: StaticTag[] = [
     severity: 'moderate'
   },
 
-  // Special population tags
+  // Special population issues
   {
     id: 'prenatal',
     name: 'prenatal',
@@ -537,7 +537,7 @@ export const staticTags: StaticTag[] = [
     severity: 'moderate'
   },
 
-  // Behavioral tags
+  // Behavioral issues
   {
     id: 'maladaptive_behaviors',
     name: 'maladaptive_behaviors',
@@ -584,7 +584,7 @@ export const staticTags: StaticTag[] = [
     severity: 'moderate'
   },
 
-  // Environmental tags
+  // Environmental issues
   {
     id: 'noise_problem',
     name: 'noise_problem',
@@ -622,18 +622,18 @@ export function getQuestionsByCategory(category: string): StaticQuestion[] {
   return staticQuestions.filter(q => q.category === category);
 }
 
-export function getTagsByCategory(category: string): StaticTag[] {
-  return staticTags.filter(t => t.category === category);
+export function getIssuesByCategory(category: string): StaticIssue[] {
+  return staticIssues.filter(t => t.category === category);
 }
 
-export function getTagsByPriority(priority: string): StaticTag[] {
-  return staticTags.filter(t => t.priority === priority);
+export function getIssuesByPriority(priority: string): StaticIssue[] {
+  return staticIssues.filter(t => t.priority === priority);
 }
 
 export function getQuestionById(id: string): StaticQuestion | undefined {
   return staticQuestions.find(q => q.id === id);
 }
 
-export function getTagByName(name: string): StaticTag | undefined {
-  return staticTags.find(t => t.name === name);
+export function getIssueByName(name: string): StaticIssue | undefined {
+  return staticIssues.find(t => t.name === name);
 }

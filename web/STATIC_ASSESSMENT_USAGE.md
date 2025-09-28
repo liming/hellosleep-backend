@@ -33,7 +33,7 @@ const answers = {
 };
 
 const result = staticAssessmentEngine.processAssessment(answers);
-console.log('标签:', result.calculatedTags);
+console.log('问题:', result.calculatedIssues);
 console.log('手册:', result.matchedBooklets);
 ```
 
@@ -76,7 +76,7 @@ curl -X POST /api/static-assessment \
 {
   "success": true,
   "data": {
-    "calculatedTags": ["unhealthy", "stress"],
+    "calculatedIssues": ["unhealthy", "stress"],
     "matchedBooklets": [
       {
         "id": "booklet_id",
@@ -209,7 +209,7 @@ try {
 const staticResult = staticAssessmentEngine.processAssessment(answers);
 
 // 处理结果
-console.log('计算的标签:', staticResult.calculatedTags);
+console.log('计算的问题:', staticResult.calculatedIssues);
 console.log('匹配的手册:', staticResult.matchedBooklets);
 ```
 
@@ -244,7 +244,7 @@ console.log(`处理时间: ${endTime - startTime}ms`);
 ```typescript
 // 分析标签分布
 const tagDistribution = {};
-result.calculatedTags.forEach(tag => {
+result.calculatedIssues.forEach(issue => {
   tagDistribution[tag] = (tagDistribution[tag] || 0) + 1;
 });
 console.log('标签分布:', tagDistribution);
@@ -271,7 +271,7 @@ console.log('标签分布:', tagDistribution);
 ```typescript
 // 启用详细日志
 console.log('输入答案:', answers);
-console.log('计算的标签:', result.calculatedTags);
+console.log('计算的问题:', result.calculatedIssues);
 console.log('匹配的手册:', result.matchedBooklets);
 ```
 

@@ -1,16 +1,16 @@
 import { StaticAssessmentEngine } from './static-assessment-engine';
-import { staticQuestions, staticTags } from '@/data/static-assessment-questions';
+import { staticQuestions, staticIssues } from '@/data/static-assessment-questions';
 
 interface TestScenario {
   name: string;
   description: string;
   answers: Record<string, string>;
-  expectedTags?: string[];
+  expectedIssues?: string[];
 }
 
 interface TestResult {
   scenario: TestScenario;
-  calculatedTags: string[];
+  calculatedIssues: string[];
   passed: boolean;
   issues: string[];
 }
@@ -52,16 +52,16 @@ export class AssessmentFlowTester {
    */
   private testScenario(scenario: TestScenario): TestResult {
     const result = this.engine.processAssessment(scenario.answers);
-    const calculatedTags = result.calculatedTags;
+    const calculatedIssues = result.calculatedIssues;
     
     const issues: string[] = [];
     let passed = true;
 
-    // Check if expected tags were calculated
-    if (scenario.expectedTags) {
-      for (const expectedTag of scenario.expectedTags) {
-        if (!calculatedTags.includes(expectedTag)) {
-          issues.push(`Missing expected tag: ${expectedTag}`);
+    // Check if expected issues were calculated
+    if (scenario.expectedIssues) {
+      for (const expectedIssue of scenario.expectedIssues) {
+        if (!calculatedIssues.includes(expectedIssue)) {
+          issues.push(`Missing expected issue: ${expectedIssue}`);
           passed = false;
         }
       }
@@ -69,7 +69,7 @@ export class AssessmentFlowTester {
 
     return {
       scenario,
-      calculatedTags,
+      calculatedIssues,
       passed,
       issues
     };
@@ -102,7 +102,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: []
+        expectedIssues: []
       },
 
       // Sleep inefficiency scenario
@@ -131,7 +131,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse']
+        expectedIssues: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse']
       },
 
       // Irregular schedule scenario
@@ -156,7 +156,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['irregular_schedule']
+        expectedIssues: ['irregular_schedule']
       },
 
       // Poor sleep quality scenario
@@ -182,7 +182,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['poor_sleep_quality']
+        expectedIssues: ['poor_sleep_quality']
       },
 
       // Unhealthy lifestyle scenario
@@ -207,7 +207,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['unhealthy_lifestyle']
+        expectedIssues: ['unhealthy_lifestyle']
       },
 
       // Idle lifestyle scenario
@@ -232,7 +232,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['idle_lifestyle', 'bedroom_overuse']
+        expectedIssues: ['idle_lifestyle', 'bedroom_overuse']
       },
 
       // Bedroom overuse scenario
@@ -257,7 +257,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['bedroom_overuse']
+        expectedIssues: ['bedroom_overuse']
       },
 
       // Prenatal scenario
@@ -282,7 +282,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['prenatal']
+        expectedIssues: ['prenatal']
       },
 
       // Postnatal scenario
@@ -307,7 +307,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['postnatal']
+        expectedIssues: ['postnatal']
       },
 
       // Student issues scenario
@@ -334,7 +334,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['student_issues']
+        expectedIssues: ['student_issues']
       },
 
       // Shift work scenario
@@ -360,7 +360,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['shift_work']
+        expectedIssues: ['shift_work']
       },
 
       // Maladaptive behaviors scenario
@@ -514,7 +514,7 @@ export class AssessmentFlowTester {
           ignore: 'yes',
           medicine: 'yes'
         },
-        expectedTags: ['irregular_schedule', 'poor_sleep_quality', 'unhealthy_lifestyle', 'bedroom_overuse', 'partner_snoring', 'maladaptive_behaviors', 'excessive_complaining', 'medication_use']
+        expectedIssues: ['irregular_schedule', 'poor_sleep_quality', 'unhealthy_lifestyle', 'bedroom_overuse', 'partner_snoring', 'maladaptive_behaviors', 'excessive_complaining', 'medication_use']
       }
     ];
   }
@@ -539,39 +539,39 @@ export class AssessmentFlowTester {
       console.log('\n❌ Failed Tests:');
       results.filter(r => !r.passed).forEach(result => {
         console.log(`\n${result.scenario.name}:`);
-        console.log(`  Expected Tags: ${result.scenario.expectedTags?.join(', ') || 'None'}`);
-        console.log(`  Calculated Tags: ${result.calculatedTags.join(', ') || 'None'}`);
+        console.log(`  Expected Issues: ${result.scenario.expectedIssues?.join(', ') || 'None'}`);
+        console.log(`  Calculated Issues: ${result.calculatedIssues.join(', ') || 'None'}`);
         console.log(`  Issues: ${result.issues.join(', ')}`);
       });
     }
 
-    // Tag coverage analysis
-    this.analyzeTagCoverage(results);
+    // Issue coverage analysis
+    this.analyzeIssueCoverage(results);
   }
 
   /**
-   * Analyze tag coverage across all tests
+   * Analyze issue coverage across all tests
    */
-  private analyzeTagCoverage(results: TestResult[]): void {
-    console.log('\n🏷️ Tag Coverage Analysis');
+  private analyzeIssueCoverage(results: TestResult[]): void {
+    console.log('\n🏷️ Issue Coverage Analysis');
     console.log('======================');
 
-    const allCalculatedTags = new Set<string>();
-    const allExpectedTags = new Set<string>();
+    const allCalculatedIssues = new Set<string>();
+    const allExpectedIssues = new Set<string>();
 
     results.forEach(result => {
-      result.calculatedTags.forEach(tag => allCalculatedTags.add(tag));
-      result.scenario.expectedTags?.forEach(tag => allExpectedTags.add(tag));
+      result.calculatedIssues.forEach(issue => allCalculatedIssues.add(issue));
+      result.scenario.expectedIssues?.forEach(issue => allExpectedIssues.add(issue));
     });
 
-    console.log(`Total Unique Tags Calculated: ${allCalculatedTags.size}`);
-    console.log(`Total Unique Tags Expected: ${allExpectedTags.size}`);
+    console.log(`Total Unique Issues Calculated: ${allCalculatedIssues.size}`);
+    console.log(`Total Unique Issues Expected: ${allExpectedIssues.size}`);
 
-    const calculatedTagsList = Array.from(allCalculatedTags).sort();
-    const expectedTagsList = Array.from(allExpectedTags).sort();
+    const calculatedIssuesList = Array.from(allCalculatedIssues).sort();
+    const expectedIssuesList = Array.from(allExpectedIssues).sort();
 
-    console.log('\nCalculated Tags:', calculatedTagsList.join(', '));
-    console.log('Expected Tags:', expectedTagsList.join(', '));
+    console.log('\nCalculated Issues:', calculatedIssuesList.join(', '));
+    console.log('Expected Issues:', expectedIssuesList.join(', '));
   }
 }
 

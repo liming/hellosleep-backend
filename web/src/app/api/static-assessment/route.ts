@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        calculatedTags: result.calculatedTags,
+        calculatedIssues: result.calculatedIssues,
         bookletFacts: result.bookletFacts.map(fact => ({
-          tag: fact.tag,
+          issue: fact.issue,
           factName: fact.factName,
           description: fact.description,
           content: fact.content,
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         completedAt: result.completedAt,
         summary: {
           totalAnswers: Object.keys(answers).length,
-          totalTags: result.calculatedTags.length,
+          totalIssues: result.calculatedIssues.length,
           totalFacts: result.bookletFacts.length
         }
       }
@@ -54,7 +54,7 @@ export async function GET() {
     const latestResult = staticAssessmentEngine.getLatestResult();
     
     // Get statistics
-    const allTags = staticAssessmentEngine.getAllTags();
+    const allIssues = staticAssessmentEngine.getAllIssues();
     
     return NextResponse.json({
       success: true,
