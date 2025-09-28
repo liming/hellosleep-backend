@@ -1,13 +1,16 @@
-// Enhanced static assessment questions and tags
-// Based on sleep science and improved assessment logic
+// Unified Assessment System - Questions and Issues
+// Consolidated system combining UI flow, issue calculation, and recommendations
+// Based on sleep science research and evidence-based interventions
 
 export interface StaticQuestion {
   id: string;
+  order: number; // Added for UI ordering
   text: string;
   type: 'single_choice' | 'multiple_choice' | 'scale' | 'text' | 'number' | 'email' | 'date' | 'time';
   category: 'basic_info' | 'sleep_habits' | 'lifestyle' | 'work_study' | 'attitude' | 'environment';
   required: boolean;
   options?: Array<{
+    id?: string; // Added for UI compatibility
     value: string;
     text: string;
     score?: number;
@@ -17,10 +20,12 @@ export interface StaticQuestion {
     value: string;
   };
   placeholder?: string;
+  hint?: string; // Added for additional help text
   min?: number;
   max?: number;
   step?: number;
   unit?: string;
+  unitDescription?: string; // Added for UI display
 }
 
 export interface StaticIssue {
@@ -46,10 +51,65 @@ export interface StaticIssue {
   severity: 'mild' | 'moderate' | 'severe';
 }
 
+// Assessment sections for UI organization
+export interface AssessmentSection {
+  id: string;
+  name: string;
+  description: string;
+  order: number;
+  questions: string[]; // Question IDs in this section
+}
+
+export const assessmentSections: AssessmentSection[] = [
+  {
+    id: 'basic_info',
+    name: 'basic_info',
+    description: '基本信息',
+    order: 0,
+    questions: ['status', 'age_group']
+  },
+  {
+    id: 'sleep_habits',
+    name: 'sleep_habits',
+    description: '睡眠习惯',
+    order: 1,
+    questions: ['sleepregular', 'sleeptime', 'getuptime', 'hourstosleep', 'hourstofallinsleep', 'sleep_quality']
+  },
+  {
+    id: 'lifestyle',
+    name: 'lifestyle',
+    description: '生活状态',
+    order: 2,
+    questions: ['sport', 'sunshine', 'pressure', 'lively']
+  },
+  {
+    id: 'environment',
+    name: 'environment',
+    description: '睡眠环境',
+    order: 3,
+    questions: ['bedroom', 'bed', 'noise', 'noisereason']
+  },
+  {
+    id: 'work_study',
+    name: 'work_study',
+    description: '工作学习',
+    order: 4,
+    questions: ['shiftwork', 'holiday', 'bedtimeearly']
+  },
+  {
+    id: 'attitude',
+    name: 'attitude',
+    description: '对待失眠的方式',
+    order: 5,
+    questions: ['irresponsible', 'inactive', 'excessive_rest', 'complain', 'ignore', 'medicine']
+  }
+];
+
 export const staticQuestions: StaticQuestion[] = [
   // Basic Information
   {
     id: 'status',
+    order: 1,
     text: '您当前的生活状态是？',
     type: 'single_choice',
     category: 'basic_info',
@@ -65,6 +125,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'age_group',
+    order: 2,
     text: '您的年龄段是？',
     type: 'single_choice',
     category: 'basic_info',
@@ -81,6 +142,7 @@ export const staticQuestions: StaticQuestion[] = [
   // Sleep Habits
   {
     id: 'sleepregular',
+    order: 3,
     text: '您的作息时间规律吗？',
     type: 'single_choice',
     category: 'sleep_habits',
@@ -92,6 +154,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'sleeptime',
+    order: 4,
     text: '通常几点睡觉？',
     type: 'time',
     category: 'sleep_habits',
@@ -99,10 +162,12 @@ export const staticQuestions: StaticQuestion[] = [
     depends: {
       questionId: 'sleepregular',
       value: 'yes'
-    }
+    },
+    placeholder: '例如: 23:00'
   },
   {
     id: 'getuptime',
+    order: 5,
     text: '通常几点起床？',
     type: 'time',
     category: 'sleep_habits',
@@ -110,10 +175,12 @@ export const staticQuestions: StaticQuestion[] = [
     depends: {
       questionId: 'sleepregular',
       value: 'yes'
-    }
+    },
+    placeholder: '例如: 07:00'
   },
   {
     id: 'hourstosleep',
+    order: 6,
     text: '晚上试图睡觉时间有多少？',
     type: 'number',
     category: 'sleep_habits',
@@ -125,10 +192,12 @@ export const staticQuestions: StaticQuestion[] = [
     min: 0,
     max: 15,
     step: 0.5,
-    unit: '小时'
+    unit: '小时',
+    unitDescription: '小时'
   },
   {
     id: 'hourstofallinsleep',
+    order: 7,
     text: '晚上的实际睡眠时间有多少？',
     type: 'number',
     category: 'sleep_habits',
@@ -136,10 +205,12 @@ export const staticQuestions: StaticQuestion[] = [
     min: 0,
     max: 12,
     step: 0.5,
-    unit: '小时'
+    unit: '小时',
+    unitDescription: '小时'
   },
   {
     id: 'sleep_quality',
+    order: 8,
     text: '您觉得自己的睡眠质量如何？',
     type: 'single_choice',
     category: 'sleep_habits',
@@ -156,6 +227,7 @@ export const staticQuestions: StaticQuestion[] = [
   // Lifestyle
   {
     id: 'sport',
+    order: 9,
     text: '您会有规律的运动吗？',
     type: 'single_choice',
     category: 'lifestyle',
@@ -170,6 +242,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'sunshine',
+    order: 10,
     text: '您每天接触阳光的时间是？',
     type: 'single_choice',
     category: 'lifestyle',
@@ -184,10 +257,12 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'pressure',
+    order: 11,
     text: '您当前的生活压力水平是？',
     type: 'single_choice',
     category: 'lifestyle',
     required: true,
+    hint: '来自于实际生活和工作繁忙事务的压力，而不是睡眠或心理的压力',
     options: [
       { value: 'very_high', text: '压力很大', score: 1 },
       { value: 'high', text: '压力较大', score: 2 },
@@ -198,6 +273,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'lively',
+    order: 12,
     text: '您的生活丰富度和活跃度如何？',
     type: 'single_choice',
     category: 'lifestyle',
@@ -214,6 +290,7 @@ export const staticQuestions: StaticQuestion[] = [
   // Environment
   {
     id: 'bedroom',
+    order: 13,
     text: '您总是长时间呆在卧室吗？',
     type: 'single_choice',
     category: 'environment',
@@ -225,6 +302,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'bed',
+    order: 14,
     text: '您总是长时间呆在床上吗？（比如玩手机）',
     type: 'single_choice',
     category: 'environment',
@@ -236,6 +314,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'noise',
+    order: 15,
     text: '您的睡眠环境安静吗？',
     type: 'single_choice',
     category: 'environment',
@@ -247,6 +326,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'noisereason',
+    order: 16,
     text: '影响睡眠环境的因素是什么？',
     type: 'single_choice',
     category: 'environment',
@@ -267,6 +347,7 @@ export const staticQuestions: StaticQuestion[] = [
   // Work/Study Specific
   {
     id: 'shiftwork',
+    order: 17,
     text: '您的工作需要倒班吗？',
     type: 'single_choice',
     category: 'work_study',
@@ -282,6 +363,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'holiday',
+    order: 18,
     text: '您的失眠发生在寒暑假吗？',
     type: 'single_choice',
     category: 'work_study',
@@ -297,6 +379,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'bedtimeearly',
+    order: 19,
     text: '您总是比室友睡得早吗？',
     type: 'single_choice',
     category: 'work_study',
@@ -314,6 +397,7 @@ export const staticQuestions: StaticQuestion[] = [
   // Attitude and Behavior
   {
     id: 'irresponsible',
+    order: 20,
     text: '失眠后您是不是刻意减少或者放弃工作/学习？',
     type: 'single_choice',
     category: 'attitude',
@@ -325,6 +409,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'inactive',
+    order: 21,
     text: '失眠后您是不是减少或放弃很多社交活动或者运动？',
     type: 'single_choice',
     category: 'attitude',
@@ -336,6 +421,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'excessive_rest',
+    order: 22,
     text: '失眠后您是不是总是在找机会休息？',
     type: 'single_choice',
     category: 'attitude',
@@ -347,6 +433,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'complain',
+    order: 23,
     text: '您会不会总是抱怨或者哭诉失眠？',
     type: 'single_choice',
     category: 'attitude',
@@ -358,6 +445,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'ignore',
+    order: 24,
     text: '失眠后您是不是很少关心亲人和朋友？',
     type: 'single_choice',
     category: 'attitude',
@@ -369,6 +457,7 @@ export const staticQuestions: StaticQuestion[] = [
   },
   {
     id: 'medicine',
+    order: 25,
     text: '您是不是去看病或者服用了安眠的药物？',
     type: 'single_choice',
     category: 'attitude',
@@ -636,4 +725,42 @@ export function getQuestionById(id: string): StaticQuestion | undefined {
 
 export function getIssueByName(name: string): StaticIssue | undefined {
   return staticIssues.find(t => t.name === name);
+}
+
+// UI Helper functions (unified assessment system)
+export function getAllQuestionsOrdered(): StaticQuestion[] {
+  return [...staticQuestions].sort((a, b) => a.order - b.order);
+}
+
+export function getAllSectionsOrdered(): AssessmentSection[] {
+  return [...assessmentSections].sort((a, b) => a.order - b.order);
+}
+
+export function getQuestionsBySection(sectionId: string): StaticQuestion[] {
+  const section = assessmentSections.find(s => s.id === sectionId);
+  if (!section) return [];
+  
+  return section.questions
+    .map(questionId => staticQuestions.find(q => q.id === questionId))
+    .filter((q): q is StaticQuestion => q !== undefined)
+    .sort((a, b) => a.order - b.order);
+}
+
+export function shouldShowQuestion(
+  question: StaticQuestion,
+  answers: Record<string, string>
+): boolean {
+  if (!question.depends) {
+    return true;
+  }
+
+  const dependentAnswer = answers[question.depends.questionId];
+  return dependentAnswer === question.depends.value;
+}
+
+export function getVisibleQuestions(
+  questions: StaticQuestion[],
+  answers: Record<string, string>
+): StaticQuestion[] {
+  return questions.filter(question => shouldShowQuestion(question, answers));
 }

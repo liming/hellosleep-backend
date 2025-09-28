@@ -61,10 +61,10 @@ export async function GET() {
       data: {
         latestResult,
         statistics: {
-          totalTags: allTags.length,
-          availableTags: allTags.map(tag => ({
-            name: tag.name,
-            text: tag.text
+          totalIssues: allIssues.length,
+          availableIssues: allIssues.map(issue => ({
+            name: issue.name,
+            text: issue.text
           }))
         }
       }

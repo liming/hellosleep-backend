@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { staticAssessmentEngine } from '@/lib/static-assessment-engine';
-import { getAllSectionsOrdered, getAllQuestionsOrdered, getVisibleQuestions } from '@/data/assessment-questions';
-import type { AssessmentQuestion } from '@/data/assessment-questions';
+import { getAllSectionsOrdered, getAllQuestionsOrdered, getVisibleQuestions, type StaticQuestion, type AssessmentSection } from '@/data/static-assessment-questions';
 import type { AssessmentResult } from '@/lib/static-assessment-engine';
 import StaticAssessmentResults from '@/components/StaticAssessmentResults';
 
@@ -13,7 +12,7 @@ export default function AssessmentPage() {
   const [currentScreen, setCurrentScreen] = useState<'landing' | 'questions' | 'results'>('landing');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [visibleQuestions, setVisibleQuestions] = useState<AssessmentQuestion[]>([]);
+  const [visibleQuestions, setVisibleQuestions] = useState<StaticQuestion[]>([]);
   const [sections] = useState(getAllSectionsOrdered());
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -327,7 +326,7 @@ export default function AssessmentPage() {
               {currentQuestion.type === 'single_choice' && currentQuestion.options && (
                 currentQuestion.options.map((option) => (
                   <button
-                    key={option.id}
+                    key={option.value}
                     onClick={() => handleAnswerSelect(currentQuestion.id, option.value.toString())}
                     className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
                       answers[currentQuestion.id] === option.value.toString()

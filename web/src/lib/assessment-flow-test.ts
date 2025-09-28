@@ -385,7 +385,7 @@ export class AssessmentFlowTester {
           ignore: 'yes',
           medicine: 'yes'
         },
-        expectedTags: ['maladaptive_behaviors', 'bedroom_overuse', 'excessive_complaining', 'medication_use']
+        expectedIssues: ['maladaptive_behaviors', 'bedroom_overuse', 'excessive_complaining', 'medication_use']
       },
 
       // Excessive complaining scenario
@@ -410,7 +410,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['excessive_complaining']
+        expectedIssues: ['excessive_complaining']
       },
 
       // Medication use scenario
@@ -435,7 +435,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'yes'
         },
-        expectedTags: ['medication_use']
+        expectedIssues: ['medication_use']
       },
 
       // Noise problem scenario
@@ -461,7 +461,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['noise_problem']
+        expectedIssues: ['noise_problem']
       },
 
       // Partner snoring scenario
@@ -487,7 +487,7 @@ export class AssessmentFlowTester {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['partner_snoring']
+        expectedIssues: ['partner_snoring']
       },
 
       // Complex scenario - Multiple issues
