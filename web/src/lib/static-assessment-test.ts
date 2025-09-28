@@ -106,13 +106,13 @@ export function runStaticAssessmentTests() {
       // Process assessment
       const result = staticAssessmentEngine.processAssessment(scenario.answers);
       
-      console.log('🏷️  计算的标签:', result.calculatedTags);
+      console.log('🏷️  计算的问题:', result.calculatedIssues);
       console.log('🧾 建议数量:', result.bookletFacts.length);
       
       if (result.bookletFacts.length > 0) {
         console.log('📝 建议列表:');
         result.bookletFacts.forEach((fact, i) => {
-          console.log(`  ${i + 1}. ${fact.description} (标签: ${fact.tag})`);
+          console.log(`  ${i + 1}. ${fact.description} (问题: ${fact.issue})`);
         });
       } else {
         console.log('⚠️  没有建议');
@@ -130,7 +130,7 @@ export function runStaticAssessmentTests() {
       console.log('📊 完成进度:', `${progress}%`);
 
       totalTests++;
-      if (result.calculatedTags.length > 0 || result.bookletFacts.length > 0) {
+      if (result.calculatedIssues.length > 0 || result.bookletFacts.length > 0) {
         passedTests++;
         console.log('✅ 测试通过\n');
       } else {
@@ -153,15 +153,15 @@ export function runStaticAssessmentTests() {
   // Test specific functions
   console.log('\n🔧 测试特定功能...');
   
-  // Test tag retrieval
-  const allTags = staticAssessmentEngine.getAllTags();
-  console.log(`📋 总标签数: ${allTags.length}`);
+  // Test issue retrieval
+  const allIssues = staticAssessmentEngine.getAllIssues();
+  console.log(`📋 总问题数: ${allIssues.length}`);
   
   return {
     totalTests,
     passedTests,
     successRate: (passedTests / totalTests) * 100,
-    totalTags: allTags.length,
+    totalIssues: allIssues.length,
   };
 }
 

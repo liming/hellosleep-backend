@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { staticAssessmentEngine, type AssessmentResult } from '@/lib/static-assessment-engine';
-import { getTagByName } from '@/data/static-assessment-questions';
+import { getIssueByName } from '@/data/static-assessment-questions';
 
 interface StaticAssessmentResultsProps {
   answers: Record<string, string>;
@@ -86,27 +86,27 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
           </p>
         </div>
 
-        {/* Tags Summary */}
-        {result.calculatedTags.length > 0 && (
+        {/* Issues Summary */}
+        {result.calculatedIssues.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">识别的问题标签</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">识别的问题</h2>
             <div className="flex flex-wrap gap-2 mb-4">
-              {result.calculatedTags.map((tagName) => {
-                const tag = getTagByName(tagName);
+              {result.calculatedIssues.map((issueName) => {
+                const issue = getIssueByName(issueName);
                 return (
                   <span
-                    key={tagName}
+                    key={issueName}
                     className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      tag?.priority === 'high' 
+                      issue?.priority === 'high' 
                         ? 'bg-red-100 text-red-800' 
-                        : tag?.priority === 'medium'
+                        : issue?.priority === 'medium'
                         ? 'bg-yellow-100 text-yellow-800'
                         : 'bg-blue-100 text-blue-800'
                     }`}
                   >
-                    {tag?.text || tagName}
-                    {tag?.priority && (
-                      <span className="ml-1 text-xs">({tag.priority})</span>
+                    {issue?.text || issueName}
+                    {issue?.priority && (
+                      <span className="ml-1 text-xs">({issue.priority})</span>
                     )}
                   </span>
                 );
@@ -114,19 +114,19 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             </div>
             <div className="text-sm text-gray-600">
               <p><strong>调试信息:</strong></p>
-              <p>计算的标签: {result.calculatedTags.join(', ')}</p>
+              <p>计算的问题: {result.calculatedIssues.join(', ')}</p>
               <p>匹配的建议数量: {result.bookletFacts.length}</p>
             </div>
           </div>
         )}
 
-        {result.calculatedTags.length === 0 && (
+        {result.calculatedIssues.length === 0 && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold text-yellow-900 mb-4">⚠️ 未识别到问题标签</h2>
-            <p className="text-yellow-800 mb-4">基于您的答案，评估引擎未识别到特定的问题标签。</p>
+            <h2 className="text-xl font-semibold text-yellow-900 mb-4">⚠️ 未识别到问题</h2>
+            <p className="text-yellow-800 mb-4">基于您的答案，评估引擎未识别到特定的问题。</p>
             <div className="text-sm text-yellow-700">
               <p><strong>调试信息:</strong></p>
-              <p>可用标签总数: {staticAssessmentEngine.getAllTags().length}</p>
+              <p>可用问题总数: {staticAssessmentEngine.getAllIssues().length}</p>
               <p>您的答案: {Object.keys(answers).length} 个问题</p>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
             <h2 className="text-xl font-semibold text-gray-900">重点建议</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {result.bookletFacts.map((fact) => (
-                <div key={fact.tag} className="bg-white rounded-lg shadow-sm p-4">
+                <div key={fact.issue} className="bg-white rounded-lg shadow-sm p-4">
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">{fact.description}</h3>
@@ -174,11 +174,11 @@ export default function StaticAssessmentResults({ answers, onBack }: StaticAsses
           <h2 className="text-lg font-semibold text-gray-900 mb-4">调试信息</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">可用标签 ({staticAssessmentEngine.getAllTags().length})</h3>
+              <h3 className="font-medium text-gray-900 mb-2">可用问题 ({staticAssessmentEngine.getAllIssues().length})</h3>
               <div className="text-sm text-gray-600 max-h-40 overflow-y-auto">
-                {staticAssessmentEngine.getAllTags().map(tag => (
-                  <div key={tag.name} className="mb-1">
-                    <span className="font-medium">{tag.name}</span>: {tag.text}
+                {staticAssessmentEngine.getAllIssues().map(issue => (
+                  <div key={issue.name} className="mb-1">
+                    <span className="font-medium">{issue.name}</span>: {issue.text}
                   </div>
                 ))}
               </div>

@@ -92,7 +92,7 @@ export default function StaticAssessmentDemoPage() {
       
       const result = await response.json();
       console.log('API Response:', result);
-      alert(`API测试成功！\n标签数: ${result.data.calculatedTags.length}\n建议数: ${result.data.bookletFacts.length}`);
+      alert(`API测试成功！\n问题数: ${result.data.calculatedIssues.length}\n建议数: ${result.data.bookletFacts.length}`);
     } catch (error) {
       console.error('API Test Error:', error);
       alert('API测试失败，请查看控制台');
@@ -116,7 +116,7 @@ export default function StaticAssessmentDemoPage() {
     
     const result = staticAssessmentEngine.processAssessment(testAnswers);
     console.log('Static Engine Test Result:', result);
-    alert(`静态引擎测试结果:\n标签: ${result.calculatedTags.join(', ')}\n建议数: ${result.bookletFacts.length}`);
+    alert(`静态引擎测试结果:\n问题: ${result.calculatedIssues.join(', ')}\n建议数: ${result.bookletFacts.length}`);
   };
 
   return (
@@ -245,7 +245,7 @@ export default function StaticAssessmentDemoPage() {
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                       <h4 className="font-medium text-gray-900 mb-2">标签统计</h4>
                       <div className="text-2xl font-bold text-blue-600">
-                        {staticAssessmentEngine.getAllTags().length}
+                        {staticAssessmentEngine.getAllIssues().length}
                       </div>
                       <div className="text-sm text-gray-600">可用标签</div>
                     </div>
@@ -283,7 +283,7 @@ export default function StaticAssessmentDemoPage() {
 {`{
   "success": true,
   "data": {
-    "calculatedTags": ["tag1", "tag2"],
+    "calculatedIssues": ["issue1", "issue2"],
     "bookletFacts": [...],
     "completedAt": "2024-01-01T00:00:00.000Z",
     "summary": {

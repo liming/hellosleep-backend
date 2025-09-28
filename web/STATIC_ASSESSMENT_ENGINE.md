@@ -41,7 +41,7 @@ prompts/
 
 - `processAssessment(answers)`: 处理评估答案并返回结果
 - `calculateTags(answers)`: 基于答案计算标签
-- `findBookletsByTags(tags)`: 根据标签查找手册
+- `findBookletsByIssues(issues)`: 根据问题查找手册
 - `validateAnswers(answers)`: 验证答案完整性
 - `getProgressPercentage(answers)`: 获取进度百分比
 
@@ -123,7 +123,7 @@ const answers = {
 };
 
 const result = staticAssessmentEngine.processAssessment(answers);
-console.log('计算的标签:', result.calculatedTags);
+console.log('计算的问题:', result.calculatedIssues);
 console.log('匹配的手册:', result.matchedBooklets);
 ```
 

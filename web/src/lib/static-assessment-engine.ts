@@ -1,5 +1,5 @@
 import calculationFunctions from '@/data/static-assessment-calculations';
-import { staticQuestions, staticTags, type StaticQuestion, type StaticTag } from '@/data/static-assessment-questions';
+import { staticQuestions, staticIssues, type StaticQuestion, type StaticIssue } from '@/data/static-assessment-questions';
 import { mapAnswersToBookletFacts, prioritizeBookletFacts, type BookletFact } from '@/data/assessment-booklets-mapping';
 
 export interface AssessmentAnswer {
@@ -8,7 +8,7 @@ export interface AssessmentAnswer {
   timestamp: Date;
 }
 
-export interface Tag {
+export interface Issue {
   id: string;
   name: string;
   text: string;
@@ -33,54 +33,54 @@ export interface Tag {
 
 export interface AssessmentResult {
   answers: Record<string, string>;
-  calculatedTags: string[];
+  calculatedIssues: string[];
   bookletFacts: BookletFact[];
   completedAt: Date;
 }
 
 export class StaticAssessmentEngine {
-  private questionsTags: StaticTag[];
+  private questionsIssues: StaticIssue[];
 
   constructor() {
-    this.questionsTags = staticTags;
+    this.questionsIssues = staticIssues;
   }
 
   /**
-   * Process assessment answers and return results with tags and booklets
+   * Process assessment answers and return results with issues and booklets
    */
   processAssessment(answers: Record<string, string>): AssessmentResult {
-    const calculatedTags = this.calculateTags(answers);
+    const calculatedIssues = this.calculateIssues(answers);
     const mappedFacts = mapAnswersToBookletFacts(answers);
     const prioritizedFacts = prioritizeBookletFacts(mappedFacts, answers);
 
     return {
       answers,
-      calculatedTags,
+      calculatedIssues,
       bookletFacts: prioritizedFacts,
       completedAt: new Date()
     };
   }
 
   /**
-   * Calculate tags based on assessment answers using the calculation functions
+   * Calculate issues based on assessment answers using the calculation functions
    */
-  private calculateTags(answers: Record<string, string>): string[] {
-    const activeTags: string[] = [];
+  private calculateIssues(answers: Record<string, string>): string[] {
+    const activeIssues: string[] = [];
 
-    for (const tag of this.questionsTags) {
-      if (this.evaluateTag(tag, answers)) {
-        activeTags.push(tag.name);
+    for (const issue of this.questionsIssues) {
+      if (this.evaluateIssue(issue, answers)) {
+        activeIssues.push(issue.name);
       }
     }
 
-    return activeTags;
+    return activeIssues;
   }
 
   /**
-   * Evaluate if a tag should be activated based on its calculation rules
+   * Evaluate if an issue should be activated based on its calculation rules
    */
-  private evaluateTag(tag: Tag, answers: Record<string, string>): boolean {
-    const { calc } = tag;
+  private evaluateIssue(issue: Issue, answers: Record<string, string>): boolean {
+    const { calc } = issue;
 
     if (calc.question && calc.value) {
       // Simple question-value matching
@@ -128,22 +128,22 @@ export class StaticAssessmentEngine {
   }
 
   /**
-   * Find booklets that match the calculated tags
+   * Find booklets that match the calculated issues
    */
   // Booklet matching removed in favor of mapping-based booklet facts
 
   /**
-   * Get all available tags
+   * Get all available issues
    */
-  getAllTags(): StaticTag[] {
-    return this.questionsTags;
+  getAllIssues(): StaticIssue[] {
+    return this.questionsIssues;
   }
 
   /**
-   * Get tag information by name
+   * Get issue information by name
    */
-  getTagByName(tagName: string): StaticTag | undefined {
-    return this.questionsTags.find(tag => tag.name === tagName);
+  getIssueByName(issueName: string): StaticIssue | undefined {
+    return this.questionsIssues.find(issue => issue.name === issueName);
   }
 
   /**
@@ -153,13 +153,13 @@ export class StaticAssessmentEngine {
     // Get all question names from the questions_tags.json data
     const allQuestions = new Set<string>();
     
-    // Extract question names from tags
-    this.questionsTags.forEach(tag => {
-      if (tag.calc.question) {
-        allQuestions.add(tag.calc.question);
+    // Extract question names from issues
+    this.questionsIssues.forEach(issue => {
+      if (issue.calc.question) {
+        allQuestions.add(issue.calc.question);
       }
-      if (tag.calc.input) {
-        tag.calc.input.forEach(question => allQuestions.add(question));
+      if (issue.calc.input) {
+        issue.calc.input.forEach(question => allQuestions.add(question));
       }
     });
 
@@ -183,12 +183,12 @@ export class StaticAssessmentEngine {
   getProgressPercentage(answers: Record<string, string>): number {
     const allQuestions = new Set<string>();
     
-    this.questionsTags.forEach(tag => {
-      if (tag.calc.question) {
-        allQuestions.add(tag.calc.question);
+    this.questionsIssues.forEach(issue => {
+      if (issue.calc.question) {
+        allQuestions.add(issue.calc.question);
       }
-      if (tag.calc.input) {
-        tag.calc.input.forEach(question => allQuestions.add(question));
+      if (issue.calc.input) {
+        issue.calc.input.forEach(question => allQuestions.add(question));
       }
     });
 
@@ -243,7 +243,7 @@ export class StaticAssessmentEngine {
    */
   exportDataForDatabase() {
     return {
-      tags: this.questionsTags,
+      issues: this.questionsIssues,
       calculationFunctions: Object.keys(calculationFunctions)
     };
   }

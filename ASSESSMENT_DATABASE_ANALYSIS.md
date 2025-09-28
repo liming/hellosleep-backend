@@ -43,7 +43,7 @@ interface StaticQuestion {
 
 **Data Structure:**
 ```typescript
-interface StaticTag {
+interface StaticIssue {
   id: string;
   name: string;
   text: string;
@@ -134,7 +134,7 @@ interface CalculationResult {
 ```typescript
 interface AssessmentResult {
   answers: Record<string, string>;
-  calculatedTags: string[];
+  calculatedIssues: string[];
   matchedBooklets: StaticBooklet[];
   completedAt: Date;
 }

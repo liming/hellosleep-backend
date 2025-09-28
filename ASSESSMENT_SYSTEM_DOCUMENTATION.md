@@ -90,7 +90,7 @@ interface CalculationResult {
 
 #### 标签结构
 ```typescript
-interface StaticTag {
+interface StaticIssue {
   id: string;
   name: string;
   text: string;

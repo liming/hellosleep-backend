@@ -43,10 +43,10 @@ class StaticAssessmentEngine {
   calculateTags(answers: Record<string, string>): string[]
   
   // 查找手册
-  findBookletsByTags(tags: string[]): StaticBooklet[]
+  findBookletsByIssues(issues: string[]): StaticBooklet[]
   
   // 评估标签条件
-  evaluateTag(tag: StaticTag, answers: Record<string, string>): boolean
+  evaluateIssue(issue: StaticIssue, answers: Record<string, string>): boolean
 }
 ```
 
@@ -61,7 +61,7 @@ const answers = {
 };
 
 const result = staticAssessmentEngine.processAssessment(answers);
-console.log('Calculated tags:', result.calculatedTags);
+console.log('Calculated issues:', result.calculatedIssues);
 console.log('Matched booklets:', result.matchedBooklets);
 ```
 
@@ -152,7 +152,7 @@ depends: {
 
 #### 标签结构
 ```typescript
-interface StaticTag {
+interface StaticIssue {
   id: string;
   name: string;
   text: string;
@@ -176,7 +176,7 @@ calc: {
 
 #### 添加新标签
 ```typescript
-export const staticTags: StaticTag[] = [
+export const staticIssues: StaticIssue[] = [
   // ... existing tags
   {
     id: 'new_tag',
@@ -348,7 +348,7 @@ describe('Tag Calculation', () => {
       hourstofallinsleep: '6'
     };
     const result = staticAssessmentEngine.processAssessment(answers);
-    expect(result.calculatedTags).toContain('sleep_efficiency');
+    expect(result.calculatedIssues).toContain('sleep_efficiency');
   });
 });
 ```
@@ -362,7 +362,7 @@ describe('Assessment Flow', () => {
     const answers = testScenarios.moderate;
     const result = staticAssessmentEngine.processAssessment(answers);
     
-    expect(result.calculatedTags.length).toBeGreaterThan(0);
+    expect(result.calculatedIssues.length).toBeGreaterThan(0);
     expect(result.matchedBooklets.length).toBeGreaterThan(0);
     expect(result.completedAt).toBeInstanceOf(Date);
   });

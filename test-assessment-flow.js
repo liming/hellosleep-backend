@@ -4,7 +4,7 @@
  * Assessment Flow Test Runner
  * 
  * This script runs comprehensive tests on the HelloSleep assessment flow
- * to validate tag calculation and booklet matching.
+ * to validate issue calculation and booklet matching.
  */
 
 const { execSync } = require('child_process');
@@ -50,7 +50,7 @@ try {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse']
+        expectedIssues: ['sleep_inefficiency', 'unhealthy_lifestyle', 'bedroom_overuse']
       },
       {
         name: 'Irregular Schedule Test',
@@ -69,7 +69,7 @@ try {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['irregular_schedule']
+        expectedIssues: ['irregular_schedule']
       },
       {
         name: 'Prenatal Test',
@@ -88,7 +88,7 @@ try {
           ignore: 'no',
           medicine: 'no'
         },
-        expectedTags: ['prenatal']
+        expectedIssues: ['prenatal']
       }
     ];
 
@@ -101,39 +101,39 @@ try {
     testScenarios.forEach((scenario, index) => {
       try {
         const result = engine.processAssessment(scenario.answers);
-        const calculatedTags = result.calculatedTags;
+        const calculatedIssues = result.calculatedIssues;
         const matchedBooklets = result.matchedBooklets.map(b => b.id);
         
         console.log(\`Test \${index + 1}: \${scenario.name}\`);
-        console.log(\`  Expected Tags: \${scenario.expectedTags.join(', ')}\`);
-        console.log(\`  Calculated Tags: \${calculatedTags.join(', ')}\`);
+        console.log(\`  Expected Issues: \${scenario.expectedIssues.join(', ')}\`);
+        console.log(\`  Calculated Issues: \${calculatedIssues.join(', ')}\`);
         console.log(\`  Matched Booklets: \${matchedBooklets.join(', ')}\`);
         
-        // Check if expected tags were found
-        const missingTags = scenario.expectedTags.filter(tag => !calculatedTags.includes(tag));
-        const extraTags = calculatedTags.filter(tag => !scenario.expectedTags.includes(tag));
+        // Check if expected issues were found
+        const missingIssues = scenario.expectedIssues.filter(issue => !calculatedIssues.includes(issue));
+        const extraIssues = calculatedIssues.filter(issue => !scenario.expectedIssues.includes(issue));
         
-        if (missingTags.length === 0 && extraTags.length === 0) {
-          console.log(\`  ✅ PASS - All expected tags found\`);
+        if (missingIssues.length === 0 && extraIssues.length === 0) {
+          console.log(\`  ✅ PASS - All expected issues found\`);
           passedTests++;
         } else {
-          console.log(\`  ❌ FAIL - Tag mismatch\`);
-          if (missingTags.length > 0) {
-            console.log(\`     Missing: \${missingTags.join(', ')}\`);
+          console.log(\`  ❌ FAIL - Issue mismatch\`);
+          if (missingIssues.length > 0) {
+            console.log(\`     Missing: \${missingIssues.join(', ')}\`);
           }
-          if (extraTags.length > 0) {
-            console.log(\`     Extra: \${extraTags.join(', ')}\`);
+          if (extraIssues.length > 0) {
+            console.log(\`     Extra: \${extraIssues.join(', ')}\`);
           }
         }
         
-        // Check if all calculated tags have booklets
-        const tagsWithoutBooklets = calculatedTags.filter(tag => {
-          const booklets = engine.getBookletsByTag(tag);
+        // Check if all calculated issues have booklets
+        const issuesWithoutBooklets = calculatedIssues.filter(issue => {
+          const booklets = engine.getBookletsByIssue(issue);
           return booklets.length === 0;
         });
         
-        if (tagsWithoutBooklets.length > 0) {
-          console.log(\`  ⚠️  WARNING - Tags without booklets: \${tagsWithoutBooklets.join(', ')}\`);
+        if (issuesWithoutBooklets.length > 0) {
+          console.log(\`  ⚠️  WARNING - Issues without booklets: \${issuesWithoutBooklets.join(', ')}\`);
         }
         
         console.log('');
@@ -152,27 +152,27 @@ try {
     console.log(\`Pass Rate: \${((passedTests / totalTests) * 100).toFixed(1)}%\`);
 
     // Overall system validation
-    const allTags = engine.getAllTags();
+    const allIssues = engine.getAllIssues();
     const allBooklets = engine.getAllBooklets();
     
     console.log(\`\\n🏷️  System Validation\`);
     console.log(\`===================\`);
-    console.log(\`Total Tags: \${allTags.length}\`);
+    console.log(\`Total Issues: \${allIssues.length}\`);
     console.log(\`Total Booklets: \${allBooklets.length}\`);
     
-    // Check tag-booklet mapping
-    const tagsWithBooklets = allTags.filter(tag => {
-      const booklets = engine.getBookletsByTag(tag.name);
+    // Check issue-booklet mapping
+    const issuesWithBooklets = allIssues.filter(issue => {
+      const booklets = engine.getBookletsByIssue(issue.name);
       return booklets.length > 0;
     });
     
-    console.log(\`Tags with Booklets: \${tagsWithBooklets.length}\`);
-    console.log(\`Tags without Booklets: \${allTags.length - tagsWithBooklets.length}\`);
+    console.log(\`Issues with Booklets: \${issuesWithBooklets.length}\`);
+    console.log(\`Issues without Booklets: \${allIssues.length - issuesWithBooklets.length}\`);
     
-    if (tagsWithBooklets.length === allTags.length) {
-      console.log(\`✅ All tags have associated booklets\`);
+    if (issuesWithBooklets.length === allIssues.length) {
+      console.log(\`✅ All issues have associated booklets\`);
     } else {
-      console.log(\`❌ Some tags are missing booklets\`);
+      console.log(\`❌ Some issues are missing booklets\`);
     }
 
   } catch (error) {

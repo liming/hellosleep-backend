@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import StaticAssessmentResults from '@/components/StaticAssessmentResults';
 import { staticAssessmentEngine } from '@/lib/static-assessment-engine';
 
-// Sample assessment questions based on the questions_tags.json structure
+// Sample assessment questions based on the questions_issues.json structure
 const sampleQuestions = [
   { id: 'status', text: '生活状态', type: 'select', options: ['work', 'study', 'unemployed', 'prenatal', 'postnatal', 'retire'] },
   { id: 'sleepregular', text: '作息时间规律吗？', type: 'radio', options: ['yes', 'no'] },
@@ -70,7 +70,7 @@ export default function StaticAssessmentPage() {
     console.log('Submitting answers:', answers);
     const result = staticAssessmentEngine.processAssessment(answers);
     console.log('Static assessment result:', result);
-    console.log('Calculated tags:', result.calculatedTags);
+    console.log('Calculated issues:', result.calculatedIssues);
     console.log('Mapped facts count:', result.bookletFacts.length);
     setShowResults(true);
   };
