@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
 import { staticAssessmentEngine } from '@/lib/static-assessment-engine';
+import { assessmentTestScenarios, getScenario } from '@/data/assessment-test-scenarios';
 import { getAllSectionsOrdered, getAllQuestionsOrdered, getVisibleQuestions } from '@/data/static-assessment-questions';
 import type { AssessmentQuestion } from '@/data/static-assessment-questions';
 import type { AssessmentResult } from '@/lib/static-assessment-engine';
@@ -10,6 +12,7 @@ import StaticAssessmentResults from '@/components/StaticAssessmentResults';
 
 export default function AssessmentPage() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [currentScreen, setCurrentScreen] = useState<'landing' | 'questions' | 'results'>('landing');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -19,102 +22,30 @@ export default function AssessmentPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isTestMode, setIsTestMode] = useState(false);
 
-  // Test data scenarios for quick assessment testing
-  const testScenarios = {
-    // Scenario 1: Moderate sleep issues (most common)
-    moderate: {
-      name: '测试用户A',
-      email: 'test@example.com',
-      birthday: '1990-01-01',
-      gender: 'male',
-      status: 'work',
-      howlong: 'midterm',
-      getupregular: 'no',
-      hourstosleep: '8',
-      hourstofallinsleep: '6',
-      hourstonoonnap: '0.5',
-      noise: 'no',
-      noisereason: 'neighbour',
-      sport: 'little',
-      sunshine: 'little',
-      pressure: 'best',
-      lively: 'normal',
-      bedroom: 'yes',
-      bed: 'yes',
-      distraction: 'yes',
-      effeciency: 'yes',
-      unsociable: 'no',
-      irresponsible: 'no',
-      inactive: 'no',
-      excessive_rest: 'no',
-      complain: 'no',
-      ignore: 'no',
-      medicine: 'no'
-    },
-    
-    // Scenario 2: Severe sleep issues
-    severe: {
-      name: '测试用户B',
-      email: 'test@example.com',
-      birthday: '1985-06-15',
-      gender: 'female',
-      status: 'work',
-      howlong: 'longterm',
-      getupregular: 'no',
-      hourstosleep: '10',
-      hourstofallinsleep: '4',
-      hourstonoonnap: '2',
-      noise: 'no',
-      noisereason: 'snore',
-      sport: 'none',
-      sunshine: 'none',
-      pressure: 'best',
-      lively: 'little',
-      bedroom: 'yes',
-      bed: 'yes',
-      distraction: 'yes',
-      effeciency: 'yes',
-      unsociable: 'yes',
-      irresponsible: 'yes',
-      inactive: 'yes',
-      excessive_rest: 'yes',
-      complain: 'yes',
-      ignore: 'yes',
-      medicine: 'yes'
-    },
-    
-    // Scenario 3: Good sleep habits
-    good: {
-      name: '测试用户C',
-      email: 'test@example.com',
-      birthday: '1995-12-20',
-      gender: 'male',
-      status: 'work',
-      howlong: 'shortterm',
-      getupregular: 'yes',
-      hourstosleep: '7',
-      hourstofallinsleep: '7',
-      hourstonoonnap: '0',
-      noise: 'yes',
-      sport: 'best',
-      sunshine: 'best',
-      pressure: 'normal',
-      lively: 'best',
-      bedroom: 'no',
-      bed: 'no',
-      distraction: 'no',
-      effeciency: 'no',
-      unsociable: 'no',
-      irresponsible: 'no',
-      inactive: 'no',
-      excessive_rest: 'no',
-      complain: 'no',
-      ignore: 'no',
-      medicine: 'no'
-    }
-  };
+  // Reusable test scenarios (imported)
+  const testScenarios = assessmentTestScenarios;
 
-  // Load questions on component mount and update based on answers
+  // Mount-only: read URL/localStorage to prefill scenario once
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const scenarioKey = params.get('scenario');
+    const scenario = getScenario(scenarioKey);
+    if (scenario) {
+      setIsTestMode(true);
+      setAnswers(scenario);
+      try { if (scenarioKey) localStorage.setItem('assessment_last_scenario', scenarioKey); } catch {}
+      return;
+    }
+    const last = (() => { try { return localStorage.getItem('assessment_last_scenario'); } catch { return null; } })();
+    const restored = getScenario(last);
+    if (restored) {
+      setIsTestMode(true);
+      setAnswers(restored);
+    }
+  }, []);
+
+  // Recompute visible questions when answers change
   useEffect(() => {
     const allQuestions = getAllQuestionsOrdered();
     const visible = getVisibleQuestions(allQuestions, answers);
@@ -236,6 +167,11 @@ export default function AssessmentPage() {
                   setIsTestMode(true);
                   setAnswers(testScenarios.moderate);
                   setCurrentScreen('questions');
+                  try { localStorage.setItem('assessment_last_scenario', 'moderate'); } catch {}
+                  if (typeof window !== 'undefined') {
+                    const path = window.location.pathname;
+                    router.replace(`${path}?scenario=moderate`);
+                  }
                 }}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
               >
@@ -246,6 +182,11 @@ export default function AssessmentPage() {
                   setIsTestMode(true);
                   setAnswers(testScenarios.severe);
                   setCurrentScreen('questions');
+                  try { localStorage.setItem('assessment_last_scenario', 'severe'); } catch {}
+                  if (typeof window !== 'undefined') {
+                    const path = window.location.pathname;
+                    router.replace(`${path}?scenario=severe`);
+                  }
                 }}
                 className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
               >
@@ -256,6 +197,11 @@ export default function AssessmentPage() {
                   setIsTestMode(true);
                   setAnswers(testScenarios.good);
                   setCurrentScreen('questions');
+                  try { localStorage.setItem('assessment_last_scenario', 'good'); } catch {}
+                  if (typeof window !== 'undefined') {
+                    const path = window.location.pathname;
+                    router.replace(`${path}?scenario=good`);
+                  }
                 }}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg text-sm"
               >
@@ -363,6 +309,38 @@ export default function AssessmentPage() {
                 </div>
               )}
 
+              {currentQuestion.type === 'number' && currentQuestion.min !== undefined && currentQuestion.max !== undefined && (
+                <div className="space-y-4">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{currentQuestion.min} {currentQuestion.unit}</span>
+                    <span>{currentQuestion.max} {currentQuestion.unit}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={currentQuestion.min}
+                    max={currentQuestion.max}
+                    step={currentQuestion.step || 0.5}
+                    value={answers[currentQuestion.id] || currentQuestion.min}
+                    onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex items-center gap-3 justify-center">
+                    <span className="text-lg font-semibold text-green-600">
+                      {answers[currentQuestion.id] || currentQuestion.min} {currentQuestion.unit}
+                    </span>
+                    <input
+                      type="number"
+                      min={currentQuestion.min}
+                      max={currentQuestion.max}
+                      step={currentQuestion.step || 0.5}
+                      value={answers[currentQuestion.id] || currentQuestion.min}
+                      onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
+                      className="w-24 p-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
               {currentQuestion.type === 'text' && (
                 <input
                   type="text"
@@ -388,6 +366,15 @@ export default function AssessmentPage() {
                   type="date"
                   min={currentQuestion.min ? `${currentQuestion.min}-01-01` : undefined}
                   max={currentQuestion.max ? `${currentQuestion.max}-12-31` : undefined}
+                  value={answers[currentQuestion.id] || ''}
+                  onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
+                  className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none"
+                />
+              )}
+
+              {currentQuestion.type === 'time' && (
+                <input
+                  type="time"
                   value={answers[currentQuestion.id] || ''}
                   onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
                   className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none"

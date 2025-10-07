@@ -156,12 +156,29 @@
   - [x] Updated UI components to display recommendations from tags
   - [x] Removed old booklet matching system and assessment-booklets-mapping.ts
   - [x] Cleaned up migration-related pages and models
+
+#### Assessment Testing Utilities ✅
+- [x] Create reusable test scenarios module (`web/src/data/assessment-test-scenarios.ts`)
+- [x] Wire scenarios into assessment page via import
+- [x] Support `?scenario=` query param to auto-fill answers
+- [x] Persist and restore last-used scenario via localStorage
+- [x] Fix scenario prefill to run only on mount (avoid overwriting clicks)
+- [x] Add `age_group` to all scenarios to match current questions
+
+#### Assessment Input UX ✅
+- [x] Add `time` input support for `sleeptime/getuptime`
+- [x] Add range slider + number input for numeric questions with min/max (e.g., `hourstosleep`)
 - [x] **Tutorial Link System**
   - [x] Created API proxy for articles to avoid CORS issues
   - [x] Added /tutorial/[altId] redirect route for backward compatibility
   - [x] Updated all 15 tutorial links from /tutorial/{altId} to /article/{documentId}
   - [x] Mapped altId to documentId using Strapi database lookup
   - [x] Assessment recommendations now link directly to correct article pages
+
+### Legacy Cleanup ✅
+- [x] Remove legacy score-based engine and recommendations file
+  - [x] Deleted `web/src/lib/assessment-engine.ts`
+  - [x] Deleted `web/src/data/assessment-recommendations.ts`
 
 ## 📋 Next Priority Tasks
 
