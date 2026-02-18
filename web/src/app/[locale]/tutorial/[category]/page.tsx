@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
-import { fetchCategories, fetchTutorialsByCategoryKey, type Category, type Article } from '@/lib/api';
+import { fetchCategories, fetchTutorialsByCategoryKey, looksLikeLegacyAltId, fetchArticleByAltId, type Category, type Article } from '@/lib/api';
 
 export default function TutorialCategoryPage() {
   const { t } = useTranslation();
@@ -22,11 +22,23 @@ export default function TutorialCategoryPage() {
     
     async function loadData() {
       try {
-        console.log('TutorialCategoryPage: Starting to load data');
         setLoading(true);
         setError(null);
+
+        // Legacy: /tutorial/[altId] — resolve altId to article and redirect to canonical URL
+        if (looksLikeLegacyAltId(categoryKey)) {
+          try {
+            const { data: article } = await fetchArticleByAltId(categoryKey);
+            router.replace(`/article/${article.documentId}`);
+            return;
+          } catch {
+            setError('Article not found');
+            setLoading(false);
+            return;
+          }
+        }
         
-        // Fetch categories first to validate the category key
+        // Category page: validate category key and load tutorials
         const categoriesResponse = await fetchCategories();
         console.log('TutorialCategoryPage: Categories fetched successfully');
         
@@ -35,7 +47,6 @@ export default function TutorialCategoryPage() {
         );
         setCategories(validCategories);
         
-        // Find the current category by key
         const category = validCategories.find(cat => cat.key === categoryKey);
         if (!category) {
           console.error('TutorialCategoryPage: Category not found for key:', categoryKey);
@@ -47,7 +58,6 @@ export default function TutorialCategoryPage() {
         setCurrentCategory(category);
         console.log('TutorialCategoryPage: Found category:', category);
         
-        // Fetch tutorials for this category
         const tutorialsResponse = await fetchTutorialsByCategoryKey(categoryKey);
         console.log('TutorialCategoryPage: Tutorials fetched successfully');
         
@@ -67,7 +77,7 @@ export default function TutorialCategoryPage() {
     }
 
     loadData();
-  }, [categoryKey]);
+  }, [categoryKey, router]);
 
   const handleCategoryClick = (category: Category | null) => {
     if (category) {
@@ -126,6 +136,27 @@ export default function TutorialCategoryPage() {
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Breadcrumb: Home > Knowledge Base > Category */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-gray-600">
+            <li>
+              <a href="/" className="hover:text-brand-primary transition-colors">
+                {t('breadcrumbHome')}
+              </a>
+            </li>
+            <li aria-hidden className="select-none">/</li>
+            <li>
+              <a href="/tutorial" className="hover:text-brand-primary transition-colors">
+                {t('knowledgeBase')}
+              </a>
+            </li>
+            <li aria-hidden className="select-none">/</li>
+            <li className="font-medium text-gray-900" aria-current="page">
+              {currentCategory?.name || 'Tutorials'}
+            </li>
+          </ol>
+        </nav>
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-brand-text-dark sm:text-5xl">
             {currentCategory?.name || 'Tutorials'}
@@ -147,7 +178,7 @@ export default function TutorialCategoryPage() {
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                All Categories
+                {t('allCategories')}
               </button>
               {categories.map((category) => (
                 <button

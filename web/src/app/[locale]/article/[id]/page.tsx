@@ -73,9 +73,49 @@ export default function ArticlePage() {
     );
   }
 
+  const isTutorial = article.type === 'tutorial';
+  const category = article.category;
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Breadcrumb: Home > Section [> Category] > Article title */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-gray-600">
+            <li>
+              <a href="/" className="hover:text-brand-primary transition-colors">
+                {t('breadcrumbHome')}
+              </a>
+            </li>
+            <li aria-hidden className="select-none">/</li>
+            <li>
+              <a
+                href={isTutorial ? '/tutorial' : '/share'}
+                className="hover:text-brand-primary transition-colors"
+              >
+                {isTutorial ? t('knowledgeBase') : t('experienceSharing')}
+              </a>
+            </li>
+            {isTutorial && category?.key && (
+              <>
+                <li aria-hidden className="select-none">/</li>
+                <li>
+                  <a
+                    href={`/tutorial/${category.key}`}
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    {category.name}
+                  </a>
+                </li>
+              </>
+            )}
+            <li aria-hidden className="select-none">/</li>
+            <li className="font-medium text-gray-900 truncate max-w-[12rem] sm:max-w-none" aria-current="page">
+              {article.title}
+            </li>
+          </ol>
+        </nav>
+
         {/* Article Header */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
           <div className="mb-6">

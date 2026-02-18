@@ -91,6 +91,12 @@ export const translations = {
     articlesSubtitle: 'Curated insights and stories about sleep and recovery',
     comingSoon: 'Coming soon',
     articlesPlaceholder: 'Articles will be available here shortly.',
+
+    // Breadcrumb
+    breadcrumbHome: 'Home',
+
+    // Tutorial
+    allCategories: 'All Categories',
   },
   zh: {
     // Header
@@ -184,6 +190,12 @@ export const translations = {
     articlesSubtitle: '关于睡眠与恢复的精选洞见与故事',
     comingSoon: '敬请期待',
     articlesPlaceholder: '文章很快会在这里展示。',
+
+    // Breadcrumb
+    breadcrumbHome: '首页',
+
+    // Tutorial
+    allCategories: '全部分类',
   },
 };
 

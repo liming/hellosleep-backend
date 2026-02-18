@@ -118,6 +118,21 @@ export default function TutorialPage() {
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Breadcrumb: Home > Knowledge Base */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-gray-600">
+            <li>
+              <a href="/" className="hover:text-brand-primary transition-colors">
+                {t('breadcrumbHome')}
+              </a>
+            </li>
+            <li aria-hidden className="select-none">/</li>
+            <li className="font-medium text-gray-900" aria-current="page">
+              {t('knowledgeBase')}
+            </li>
+          </ol>
+        </nav>
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-brand-text-dark sm:text-5xl">
             {t('knowledgeBaseTitle')}
@@ -135,7 +150,7 @@ export default function TutorialPage() {
                 onClick={() => handleCategoryClick(null)}
                 className="px-4 py-2 rounded-md font-medium transition-colors bg-primary-600 text-white"
               >
-                All Categories
+                {t('allCategories')}
               </button>
               {categories.map((category) => (
                 <button

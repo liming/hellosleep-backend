@@ -294,4 +294,30 @@ export async function fetchArticle(articleId: string): Promise<{ data: Article }
   
   // Return the first (and should be only) article found
   return { data: result.data[0] };
+}
+
+/** Legacy tutorial URLs use altId (MongoDB ObjectId, 24 hex chars). Resolve to article. */
+const LEGACY_ALTID_REGEX = /^[a-f0-9]{24}$/i;
+
+export function looksLikeLegacyAltId(segment: string): boolean {
+  return LEGACY_ALTID_REGEX.test(segment);
+}
+
+/** Fetch a single article by legacy altId (for /tutorial/[altId] redirects). */
+export async function fetchArticleByAltId(altId: string): Promise<{ data: Article }> {
+  const url = `${API_BASE_URL}/api/articles?filters[altId][$eq]=${encodeURIComponent(altId)}&populate=*`;
+  const response = await fetch(url, {
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch article by altId: ${response.status} ${response.statusText}`);
+  }
+
+  const result = await response.json();
+  if (!result.data || result.data.length === 0) {
+    throw new Error(`Article with altId ${altId} not found`);
+  }
+
+  return { data: result.data[0] };
 } 

@@ -101,15 +101,15 @@
 ## 🔄 In Progress
 
 ### Tutorial System Issues
-- [ ] **Route Conflict Resolution**
-  - [ ] Fix route conflict between /tutorial/[altId] and /tutorial/[category]
-  - [ ] Test tutorial redirects work correctly after fixing route conflict
-  - [ ] Ensure backward compatibility for old tutorial links
+- [x] **Route Conflict Resolution**
+  - [x] Fix route conflict between /tutorial/[altId] and /tutorial/[category]
+  - [x] Resolve segment in [category] page: legacy altId (24-char hex) → redirect to /article/{documentId}; else show category page
+  - [x] Ensure backward compatibility for old tutorial links (fetchArticleByAltId + looksLikeLegacyAltId in api.ts)
 
 ### Frontend Routing & Navigation
 - [x] Test and verify category URL routing functionality
 - [x] Ensure proper category linking between articles and categories
-- [ ] Add breadcrumb navigation for category pages
+- [x] Add breadcrumb navigation for category pages (tutorial index and tutorial/[category])
 
 ### Assessment System ✅
 - [x] Complete sleep assessment implementation with wireframe design
@@ -322,4 +322,5 @@
 - **AI Enhancement**: Implemented AI-powered recommendation system replacing hard-coded calculations with dynamic, personalized suggestions
 - **Cost Optimization**: Created AI training data system with pattern matching and caching, reducing AI API calls by 90%+ while maintaining quality
 - **Assessment Refactoring**: Successfully unified tag and booklet facts into single StaticTag structure, removing redundant fields and simplifying the recommendation system
-- **Tutorial Link Migration**: Updated all assessment tutorial links from /tutorial/{altId} to /article/{documentId} format, with API proxy for CORS handling and backward compatibility redirect route 
+- **Tutorial Link Migration**: Updated all assessment tutorial links from /tutorial/{altId} to /article/{documentId} format, with API proxy for CORS handling and backward compatibility redirect route
+- **Tutorial Route Conflict Resolved**: Single /tutorial/[category] route now handles both category keys and legacy altIds; 24-char hex segments are resolved via fetchArticleByAltId and redirect to /article/{documentId}; other segments are treated as category keys
