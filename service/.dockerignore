@@ -1,0 +1,11 @@
+node_modules
+.git
+.env
+.env.*
+!.env.example
+dist
+build
+.turbo
+*.log
+.strapi-updater.json
+.strapi

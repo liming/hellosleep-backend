@@ -40,7 +40,8 @@ URL=https://your-domain.com
 ```
 
 ### 1.5 部署
-- Railway 会自动检测 Node.js 项目并部署
+- Railway 会优先使用 `service/Dockerfile`（解决 sharp/libvips 兼容问题）
+- 若无 Dockerfile 则回退到 Nixpacks 检测 Node.js
 - 部署完成后，记下 `https://your-project.railway.app`
 
 ---
