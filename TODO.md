@@ -183,39 +183,32 @@
 ## 📋 Next Priority Tasks
 
 ### Assessment System Migration to Database
-- [ ] **Review Assessment Data**
-  - [ ] Review the assessment data structure and content
-  - [ ] Analyze current static data in `static-assessment-questions.ts`
-  - [ ] Document data relationships and dependencies
-  - [ ] Plan database schema for questions and tags
+- [x] **Review Assessment Data**
+  - [x] Review the assessment data structure and content
+  - [x] Analyze current static data in `static-assessment-questions.ts` (and calculations + engine)
+  - [x] Document data relationships and dependencies
+  - [x] Plan database schema for questions and tags (see `ASSESSMENT_DATA_REVIEW.md`)
 
-- [ ] **Create Strapi Data Models**
-  - [ ] Create related data models in Strapi 5 admin panel
-  - [ ] Design database schema for assessment questions
-  - [ ] Design database schema for assessment tags
-  - [ ] Set up proper relationships between questions and tags
-  - [ ] Configure content types with proper validation
+- [x] **Create Strapi Data Models**
+  - [x] Section: key, name, description, order, questions relation
+  - [x] Question: questionId, text, type, category (relation), required, options, depends, order, min/max/step/unit
+  - [x] Assessment-tag: name, text, description, category, priority, severity, calc (json), recommendation (json)
 
-- [ ] **Migrate Data to Database**
-  - [ ] Migrate the assessment data from code to remote databases
-  - [ ] Create migration scripts for questions data
-  - [ ] Create migration scripts for tags and recommendations
-  - [ ] Test data integrity and relationships
-  - [ ] Validate all migrated data
+- [x] **Migrate Data to Database**
+  - [x] Seed script: service/script/seed-assessment.js (fetches from web /api/assessment-seed-data, POSTs to Strapi)
+  - [x] npm run seed:assessment in service (requires Strapi + web running)
+  - [x] See ASSESSMENT_MIGRATION_README.md
 
-- [ ] **Update Code for API Integration**
-  - [ ] Change code to support getting assessment data from backend API
-  - [ ] Update assessment engine to fetch data from Strapi
-  - [ ] Modify frontend components to use API data
-  - [ ] Implement proper error handling for API calls
-  - [ ] Add loading states for dynamic data
+- [x] **Update Code for API Integration**
+  - [x] GET /api/assessment/data returns sections, questions, tags from Strapi
+  - [x] fetchAssessmentData() in web with static fallback
+  - [x] Engine processAssessment(answers, tagsOverride?) uses API tags when provided
+  - [x] Assessment page loads data from API and passes tags to engine
 
-- [ ] **Test Whole System**
-  - [ ] Test the whole assessment system end-to-end
-  - [ ] Verify all questions load correctly from database
-  - [ ] Test tag calculations with database data
-  - [ ] Validate recommendation system works with API data
-  - [ ] Perform comprehensive system testing
+- [x] **Test Whole System**
+  - [x] GET /api/assessment/test runs verification + all scenarios (uses API or static tags)
+  - [x] GET /api/assessment-verify for tag→booklet check
+  - [ ] Manual E2E: run Strapi + web, seed, then complete assessment at /zh/assessment
 
 - [ ] **Deploy Changes**
   - [ ] Deploy the changes to production

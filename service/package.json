@@ -16,7 +16,8 @@
     "migration:test-single": "node script/single-migration-test.js",
     "migration:test-import": "node script/single-import-test.js",
     "migration:download-images": "node script/download-external-images.js",
-    "migration:full": "npm run migration:export && npm run migration:transform && npm run migration:import"
+    "migration:full": "npm run migration:export && npm run migration:transform && npm run migration:import",
+    "seed:assessment": "node script/seed-assessment.js"
   },
   "devDependencies": {},
   "dependencies": {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { staticAssessmentEngine } from '@/lib/static-assessment-engine';
+import { processAssessment, tags } from '@/lib/assessment';
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,75 +7,41 @@ export async function POST(request: NextRequest) {
     const { answers } = body;
 
     if (!answers || typeof answers !== 'object') {
-      return NextResponse.json(
-        { error: 'Invalid answers format' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid answers format' }, { status: 400 });
     }
 
-    // Process assessment using static engine
-    const result = staticAssessmentEngine.processAssessment(answers);
-
-    // Save result (in production, this would save to database)
-    staticAssessmentEngine.saveResult(result);
+    const activeTags = processAssessment(answers);
 
     return NextResponse.json({
       success: true,
       data: {
-        calculatedTags: result.calculatedTags.map(tag => ({
+        calculatedTags: activeTags.map((tag) => ({
           name: tag.name,
           text: tag.text,
-          description: tag.description,
           category: tag.category,
           priority: tag.priority,
-          severity: tag.severity,
-          recommendation: tag.recommendation
+          recommendation: tag.recommendation,
         })),
-        completedAt: result.completedAt,
         summary: {
           totalAnswers: Object.keys(answers).length,
-          totalTags: result.calculatedTags.length,
-          totalRecommendations: result.calculatedTags.length
-        }
-      }
+          totalTags: activeTags.length,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Static assessment API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 export async function GET() {
-  try {
-    // Get latest result for demonstration
-    const latestResult = staticAssessmentEngine.getLatestResult();
-    
-    // Get statistics
-    const allTags = staticAssessmentEngine.getAllTags();
-    
-    return NextResponse.json({
-      success: true,
-      data: {
-        latestResult,
-        statistics: {
-          totalTags: allTags.length,
-          availableTags: allTags.map(tag => ({
-            name: tag.name,
-            text: tag.text
-          }))
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error('Static assessment API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    success: true,
+    data: {
+      statistics: {
+        totalTags: tags.length,
+        availableTags: tags.map((tag) => ({ name: tag.name, text: tag.text })),
+      },
+    },
+  });
 }

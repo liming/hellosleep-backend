@@ -1,0 +1,301 @@
+[
+  {
+    "id": "status",
+    "text": "您当前的生活状态是？",
+    "type": "single_choice",
+    "category": "basic_info",
+    "required": true,
+    "options": [
+      { "value": "work", "text": "工作" },
+      { "value": "study", "text": "上学" },
+      { "value": "unemployed", "text": "待业" },
+      { "value": "prenatal", "text": "孕期" },
+      { "value": "postnatal", "text": "产后" },
+      { "value": "retire", "text": "退休" }
+    ]
+  },
+  {
+    "id": "age_group",
+    "text": "您的年龄段是？",
+    "type": "single_choice",
+    "category": "basic_info",
+    "required": true,
+    "options": [
+      { "value": "18-25", "text": "18-25岁" },
+      { "value": "26-35", "text": "26-35岁" },
+      { "value": "36-45", "text": "36-45岁" },
+      { "value": "46-55", "text": "46-55岁" },
+      { "value": "55+", "text": "55岁以上" }
+    ]
+  },
+  {
+    "id": "sleepregular",
+    "text": "您的作息时间规律吗？",
+    "type": "single_choice",
+    "category": "sleep_habits",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "规律" },
+      { "value": "no", "text": "不规律" }
+    ]
+  },
+  {
+    "id": "sleeptime",
+    "text": "通常几点睡觉？",
+    "type": "time",
+    "category": "sleep_habits",
+    "required": false,
+    "depends": { "questionId": "sleepregular", "value": "yes" }
+  },
+  {
+    "id": "getuptime",
+    "text": "通常几点起床？",
+    "type": "time",
+    "category": "sleep_habits",
+    "required": false,
+    "depends": { "questionId": "sleepregular", "value": "yes" }
+  },
+  {
+    "id": "hourstosleep",
+    "text": "晚上试图睡觉时间有多少？",
+    "type": "number",
+    "category": "sleep_habits",
+    "required": false,
+    "depends": { "questionId": "sleepregular", "value": "no" },
+    "min": 0,
+    "max": 15,
+    "step": 0.5,
+    "unit": "小时"
+  },
+  {
+    "id": "hourstofallinsleep",
+    "text": "晚上的实际睡眠时间有多少？",
+    "type": "number",
+    "category": "sleep_habits",
+    "required": true,
+    "min": 0,
+    "max": 12,
+    "step": 0.5,
+    "unit": "小时"
+  },
+  {
+    "id": "sleep_quality",
+    "text": "您觉得自己的睡眠质量如何？",
+    "type": "single_choice",
+    "category": "sleep_habits",
+    "required": true,
+    "options": [
+      { "value": "excellent", "text": "很好" },
+      { "value": "good", "text": "良好" },
+      { "value": "fair", "text": "一般" },
+      { "value": "poor", "text": "较差" },
+      { "value": "very_poor", "text": "很差" }
+    ]
+  },
+  {
+    "id": "sport",
+    "text": "您会有规律的运动吗？",
+    "type": "single_choice",
+    "category": "lifestyle",
+    "required": true,
+    "options": [
+      { "value": "best", "text": "有规律且强度适中" },
+      { "value": "good", "text": "有规律但强度较低" },
+      { "value": "normal", "text": "偶尔运动" },
+      { "value": "little", "text": "很少运动" },
+      { "value": "none", "text": "不运动" }
+    ]
+  },
+  {
+    "id": "sunshine",
+    "text": "您每天接触阳光的时间是？",
+    "type": "single_choice",
+    "category": "lifestyle",
+    "required": true,
+    "options": [
+      { "value": "best", "text": "2小时以上" },
+      { "value": "good", "text": "1-2小时" },
+      { "value": "normal", "text": "30分钟-1小时" },
+      { "value": "little", "text": "15-30分钟" },
+      { "value": "none", "text": "很少接触" }
+    ]
+  },
+  {
+    "id": "pressure",
+    "text": "您当前的生活压力水平是？",
+    "type": "single_choice",
+    "category": "lifestyle",
+    "required": true,
+    "options": [
+      { "value": "very_high", "text": "压力很大" },
+      { "value": "high", "text": "压力较大" },
+      { "value": "normal", "text": "压力适中" },
+      { "value": "low", "text": "压力较小" },
+      { "value": "very_low", "text": "压力很小" }
+    ]
+  },
+  {
+    "id": "lively",
+    "text": "您的生活丰富度和活跃度如何？",
+    "type": "single_choice",
+    "category": "lifestyle",
+    "required": true,
+    "options": [
+      { "value": "very_active", "text": "非常丰富活跃" },
+      { "value": "active", "text": "比较丰富活跃" },
+      { "value": "normal", "text": "一般" },
+      { "value": "inactive", "text": "不太活跃" },
+      { "value": "very_inactive", "text": "很单调" }
+    ]
+  },
+  {
+    "id": "bedroom",
+    "text": "您总是长时间呆在卧室吗？",
+    "type": "single_choice",
+    "category": "environment",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "bed",
+    "text": "您总是长时间呆在床上吗？（比如玩手机）",
+    "type": "single_choice",
+    "category": "environment",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "noise",
+    "text": "您的睡眠环境安静吗？",
+    "type": "single_choice",
+    "category": "environment",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "安静" },
+      { "value": "no", "text": "不安静" }
+    ]
+  },
+  {
+    "id": "noisereason",
+    "text": "影响睡眠环境的因素是什么？",
+    "type": "single_choice",
+    "category": "environment",
+    "required": false,
+    "depends": { "questionId": "noise", "value": "no" },
+    "options": [
+      { "value": "snore", "text": "伴侣打呼噜" },
+      { "value": "neighbour", "text": "邻居吵闹" },
+      { "value": "roommate", "text": "室友吵闹" },
+      { "value": "traffic", "text": "交通噪音" },
+      { "value": "others", "text": "其他" }
+    ]
+  },
+  {
+    "id": "shiftwork",
+    "text": "您的工作需要倒班吗？",
+    "type": "single_choice",
+    "category": "work_study",
+    "required": false,
+    "depends": { "questionId": "status", "value": "work" },
+    "options": [
+      { "value": "yes", "text": "需要" },
+      { "value": "no", "text": "不需要" }
+    ]
+  },
+  {
+    "id": "holiday",
+    "text": "您的失眠发生在寒暑假吗？",
+    "type": "single_choice",
+    "category": "work_study",
+    "required": false,
+    "depends": { "questionId": "status", "value": "study" },
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "bedtimeearly",
+    "text": "您总是比室友睡得早吗？",
+    "type": "single_choice",
+    "category": "work_study",
+    "required": false,
+    "depends": { "questionId": "status", "value": "study" },
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "irresponsible",
+    "text": "失眠后您是不是刻意减少或者放弃工作/学习？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "inactive",
+    "text": "失眠后您是不是减少或放弃很多社交活动或者运动？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "excessive_rest",
+    "text": "失眠后您是不是总是在找机会休息？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "complain",
+    "text": "您会不会总是抱怨或者哭诉失眠？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "ignore",
+    "text": "失眠后您是不是很少关心亲人和朋友？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  },
+  {
+    "id": "medicine",
+    "text": "您是不是去看病或者服用了安眠的药物？",
+    "type": "single_choice",
+    "category": "attitude",
+    "required": true,
+    "options": [
+      { "value": "yes", "text": "是" },
+      { "value": "no", "text": "不是" }
+    ]
+  }
+]

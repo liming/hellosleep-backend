@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "评估 Assessment 简化方案",
+      "description": "按照 ASSESSMENT_SIMPLIFICATION_PROPOSAL.md 实施简化，重点：\n\n1. 将 questions 和 tags 做成 JSON 文件，放在 shared 目录下（如 shared/data/assessment-questions.json, shared/data/assessment-tags.json）\n2. 创建纯函数引擎 assessment.ts（替代 engine class）\n3. 拆分 page.tsx 为 LandingScreen / QuestionScreen / ResultsScreen 三个组件\n4. 删除冗余的 API 路由和开发工具文件\n5. 去掉调试信息区块\n\n详见 backlog/ASSESSMENT_SIMPLIFICATION_PROPOSAL.md",
+      "priority": "high",
+      "status": "done",
+      "createdAt": "2025-02-21T13:30:00Z",
+      "updatedAt": "2025-02-21T16:20:00Z",
+      "result": "已完成。JSON 数据放在 shared/data/，页面拆分为 3 个组件，page.tsx 简化至 72 行，验证通过并修复 2 个 bug。"
+    }
+  ],
+  "lastChecked": "2025-02-21T16:20:00Z"
+}

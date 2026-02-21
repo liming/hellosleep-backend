@@ -487,19 +487,39 @@ export interface ApiAssessmentTagAssessmentTag
     draftAndPublish: true;
   };
   attributes: {
+    calc: Schema.Attribute.JSON & Schema.Attribute.Required;
+    category: Schema.Attribute.Enumeration<
+      [
+        'sleep',
+        'lifestyle',
+        'work',
+        'student',
+        'special',
+        'behavior',
+        'environment',
+      ]
+    > &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::assessment-tag.assessment-tag'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String &
+    name: Schema.Attribute.UID &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    priority: Schema.Attribute.Enumeration<['high', 'medium', 'low']> &
+      Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    recommendation: Schema.Attribute.JSON & Schema.Attribute.Required;
+    severity: Schema.Attribute.Enumeration<['mild', 'moderate', 'severe']> &
+      Schema.Attribute.Required;
+    text: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -608,15 +628,19 @@ export interface ApiQuestionQuestion extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::question.question'
     >;
-    name: Schema.Attribute.String &
-      Schema.Attribute.Required &
+    max: Schema.Attribute.Integer &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
+        };
+      }>;
+    min: Schema.Attribute.Integer &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
         };
       }>;
     options: Schema.Attribute.JSON &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -636,22 +660,51 @@ export interface ApiQuestionQuestion extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    questionId: Schema.Attribute.UID &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    required: Schema.Attribute.Boolean &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<true>;
+    step: Schema.Attribute.Float &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    text: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     type: Schema.Attribute.Enumeration<
       [
-        '"single_choice"',
-        '"multiple_choice"',
-        '"scale"',
-        '"text"',
-        '"number"',
-        '"email"',
-        '"date"',
-        '"time"',
+        'single_choice',
+        'multiple_choice',
+        'scale',
+        'text',
+        'number',
+        'email',
+        'date',
+        'time',
       ]
     > &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
+        };
+      }>;
+    unit: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
         };
       }>;
     updatedAt: Schema.Attribute.DateTime;
@@ -686,6 +739,9 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    key: Schema.Attribute.UID &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -693,7 +749,6 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
     >;
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
-      Schema.Attribute.Unique &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -701,7 +756,6 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
       }>;
     order: Schema.Attribute.Integer &
       Schema.Attribute.Required &
-      Schema.Attribute.Unique &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
