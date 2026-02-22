@@ -1,0 +1,6 @@
+# Ignore when build context is repo root
+**/node_modules
+.git
+.env
+.env.*
+*.log

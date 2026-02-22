@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy package files (service has its own yarn.lock)
-COPY package.json yarn.lock .yarnrc* ./
+# Build context is repo root (railway.json dockerfilePath)
+COPY service/package.json service/yarn.lock service/.yarnrc* ./
 
 # Install dependencies
 RUN yarn install --ignore-engines
 
-# Copy source
-COPY . .
+# Copy rest of service source
+COPY service/ .
 
 # Build Strapi admin
 RUN yarn build
