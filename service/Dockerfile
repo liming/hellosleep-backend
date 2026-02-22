@@ -4,10 +4,9 @@ FROM node:24-bookworm-slim
 # Use Yarn 1 (classic) to match project's yarn.lock format
 RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 
-# Install libvips for sharp native bindings
+# Install libvips42 (provides libvips-cpp.so.42) for sharp
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libvips-dev \
-    libglib2.0-0 \
+    libvips42 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
