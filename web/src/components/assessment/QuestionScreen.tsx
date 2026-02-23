@@ -87,7 +87,7 @@ export default function QuestionScreen({
                   className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
                     answers[question.id] === option.value
                       ? 'border-green-500 bg-green-50 text-green-700'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-200 hover:border-gray-300 text-gray-900'
                   }`}
                 >
                   {option.text}
