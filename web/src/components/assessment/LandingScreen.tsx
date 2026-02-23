@@ -26,15 +26,21 @@ export default function LandingScreen({ onStart }: LandingScreenProps) {
 
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="text-center">
+            {(
+              [
+                ['assessmentStep1Title', 'assessmentStep1Desc'],
+                ['assessmentStep2Title', 'assessmentStep2Desc'],
+                ['assessmentStep3Title', 'assessmentStep3Desc'],
+              ] as const
+            ).map(([titleKey, descKey], i) => (
+              <div key={i} className="text-center">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">{step}</span>
+                  <span className="text-2xl font-bold text-blue-600">{i + 1}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {t(`assessmentStep${step}Title`)}
+                  {t(titleKey)}
                 </h3>
-                <p className="text-gray-600 text-sm">{t(`assessmentStep${step}Desc`)}</p>
+                <p className="text-gray-600 text-sm">{t(descKey)}</p>
               </div>
             ))}
           </div>
