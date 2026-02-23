@@ -77,7 +77,7 @@ export default function AuthModal({ onClose, onSuccess, initialMode = 'login' }:
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="请输入用户名"
                 required
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900 placeholder:text-gray-400 bg-white"
               />
             </div>
           )}
@@ -90,7 +90,7 @@ export default function AuthModal({ onClose, onSuccess, initialMode = 'login' }:
               onChange={(e) => setEmail(e.target.value)}
               placeholder="请输入邮箱"
               required
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900 placeholder:text-gray-400 bg-white"
             />
           </div>
 
@@ -103,7 +103,7 @@ export default function AuthModal({ onClose, onSuccess, initialMode = 'login' }:
               placeholder="请输入密码"
               required
               minLength={6}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900 placeholder:text-gray-400 bg-white"
             />
           </div>
 
