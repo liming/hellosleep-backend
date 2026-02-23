@@ -1,6 +1,6 @@
-# 部署指南：Railway + Cloudflare
+# 部署指南：Railway + Vercel / Cloudflare
 
-## 费用：$5/月 (Railway) + 免费 (Cloudflare)
+## 费用：$5/月 (Railway) + 免费 (Vercel Hobby) 或 免费 (Cloudflare Pages)
 
 ---
 
@@ -46,7 +46,40 @@ URL=https://your-domain.com
 
 ---
 
-## 第二步：Cloudflare Pages 部署前端
+## 第二步：Vercel 部署前端（推荐）
+
+### 2.1 创建 Vercel 账号
+1. 访问 https://vercel.com
+2. 用 GitHub 登录
+
+### 2.2 创建项目
+1. Add New → Project
+2. 选择 `hellosleep-app` 仓库
+3. 配置：
+   - **Framework Preset**: Next.js（自动检测）
+   - **Root Directory**: `web`（点击 Edit 选择）
+   - **Build Command**: 默认 `npm run build`
+   - **Output Directory**: 默认（Next.js 自动处理）
+
+### 2.3 添加环境变量
+Settings → Environment Variables 添加：
+
+```
+NEXT_PUBLIC_STRAPI_URL=https://your-railway-app.railway.app
+NEXT_PUBLIC_STRAPI_API_TOKEN=<可选：Strapi API token>
+```
+
+### 2.4 部署
+- 点击 Deploy
+- 完成后记下 `https://your-project.vercel.app`
+
+### 2.5 自定义域名
+- Project Settings → Domains → Add
+- 输入你的域名并按提示配置 DNS
+
+---
+
+## 第二步（备选）：Cloudflare Pages 部署前端
 
 ### 2.1 创建 Cloudflare 账号
 1. 访问 https://pages.cloudflare.com
@@ -91,8 +124,8 @@ NEXT_PUBLIC_STRAPI_API_TOKEN=<可选：Strapi API token>
 在 Railway 环境变量里添加：
 
 ```
-STRAPI_URL=https://your-project.railway.app
-NEXT_PUBLIC_API_URL=https://your-domain.com
+STRAPI_URL=https://your-railway-app.railway.app
+NEXT_PUBLIC_API_URL=https://your-vercel-app.vercel.app
 ```
 
 ### 4.2 创建管理员账号
