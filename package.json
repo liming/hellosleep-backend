@@ -1,5 +1,6 @@
 {
   "name": "hellosleep",
+  "packageManager": "yarn@1.22.22",
   "version": "1.0.0",
   "description": "HelloSleep - Sleep improvement platform",
   "private": true,
