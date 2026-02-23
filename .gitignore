@@ -73,9 +73,9 @@ jspm_packages/
 .nuxt
 dist
 
-# Gatsby files
+# Gatsby files (only root public; do not ignore web/public for Next.js assets)
 .cache/
-public
+/public
 
 # Storybook build outputs
 .out
