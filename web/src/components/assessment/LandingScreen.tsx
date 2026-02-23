@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/hooks/useTranslation';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LandingScreenProps {
   onStart: () => void;
@@ -8,6 +9,7 @@ interface LandingScreenProps {
 
 export default function LandingScreen({ onStart }: LandingScreenProps) {
   const { t } = useTranslation();
+  const { user, isLoading } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
@@ -54,6 +56,16 @@ export default function LandingScreen({ onStart }: LandingScreenProps) {
             {t('startAssessment')}
           </button>
           <p className="text-sm text-gray-500 mt-4">{t('assessmentTimeEstimate')}</p>
+          {!isLoading && !user && (
+            <p className="text-sm text-blue-600 mt-2">
+              需要登录后才能开始评估，点击上方按钮将弹出登录界面
+            </p>
+          )}
+          {!isLoading && user && (
+            <p className="text-sm text-green-600 mt-2">
+              已登录为 <strong>{user.username}</strong>，评估结果将自动保存
+            </p>
+          )}
         </div>
       </div>
     </div>

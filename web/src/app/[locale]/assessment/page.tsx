@@ -5,21 +5,25 @@ import { questions, getVisibleQuestions, processAssessment, type Tag } from '@/l
 import LandingScreen from '@/components/assessment/LandingScreen';
 import QuestionScreen from '@/components/assessment/QuestionScreen';
 import ResultsScreen from '@/components/assessment/ResultsScreen';
+import AuthModal from '@/components/auth/AuthModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { saveAssessmentResult } from '@/lib/auth';
 
 type Screen = 'landing' | 'questions' | 'results';
 
 export default function AssessmentPage() {
+  const { user, jwt } = useAuth();
   const [screen, setScreen] = useState<Screen>('landing');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [questionIndex, setQuestionIndex] = useState(0);
   const [activeTags, setActiveTags] = useState<Tag[]>([]);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const visibleQuestions = useMemo(
     () => getVisibleQuestions(questions, answers),
     [answers]
   );
 
-  // Auto-initialize default values for scale/number questions so the Next button isn't blocked
   useEffect(() => {
     const current = visibleQuestions[questionIndex];
     if (
@@ -40,8 +44,13 @@ export default function AssessmentPage() {
     if (questionIndex < visibleQuestions.length - 1) {
       setQuestionIndex((i) => i + 1);
     } else {
-      setActiveTags(processAssessment(answers));
+      const tags = processAssessment(answers);
+      setActiveTags(tags);
       setScreen('results');
+      if (jwt) {
+        const tagData = tags.map((t) => ({ name: t.name, text: t.text, priority: t.priority }));
+        saveAssessmentResult(jwt, answers, tagData).catch(console.error);
+      }
     }
   };
 
@@ -50,6 +59,10 @@ export default function AssessmentPage() {
   };
 
   const handleStart = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
     setScreen('questions');
     setQuestionIndex(0);
   };
@@ -78,6 +91,16 @@ export default function AssessmentPage() {
           tags={activeTags}
           answeredCount={Object.keys(answers).length}
           onBack={handleBack}
+        />
+      )}
+
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => {
+            setScreen('questions');
+            setQuestionIndex(0);
+          }}
         />
       )}
     </>

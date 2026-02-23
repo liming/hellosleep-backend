@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "assessment_results",
+  "info": {
+    "singularName": "assessment-result",
+    "pluralName": "assessment-results",
+    "displayName": "AssessmentResult"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "answers": {
+      "type": "json",
+      "required": true
+    },
+    "tags": {
+      "type": "json",
+      "required": true
+    },
+    "completedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

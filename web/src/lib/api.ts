@@ -1,5 +1,9 @@
-// API client for Strapi backend
-const API_BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+// API client for Strapi backend (must be full origin with protocol for client-side requests)
+const rawStrapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const API_BASE_URL =
+  rawStrapiUrl.startsWith('http://') || rawStrapiUrl.startsWith('https://')
+    ? rawStrapiUrl.replace(/\/$/, '')
+    : `https://${rawStrapiUrl.replace(/\/$/, '')}`;
 const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 
 // Common headers for API requests

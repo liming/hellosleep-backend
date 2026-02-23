@@ -1,6 +1,8 @@
 'use client';
 
 import type { Tag } from '@/lib/assessment';
+import { useAuth } from '@/contexts/AuthContext';
+import AssessmentHistory from '@/components/assessment/AssessmentHistory';
 
 interface ResultsScreenProps {
   tags: Tag[];
@@ -21,6 +23,7 @@ const PRIORITY_LABELS: Record<string, string> = {
 };
 
 export default function ResultsScreen({ tags, answeredCount, onBack }: ResultsScreenProps) {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
@@ -99,7 +102,14 @@ export default function ResultsScreen({ tags, answeredCount, onBack }: ResultsSc
               <p className="text-lg font-semibold">{tags.length}</p>
             </div>
           </div>
+          {user && (
+            <p className="mt-3 text-xs text-green-700 bg-green-50 rounded-lg px-3 py-2">
+              本次评估结果已自动保存到您的账户
+            </p>
+          )}
         </div>
+
+        {user && <AssessmentHistory />}
       </div>
     </div>
   );
