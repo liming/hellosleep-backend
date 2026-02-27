@@ -48,9 +48,36 @@
 
 ## Prerequisites
 
-- Strapi running on `http://localhost:1337`
-- `LOCAL_API_TOKEN` set in `service/.env`
-- Remote Strapi 3 server accessible
+- Strapi running on `http://localhost:1337` (or set `STRAPI_URL` for production)
+- `LOCAL_API_TOKEN` or `STRAPI_API_TOKEN` set in `service/.env` (or env when running)
+- Remote Strapi 3 server accessible (for export)
+
+## Import to production (e.g. Railway)
+
+To import articles to your production Strapi (e.g. Railway):
+
+1. Ensure you have the migrated files in `service/script/`:
+   - `migrated-categories.json`
+   - `migrated-remote-articles-improved.json`
+   (If not, run export + transform first against your old Strapi 3.)
+
+2. Create an API token in production Strapi:
+   - Open `https://your-app.up.railway.app/admin` → Settings → API Tokens → Create new API Token (Full access or custom with content read/write).
+
+3. From repo root, run (replace with your URL and token):
+
+   ```bash
+   cd service
+   STRAPI_URL=https://hellosleep-production.up.railway.app STRAPI_API_TOKEN=your-token node script/improved-import.js categories
+   STRAPI_URL=https://hellosleep-production.up.railway.app STRAPI_API_TOKEN=your-token node script/improved-import.js
+   ```
+
+   Or add `STRAPI_URL` and `STRAPI_API_TOKEN` to `service/.env` and run:
+
+   ```bash
+   cd service && npm run migration:import-categories
+   cd service && npm run migration:import
+   ```
 
 ## Output Files
 

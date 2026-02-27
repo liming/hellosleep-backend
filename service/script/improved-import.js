@@ -4,9 +4,12 @@ const path = require('path');
 // Load environment variables from .env file
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-// Configuration
-const STRAPI_URL = 'http://localhost:1337';
-const API_TOKEN = process.env.LOCAL_API_TOKEN || process.env.STRAPI_API_TOKEN || process.env.STRAPI_TOKEN || 'your-api-token-here';
+// Configuration: use STRAPI_URL to import to production (e.g. Railway)
+const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
+// When targeting production, prefer STRAPI_API_TOKEN so .env LOCAL_API_TOKEN doesn't override
+const API_TOKEN = process.env.STRAPI_URL
+  ? (process.env.STRAPI_API_TOKEN || process.env.STRAPI_TOKEN || process.env.LOCAL_API_TOKEN)
+  : (process.env.LOCAL_API_TOKEN || process.env.STRAPI_API_TOKEN || process.env.STRAPI_TOKEN || 'your-api-token-here');
 
 // Helper function to make API requests
 async function makeApiRequest(endpoint, method = 'GET', data = null) {
