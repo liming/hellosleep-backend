@@ -72,6 +72,38 @@ export async function registerWithEmail(
   return res.json();
 }
 
+export async function forgotPassword(email: string): Promise<void> {
+  const res = await fetch(`${STRAPI_URL}/api/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err?.error?.message || '发送重置邮件失败');
+  }
+}
+
+export async function resetPassword(
+  code: string,
+  password: string,
+  passwordConfirmation: string
+): Promise<AuthResponse> {
+  const res = await fetch(`${STRAPI_URL}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, password, passwordConfirmation }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err?.error?.message || '重置密码失败');
+  }
+
+  return res.json();
+}
+
 export async function saveAssessmentResult(
   jwt: string,
   answers: Record<string, string>,
