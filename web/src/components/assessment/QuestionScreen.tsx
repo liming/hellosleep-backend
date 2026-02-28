@@ -23,9 +23,7 @@ const SECTION_LABELS: Record<string, string> = {
 };
 
 function buildHalfHourOptions() {
-  const options: Array<{ value: string; label: string }> = [
-    { value: 'not_fixed', label: '不固定' },
-  ];
+  const options: Array<{ value: string; label: string }> = [];
 
   for (let hour = 0; hour < 24; hour += 1) {
     for (const minute of [0, 30]) {
