@@ -181,12 +181,6 @@ export default function AssessmentPage() {
     setQuestionIndex(0);
   };
 
-  const handleBack = () => {
-    setScreen('landing');
-    setAnswers({});
-    setQuestionIndex(0);
-  };
-
   const handleRetake = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(LAST_ASSESSMENT_KEY);
@@ -213,8 +207,6 @@ export default function AssessmentPage() {
       {screen === 'results' && (
         <ResultsScreen
           tags={activeTags}
-          answeredCount={Object.keys(answers).length}
-          onBack={handleBack}
           onRetake={handleRetake}
         />
       )}
