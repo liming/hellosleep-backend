@@ -186,7 +186,7 @@ export default function ArticlePage() {
             onClick={() => window.history.back()}
             className="px-6 py-3 bg-brand-primary text-white rounded-md hover:bg-primary-600 transition-colors"
           >
-            ← Back to Articles
+            ← {t('backToArticles')}
           </button>
         </div>
       </div>

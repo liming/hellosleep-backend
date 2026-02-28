@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Tag } from '@/lib/assessment';
+import { getVisibleQuestions, questions, type Tag } from '@/lib/assessment';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentHistory from '@/components/assessment/AssessmentHistory';
 
 interface ResultsScreenProps {
+  answers: Record<string, string>;
   tags: Tag[];
   onRetake: () => void;
 }
@@ -22,32 +23,38 @@ const PRIORITY_LABELS: Record<string, string> = {
   low: '参考',
 };
 
-export default function ResultsScreen({ tags, onRetake }: ResultsScreenProps) {
+export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreenProps) {
   const { user } = useAuth();
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
 
   const copyText = useMemo(() => {
-    if (!tags.length) {
-      return [
-        '我的睡眠评估结果：',
-        '当前未发现明显睡眠问题，建议继续保持良好作息与生活习惯。',
-      ].join('\n');
+    const visible = getVisibleQuestions(questions, answers);
+    const lines: string[] = ['我的睡眠评估问答：', ''];
+
+    visible.forEach((q) => {
+      const raw = answers[q.id];
+      if (raw === undefined || raw === '') return;
+
+      let displayValue = raw;
+
+      if (q.type === 'single_choice' && q.options?.length) {
+        const matched = q.options.find((o) => o.value === raw);
+        if (matched?.text) displayValue = matched.text;
+      }
+
+      if ((q.type === 'scale' || q.type === 'number') && q.unit) {
+        displayValue = `${raw}${q.unit}`;
+      }
+
+      lines.push(`${q.text} ：${displayValue}`);
+    });
+
+    if (lines.length === 2) {
+      lines.push('暂无可复制的问答内容。');
     }
 
-    const lines: string[] = ['我的睡眠评估结果：', ''];
-    lines.push('识别到的问题：');
-    tags.forEach((tag) => lines.push(`- ${tag.text}（${PRIORITY_LABELS[tag.priority]}）`));
-    lines.push('');
-    lines.push('重点建议：');
-    tags.forEach((tag, idx) => {
-      lines.push(`${idx + 1}. ${tag.recommendation.title}`);
-      lines.push(`   ${tag.recommendation.content}`);
-      if (tag.recommendation.tutorialLink) {
-        lines.push(`   教程：${tag.recommendation.tutorialLink}`);
-      }
-    });
     return lines.join('\n');
-  }, [tags]);
+  }, [answers]);
 
   const handleCopyResult = async () => {
     try {
@@ -80,13 +87,24 @@ export default function ResultsScreen({ tags, onRetake }: ResultsScreenProps) {
                 onClick={handleCopyResult}
                 className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                复制评估结果
+                复制问答结果
               </button>
             </div>
           </div>
           {copyState === 'copied' && (
             <p className="mt-3 text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2">
-              已复制，可直接粘贴到 community 提问。
+              已复制问答内容，可直接粘贴到
+              {' '}
+              <a
+                href="https://www.douban.com/group/hellosleep"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold underline hover:text-green-800"
+              >
+                睡吧小组
+              </a>
+              {' '}
+              提问。
             </p>
           )}
           {copyState === 'error' && (

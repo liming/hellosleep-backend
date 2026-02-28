@@ -94,6 +94,7 @@ export const translations = {
 
     // Breadcrumb
     breadcrumbHome: 'Home',
+    backToArticles: 'Back to Articles',
 
     // Tutorial
     allCategories: 'All Categories',
@@ -193,6 +194,7 @@ export const translations = {
 
     // Breadcrumb
     breadcrumbHome: '首页',
+    backToArticles: '返回文章列表',
 
     // Tutorial
     allCategories: '全部分类',

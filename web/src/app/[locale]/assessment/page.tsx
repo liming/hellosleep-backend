@@ -206,6 +206,7 @@ export default function AssessmentPage() {
       )}
       {screen === 'results' && (
         <ResultsScreen
+          answers={answers}
           tags={activeTags}
           onRetake={handleRetake}
         />
