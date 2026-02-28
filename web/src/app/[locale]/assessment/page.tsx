@@ -10,6 +10,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { saveAssessmentResult } from '@/lib/auth';
 
 type Screen = 'landing' | 'questions' | 'results';
+const LAST_ASSESSMENT_KEY = 'hellosleep_last_assessment';
+
+const DEFAULT_TIME_ANSWERS: Record<string, string> = {
+  sleeptime: '23:00',
+  getuptime: '07:00',
+};
 
 export default function AssessmentPage() {
   const { user, jwt } = useAuth();
@@ -18,6 +24,23 @@ export default function AssessmentPage() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [activeTags, setActiveTags] = useState<Tag[]>([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const raw = localStorage.getItem(LAST_ASSESSMENT_KEY);
+    if (!raw) return;
+
+    try {
+      const parsed = JSON.parse(raw) as { answers?: Record<string, string> };
+      if (parsed.answers && Object.keys(parsed.answers).length > 0) {
+        setAnswers(parsed.answers);
+        setActiveTags(processAssessment(parsed.answers));
+        setScreen('results');
+      }
+    } catch {
+      localStorage.removeItem(LAST_ASSESSMENT_KEY);
+    }
+  }, []);
 
   const visibleQuestions = useMemo(
     () => getVisibleQuestions(questions, answers),
@@ -34,6 +57,15 @@ export default function AssessmentPage() {
     ) {
       setAnswers((prev) => ({ ...prev, [current.id]: String(current.min) }));
     }
+
+    if (
+      current &&
+      current.type === 'time' &&
+      answers[current.id] === undefined &&
+      DEFAULT_TIME_ANSWERS[current.id]
+    ) {
+      setAnswers((prev) => ({ ...prev, [current.id]: DEFAULT_TIME_ANSWERS[current.id] }));
+    }
   }, [questionIndex, visibleQuestions, answers]);
 
   const handleAnswer = (questionId: string, value: string) => {
@@ -47,6 +79,15 @@ export default function AssessmentPage() {
       const tags = processAssessment(answers);
       setActiveTags(tags);
       setScreen('results');
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(
+          LAST_ASSESSMENT_KEY,
+          JSON.stringify({
+            answers,
+            completedAt: new Date().toISOString(),
+          })
+        );
+      }
       if (jwt) {
         const tagData = tags.map((t) => ({ name: t.name, text: t.text, priority: t.priority }));
         saveAssessmentResult(jwt, answers, tagData).catch(console.error);
@@ -73,6 +114,16 @@ export default function AssessmentPage() {
     setQuestionIndex(0);
   };
 
+  const handleRetake = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LAST_ASSESSMENT_KEY);
+    }
+    setAnswers({});
+    setActiveTags([]);
+    setQuestionIndex(0);
+    setScreen('questions');
+  };
+
   return (
     <>
       {screen === 'landing' && <LandingScreen onStart={handleStart} />}
@@ -91,6 +142,7 @@ export default function AssessmentPage() {
           tags={activeTags}
           answeredCount={Object.keys(answers).length}
           onBack={handleBack}
+          onRetake={handleRetake}
         />
       )}
 

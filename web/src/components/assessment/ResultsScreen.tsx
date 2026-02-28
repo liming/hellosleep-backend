@@ -8,6 +8,7 @@ interface ResultsScreenProps {
   tags: Tag[];
   answeredCount: number;
   onBack: () => void;
+  onRetake: () => void;
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -22,7 +23,7 @@ const PRIORITY_LABELS: Record<string, string> = {
   low: '参考',
 };
 
-export default function ResultsScreen({ tags, answeredCount, onBack }: ResultsScreenProps) {
+export default function ResultsScreen({ tags, answeredCount, onBack, onRetake }: ResultsScreenProps) {
   const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -107,6 +108,14 @@ export default function ResultsScreen({ tags, answeredCount, onBack }: ResultsSc
               本次评估结果已自动保存到您的账户
             </p>
           )}
+          <div className="mt-5">
+            <button
+              onClick={onRetake}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              重新评估
+            </button>
+          </div>
         </div>
 
         {user && <AssessmentHistory />}
