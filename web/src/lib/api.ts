@@ -40,7 +40,7 @@ export interface Article {
   publishedAt: string;
   locale: string;
   altId: string;
-  type: string; // 'tutorial' or 'share'
+  type: string; // 'tutorial' | 'share' | 'blog'
   originUrl?: string; // Present for shared articles, absent for tutorials
   like?: number;
   category?: Category;
@@ -228,6 +228,20 @@ export async function fetchSharedArticles(): Promise<StrapiResponse<Article>> {
     filters: {
       type: {
         $eq: 'share'
+      }
+    },
+    populate: '*',
+    sort: 'date:desc'
+  });
+}
+
+// Fetch blog articles (articles with type 'blog')
+export async function fetchBlogArticles(): Promise<StrapiResponse<Article>> {
+  console.log('fetchBlogArticles called');
+  return fetchArticles({
+    filters: {
+      type: {
+        $eq: 'blog'
       }
     },
     populate: '*',

@@ -1,9 +1,70 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { fetchBlogArticles, type Article } from '@/lib/api';
 
 export default function BlogPage() {
   const { t } = useTranslation();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetchBlogArticles();
+        setArticles(response.data);
+      } catch (err) {
+        console.error('Failed to load blog articles:', err);
+        setError('Failed to load blog articles. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading blog posts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
+            <div className="text-red-600 mb-4">
+              <svg className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-brand-text-dark mb-2">Error Loading Blog</h2>
+            <p className="text-gray-600">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white">
@@ -16,56 +77,45 @@ export default function BlogPage() {
             最新的睡眠健康资讯和专家观点
           </p>
         </div>
-        
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <article className="bg-white rounded-lg shadow-md overflow-hidden border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                慢性失眠，来自于我们的精心培育
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                失眠就像是一根柱子，而失眠所带来的焦虑和担忧就像是一根绳子...
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>专家观点</span>
-                <span className="mx-2">•</span>
-                <span>2022-09-28</span>
-              </div>
-            </div>
-          </article>
-          
-          <article className="bg-white rounded-lg shadow-md overflow-hidden border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                我要努力睡着
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                如果睡眠发生，那就让它自然的发生。如果睡眠不发生，那就让它自然的不发生。
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>生活哲学</span>
-                <span className="mx-2">•</span>
-                <span>2022-09-27</span>
-              </div>
-            </div>
-          </article>
-          
-          <article className="bg-white rounded-lg shadow-md overflow-hidden border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                "抱怨"的背后
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                抱怨这种负能量不仅影响听到看到言论的每个人，更是在培育我们对失眠的执着。
-              </p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>心理分析</span>
-                <span className="mx-2">•</span>
-                <span>2022-09-23</span>
-              </div>
-            </div>
-          </article>
-        </div>
+
+        {articles.length > 0 ? (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <article key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden border">
+                <div className="p-6">
+                  <a
+                    href={`/article/${article.documentId}`}
+                    className="block hover:no-underline"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-brand-primary transition-colors">
+                      {article.title}
+                    </h3>
+                  </a>
+                  {article.excerpt && (
+                    <p className="text-gray-600 text-sm mb-4">
+                      {article.excerpt}
+                    </p>
+                  )}
+                  <div className="flex items-center text-sm text-gray-500">
+                    {article.date && <span>{article.date}</span>}
+                    {article.category?.name && (
+                      <>
+                        {article.date && <span className="mx-2">•</span>}
+                        <span>{article.category.name}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-600">
+              暂无博客内容
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
