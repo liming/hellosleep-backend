@@ -22,6 +22,24 @@ const SECTION_LABELS: Record<string, string> = {
   attitude: '对待失眠的方式',
 };
 
+function buildHalfHourOptions() {
+  const options: Array<{ value: string; label: string }> = [
+    { value: 'not_fixed', label: '不固定' },
+  ];
+
+  for (let hour = 0; hour < 24; hour += 1) {
+    for (const minute of [0, 30]) {
+      const hh = String(hour).padStart(2, '0');
+      const mm = String(minute).padStart(2, '0');
+      options.push({ value: `${hh}:${mm}`, label: `${hh}:${mm}` });
+    }
+  }
+
+  return options;
+}
+
+const HALF_HOUR_OPTIONS = buildHalfHourOptions();
+
 export default function QuestionScreen({
   questions,
   currentIndex,
@@ -130,12 +148,25 @@ export default function QuestionScreen({
               )}
 
             {question.type === 'time' && (
-              <input
-                type="time"
-                value={answers[question.id] ?? ''}
-                onChange={(e) => onAnswer(question.id, e.target.value)}
-                className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none"
-              />
+              <div className="space-y-2">
+                <select
+                  value={answers[question.id] ?? ''}
+                  onChange={(e) => onAnswer(question.id, e.target.value)}
+                  className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none bg-white text-gray-900"
+                >
+                  <option value="" disabled>
+                    请选择时间（每 30 分钟一档）
+                  </option>
+                  {HALF_HOUR_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500">
+                  为了更便于选择，时间已简化为每 30 分钟一档。
+                </p>
+              </div>
             )}
 
             {question.type === 'text' && (

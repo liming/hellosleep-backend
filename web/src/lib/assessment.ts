@@ -41,11 +41,15 @@ function getSleepHours(sleeptime: string, getuptime: string, hourstosleep: strin
   const hours = parseFloat(hourstosleep);
   if (hours > 0) return hours;
   if (sleeptime && getuptime) {
+    const isValidTime = (value: string) => /^\d{2}:\d{2}$/.test(value);
+    if (!isValidTime(sleeptime) || !isValidTime(getuptime)) return 0;
+
     try {
       const sleep = new Date(`2000-01-01T${sleeptime}`);
       const getup = new Date(`2000-01-01T${getuptime}`);
       if (getup <= sleep) getup.setDate(getup.getDate() + 1);
-      return Math.round(Math.abs(getup.getTime() - sleep.getTime()) / 36000) / 100;
+      const value = Math.round(Math.abs(getup.getTime() - sleep.getTime()) / 36000) / 100;
+      return Number.isFinite(value) ? value : 0;
     } catch {
       return 0;
     }
