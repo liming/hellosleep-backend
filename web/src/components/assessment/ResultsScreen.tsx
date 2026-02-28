@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getVisibleQuestions, questions, type Tag } from '@/lib/assessment';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentHistory from '@/components/assessment/AssessmentHistory';
@@ -11,12 +11,6 @@ interface ResultsScreenProps {
   onRetake: () => void;
 }
 
-const PRIORITY_COLORS: Record<string, string> = {
-  high: 'bg-red-100 text-red-800',
-  medium: 'bg-yellow-100 text-yellow-800',
-  low: 'bg-blue-100 text-blue-800',
-};
-
 const PRIORITY_LABELS: Record<string, string> = {
   high: '重要',
   medium: '中等',
@@ -26,6 +20,15 @@ const PRIORITY_LABELS: Record<string, string> = {
 export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreenProps) {
   const { user } = useAuth();
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
+  const copyFeedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyFeedbackTimeoutRef.current) {
+        clearTimeout(copyFeedbackTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const copyText = useMemo(() => {
     const visible = getVisibleQuestions(questions, answers);
@@ -67,7 +70,10 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
       console.error('Failed to copy assessment result:', error);
       setCopyState('error');
     } finally {
-      setTimeout(() => setCopyState('idle'), 1800);
+      if (copyFeedbackTimeoutRef.current) {
+        clearTimeout(copyFeedbackTimeoutRef.current);
+      }
+      copyFeedbackTimeoutRef.current = setTimeout(() => setCopyState('idle'), 8000);
     }
   };
 
@@ -120,43 +126,27 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
             <p className="text-green-800">基于您的答案，评估未发现明显的睡眠问题。继续保持健康的生活方式！</p>
           </div>
         ) : (
-          <>
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span
-                    key={tag.name}
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${PRIORITY_COLORS[tag.priority]}`}
-                  >
-                    {tag.text}
-                    <span className="ml-1 text-xs opacity-75">({PRIORITY_LABELS[tag.priority]})</span>
-                  </span>
-                ))}
-              </div>
+          <div className="space-y-4 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">重点建议</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {tags.map((tag) => (
+                <div key={tag.name} className="bg-white rounded-lg shadow-sm p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    {tag.recommendation.title}
+                  </h3>
+                  <p className="text-sm text-gray-600">{tag.recommendation.content}</p>
+                  {tag.recommendation.tutorialLink && (
+                    <a
+                      href={tag.recommendation.tutorialLink}
+                      className="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block"
+                    >
+                      查看详细教程 →
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
-
-            <div className="space-y-4 mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">重点建议</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {tags.map((tag) => (
-                  <div key={tag.name} className="bg-white rounded-lg shadow-sm p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      {tag.recommendation.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">{tag.recommendation.content}</p>
-                    {tag.recommendation.tutorialLink && (
-                      <a
-                        href={tag.recommendation.tutorialLink}
-                        className="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block"
-                      >
-                        查看详细教程 →
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
+          </div>
         )}
 
         <div className="bg-white rounded-lg shadow-sm p-6">

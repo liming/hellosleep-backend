@@ -292,7 +292,7 @@ export async function fetchArticle(articleId: string): Promise<{ data: Article }
   console.log('fetchArticle called with articleId:', articleId);
   
   // First, find the article by documentId using a filter
-  const url = `${API_BASE_URL}/api/articles?filters[documentId][$eq]=${articleId}&populate=*`;
+  const url = `${API_BASE_URL}/api/articles?filters[documentId][$eq]=${encodeURIComponent(articleId)}&populate=*`;
   console.log('Fetching article from:', url);
   
   const response = await fetch(url, {
@@ -307,7 +307,12 @@ export async function fetchArticle(articleId: string): Promise<{ data: Article }
   console.log('Article search result:', result);
   
   if (!result.data || result.data.length === 0) {
-    throw new Error(`Article with documentId ${articleId} not found`);
+    // Backward compatibility: some stored links may still use altId.
+    try {
+      return await fetchArticleByAltId(articleId);
+    } catch {
+      throw new Error(`Article with identifier ${articleId} not found`);
+    }
   }
   
   // Return the first (and should be only) article found
