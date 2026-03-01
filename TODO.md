@@ -228,6 +228,9 @@
   - [x] Clean up and organize migration scripts
   - [x] Document failed articles for future resolution
 
+### Deployment Documentation ✅
+- [x] Add Cloudflare + Vercel domain setup guide (including Aliyun NS transfer)
+
 - [ ] **Content Workflows**
   - [ ] Set up content approval workflows
   - [ ] Implement content versioning

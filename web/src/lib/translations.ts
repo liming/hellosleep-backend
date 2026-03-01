@@ -1,3 +1,5 @@
+const currentYear = new Date().getFullYear();
+
 export const translations = {
   en: {
     // Header
@@ -66,7 +68,7 @@ export const translations = {
     nextQuestion: 'Next Question',
     
     // Footer
-    copyright: '© 2024 HelloSleep. All rights reserved.',
+    copyright: `© ${currentYear} HelloSleep. All rights reserved.`,
     
     // Ferry metaphor
     ferryMetaphor: 'Crossing the river of insomnia',
@@ -166,7 +168,7 @@ export const translations = {
     nextQuestion: '下一题',
     
     // Footer
-    copyright: '© 2024 睡吧. 版权所有.',
+    copyright: `© ${currentYear} 睡吧. 版权所有.`,
     
     // Ferry metaphor
     ferryMetaphor: '渡过失眠的河流',
