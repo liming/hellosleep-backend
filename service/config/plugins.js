@@ -1,12 +1,35 @@
 module.exports = ({ env }) => ({
-  // Disable upload plugin to avoid sharp native module issues (darwin-arm64, linux-x64).
-  // Re-enable when sharp is fixed. Use external provider (e.g. Cloudinary) if uploads are needed.
-  upload: false,
+  upload: {
+    config: {
+      provider: '@strapi/provider-upload-aws-s3',
+      providerOptions: {
+        s3Options: {
+          credentials: {
+            accessKeyId: env('R2_ACCESS_KEY_ID'),
+            secretAccessKey: env('R2_SECRET_ACCESS_KEY'),
+          },
+          region: env('R2_REGION', 'auto'),
+          endpoint: env('R2_ENDPOINT'),
+          forcePathStyle: true,
+          params: {
+            Bucket: env('R2_BUCKET'),
+          },
+        },
+      },
+      actionOptions: {
+        upload: {},
+        uploadStream: {},
+        delete: {},
+      },
+    },
+  },
+
   'users-permissions': {
     config: {
       jwtSecret: env('JWT_SECRET'),
     },
   },
+
   email: {
     config: {
       provider: 'nodemailer',
