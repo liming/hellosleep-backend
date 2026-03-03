@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const queryString = searchParams.toString();
-    const strapiUrl = `${STRAPI_URL}/api/articles${queryString ? `?${queryString}` : ''}`;
+    const strapiUrl = `${STRAPI_URL}/api/categories${queryString ? `?${queryString}` : ''}`;
 
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (API_TOKEN) headers.Authorization = `Bearer ${API_TOKEN}`;
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     if (!response.ok) {
       const text = await response.text();
       return NextResponse.json(
-        { error: 'Failed to fetch articles', detail: text },
+        { error: 'Failed to fetch categories', detail: text },
         { status: response.status }
       );
     }
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json(
-      { error: 'Failed to fetch articles', detail: error?.message || 'unknown' },
+      { error: 'Failed to fetch categories', detail: error?.message || 'unknown' },
       { status: 500 }
     );
   }
