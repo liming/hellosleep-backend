@@ -310,7 +310,7 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                   </>
                 )}
               </div>
-            )
+            )}
 
             {/* QA Tab */}
             {activeSection === 'qa' && (
