@@ -1,26 +1,11 @@
 // API client for Strapi backend (must be full origin with protocol for client-side requests)
-const rawStrapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const API_BASE_URL =
-  rawStrapiUrl.startsWith('http://') || rawStrapiUrl.startsWith('https://')
-    ? rawStrapiUrl.replace(/\/$/, '')
-    : `https://${rawStrapiUrl.replace(/\/$/, '')}`;
-const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
+// Route all content reads through Next.js API proxy to avoid exposing backend tokens in browser.
+const API_BASE_URL = '';
 
 // Common headers for API requests
-const getHeaders = () => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  
-  if (API_TOKEN) {
-    headers['Authorization'] = `Bearer ${API_TOKEN}`;
-  }
-  
-  console.log('API Token available:', !!API_TOKEN);
-  console.log('API Base URL:', API_BASE_URL);
-  
-  return headers;
-};
+const getHeaders = () => ({
+  'Content-Type': 'application/json',
+});
 
 export interface Sharing {
   contributor: string;
@@ -82,16 +67,13 @@ export async function makeApiRequest(
     params?: Record<string, any>;
   }
 ): Promise<any> {
-  const url = new URL(`${API_BASE_URL}/api${endpoint}`);
-  
-  // Add query parameters
+  const search = new URLSearchParams();
   if (options?.params) {
     Object.entries(options.params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        url.searchParams.append(key, value.toString());
-      }
+      if (value !== undefined && value !== null) search.append(key, value.toString());
     });
   }
+  const url = `${API_BASE_URL}/api${endpoint}${search.toString() ? `?${search.toString()}` : ''}`;
   
   const config: RequestInit = {
     method,
@@ -103,7 +85,7 @@ export async function makeApiRequest(
   }
   
   try {
-    const response = await fetch(url.toString(), config);
+    const response = await fetch(url, config);
     
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`);
