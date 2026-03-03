@@ -20,6 +20,7 @@ const priorityConfig = {
 
 export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreenProps) {
   const { user } = useAuth();
+  const enablePremium = process.env.NEXT_PUBLIC_ENABLE_PREMIUM === 'true';
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [activeSection, setActiveSection] = useState<'summary' | 'qa'>('summary');
   const [expandedTag, setExpandedTag] = useState<string | null>(null);
@@ -289,20 +290,22 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
-                      <h3 className="font-semibold text-gray-900 mb-3">💬 需要更多帮助？</h3>
-                      <p className="text-sm text-gray-600 mb-4">评估只是开始。如果需要个性化指导，可以选择更深入的服务。</p>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button className="p-3 bg-white rounded-lg border border-green-200 hover:border-green-400 transition-colors text-left">
-                          <div className="flex items-center gap-2 mb-1"><span className="text-lg">🤖</span><span className="font-medium text-gray-900">AI 咨询</span></div>
-                          <div className="text-sm text-gray-500">¥99 起</div>
-                        </button>
-                        <button className="p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-400 transition-colors text-left">
-                          <div className="flex items-center gap-2 mb-1"><span className="text-lg">📞</span><span className="font-medium text-gray-900">电话咨询</span></div>
-                          <div className="text-sm text-gray-500">¥499 起</div>
-                        </button>
+                    {enablePremium && (
+                      <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
+                        <h3 className="font-semibold text-gray-900 mb-3">💬 需要更多帮助？</h3>
+                        <p className="text-sm text-gray-600 mb-4">评估只是开始。如果需要个性化指导，可以选择更深入的服务。</p>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button className="p-3 bg-white rounded-lg border border-green-200 hover:border-green-400 transition-colors text-left">
+                            <div className="flex items-center gap-2 mb-1"><span className="text-lg">🤖</span><span className="font-medium text-gray-900">AI 咨询</span></div>
+                            <div className="text-sm text-gray-500">¥99 起</div>
+                          </button>
+                          <button className="p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-400 transition-colors text-left">
+                            <div className="flex items-center gap-2 mb-1"><span className="text-lg">📞</span><span className="font-medium text-gray-900">电话咨询</span></div>
+                            <div className="text-sm text-gray-500">¥499 起</div>
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </>
                 )}
               </div>
