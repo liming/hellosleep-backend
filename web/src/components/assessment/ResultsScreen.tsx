@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { getVisibleQuestions, questions, type Tag } from '@/lib/assessment';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentHistory from '@/components/assessment/AssessmentHistory';
-import actionSuggestions from '../../../shared/data/action-suggestions.json';
+import actionSuggestions from '../../../../shared/data/action-suggestions.json';
 
 interface ResultsScreenProps {
   answers: Record<string, string>;
