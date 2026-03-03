@@ -132,17 +132,6 @@
     }
   },
   {
-    "name": "medication_use",
-    "text": "药物使用",
-    "category": "behavior",
-    "priority": "high",
-    "recommendation": {
-      "title": "药物",
-      "content": "药物对治失眠非常流行，却并不能带来明显的效果。通常安眠药在开始的几天是好用的，但是效果会越来越不明显，而当我们停止服用安眠药，失眠会更加严重。主要原因是因为药物只是针对失眠的现象，并不对治造成失眠的根本原因。",
-      "tutorialLink": "/article/tmo10zgni5904ebx5lsuspy9"
-    }
-  },
-  {
     "name": "noise_problem",
     "text": "噪音问题",
     "category": "environment",
