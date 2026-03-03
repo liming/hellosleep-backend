@@ -124,7 +124,7 @@
     "name": "excessive_complaining",
     "text": "过度抱怨",
     "category": "behavior",
-    "priority": "medium",
+    "priority": "high",
     "recommendation": {
       "title": "终止抱怨",
       "content": "许多人失眠之后，都会先给自己最亲近的人抱怨或者哭诉。而试想当自己的家人、朋友或者同事日复一日听到无精打采的你说自己睡不着，他们会有怎样的反应呢？事实上，当我们说出来：失眠很痛苦，我很绝望。失眠的痛苦不仅在我们心中扎根，而且在听到或者看到这句话的人心中扎根。",
@@ -135,7 +135,7 @@
     "name": "noise_problem",
     "text": "噪音问题",
     "category": "environment",
-    "priority": "medium",
+    "priority": "high",
     "recommendation": {
       "title": "尝试合理沟通",
       "content": "远亲不如近邻，每一个邻居都是自己的至亲。当我们的睡眠被自己的邻里所打扰，最不应该做的事情是去指责和对峙。在我们抱怨邻居不顾及他人感受的时候，也应该考虑自己是不是很好的维持邻里之间的关系。",
