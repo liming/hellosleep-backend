@@ -87,13 +87,15 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
 
   const handleCopyResult = async () => {
     try {
-      if (typeof navigator === 'undefined' || !navigator.clipboard) {
-        throw new Error('Clipboard API unavailable');
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(copyText);
+        setCopyState('copied');
+      } else {
+        // Fallback: avoid throwing runtime error overlay in mobile browsers/webviews.
+        setCopyState('error');
       }
-      await navigator.clipboard.writeText(copyText);
-      setCopyState('copied');
     } catch (error) {
-      console.error('Failed to copy assessment result:', error);
+      console.warn('Failed to copy assessment result:', error);
       setCopyState('error');
     } finally {
       if (copyFeedbackTimeoutRef.current) {

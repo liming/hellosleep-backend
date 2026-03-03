@@ -108,7 +108,7 @@ export async function saveAssessmentResult(
   jwt: string,
   answers: Record<string, string>,
   tags: Array<{ name: string; text: string; priority: string }>
-): Promise<AssessmentResult> {
+): Promise<AssessmentResult | null> {
   const res = await fetch(`${STRAPI_URL}/api/assessment-results`, {
     method: 'POST',
     headers: {
@@ -123,12 +123,22 @@ export async function saveAssessmentResult(
       },
     }),
   });
+
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err?.error?.message || '保存失败');
+    let message = '保存失败';
+    try {
+      const err = await res.json();
+      message = err?.error?.message || message;
+    } catch {
+      // ignore
+    }
+    // In dev/preview, backend schema may be behind (e.g. Invalid key user). Don't block UX.
+    console.warn('[assessment] save failed:', message);
+    return null;
   }
+
   const result = await res.json();
-  return result.data;
+  return result.data ?? null;
 }
 
 export async function fetchAssessmentHistory(jwt: string): Promise<AssessmentResult[]> {
@@ -137,9 +147,19 @@ export async function fetchAssessmentHistory(jwt: string): Promise<AssessmentRes
       Authorization: `Bearer ${jwt}`,
     },
   });
+
   if (!res.ok) {
-    throw new Error('获取历史记录失败');
+    let message = '获取历史记录失败';
+    try {
+      const err = await res.json();
+      message = err?.error?.message || message;
+    } catch {
+      // ignore
+    }
+    console.warn('[assessment] history fetch failed:', message);
+    return [];
   }
+
   const result = await res.json();
   return result.data || [];
 }
