@@ -3,7 +3,7 @@
     "name": "sleep_inefficiency",
     "text": "睡眠效率低",
     "category": "sleep",
-    "priority": "high",
+    "priority": "medium",
     "recommendation": {
       "title": "合理提高睡眠效率",
       "content": "对失眠的人最重要的是提高自己的睡眠效率，而不是花很长时间努力睡觉却翻来覆去无法入睡。请阅读并实践『如何提高睡眠效率』，让自己避免躺在床上却无法入睡的时间。",
@@ -14,7 +14,7 @@
     "name": "irregular_schedule",
     "text": "作息不规律",
     "category": "sleep",
-    "priority": "high",
+    "priority": "medium",
     "recommendation": {
       "title": "按时早起",
       "content": "常常因为睡得不好而补觉，这是很糟糕的做法。在早晨补觉会有两种后果：1. 推迟一天的生活，从而推迟晚上入睡的时间。会发现自己很晚也没有充足的困意。2. 打乱生活节奏，打乱自己的计划。按时早起是一天的节拍器，它定义了我们一天的生活和作息时间。所以，不论晚上睡得如何，按时早起是必须的。",
@@ -47,7 +47,7 @@
     "name": "idle_lifestyle",
     "text": "生活单调",
     "category": "lifestyle",
-    "priority": "medium",
+    "priority": "high",
     "recommendation": {
       "title": "充实生活",
       "content": "睡眠最根本的目的，是为了消除一天劳作带来的疲劳，恢复我们身体和精神的能量。理解睡眠是一种需求，我们就应该明白为什么清闲的生活反而更容易失眠。因为无所事事的状态中大脑和身体的活跃度非常低，一直处于休息的状态，所以到了入睡的时间难以产生困意。",
@@ -58,7 +58,7 @@
     "name": "bedroom_overuse",
     "text": "卧室过度使用",
     "category": "lifestyle",
-    "priority": "medium",
+    "priority": "high",
     "recommendation": {
       "title": "合理利用卧室",
       "content": "几乎每个失眠患者无一例外都会采取错误的手段对待失眠，其一是在床上呆更长的时间，以便延长自己的睡眠时间；其二是不停得翻来覆去寻找合适的姿势入睡。这样做的是不正确的，后果很严重。因为我们在床上花了许多「无法入睡」的时间，渐渐的床铺会成为一个「睡不着觉」的存在。",
