@@ -116,17 +116,13 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
       break;
 
     case 'maladaptive_behaviors': {
-      const behaviorKeys = ['irresponsible', 'inactive', 'excessive_rest', 'complain', 'ignore', 'medicine'];
+      const behaviorKeys = ['irresponsible', 'inactive', 'excessive_rest', 'complain', 'ignore'];
       match = (a) => behaviorKeys.filter((k) => a[k] === 'yes').length >= 3;
       break;
     }
 
     case 'excessive_complaining':
       match = (a) => a.complain === 'yes';
-      break;
-
-    case 'medication_use':
-      match = (a) => a.medicine === 'yes';
       break;
 
     case 'noise_problem':

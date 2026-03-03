@@ -6,12 +6,30 @@
     "category": "basic_info",
     "required": true,
     "options": [
-      { "value": "work", "text": "工作" },
-      { "value": "study", "text": "上学" },
-      { "value": "unemployed", "text": "待业" },
-      { "value": "prenatal", "text": "孕期" },
-      { "value": "postnatal", "text": "产后" },
-      { "value": "retire", "text": "退休" }
+      {
+        "value": "work",
+        "text": "工作"
+      },
+      {
+        "value": "study",
+        "text": "上学"
+      },
+      {
+        "value": "unemployed",
+        "text": "待业"
+      },
+      {
+        "value": "prenatal",
+        "text": "孕期"
+      },
+      {
+        "value": "postnatal",
+        "text": "产后"
+      },
+      {
+        "value": "retire",
+        "text": "退休"
+      }
     ]
   },
   {
@@ -21,11 +39,26 @@
     "category": "basic_info",
     "required": true,
     "options": [
-      { "value": "18-25", "text": "18-25岁" },
-      { "value": "26-35", "text": "26-35岁" },
-      { "value": "36-45", "text": "36-45岁" },
-      { "value": "46-55", "text": "46-55岁" },
-      { "value": "55+", "text": "55岁以上" }
+      {
+        "value": "18-25",
+        "text": "18-25岁"
+      },
+      {
+        "value": "26-35",
+        "text": "26-35岁"
+      },
+      {
+        "value": "36-45",
+        "text": "36-45岁"
+      },
+      {
+        "value": "46-55",
+        "text": "46-55岁"
+      },
+      {
+        "value": "55+",
+        "text": "55岁以上"
+      }
     ]
   },
   {
@@ -35,8 +68,14 @@
     "category": "sleep_habits",
     "required": true,
     "options": [
-      { "value": "yes", "text": "规律" },
-      { "value": "no", "text": "不规律" }
+      {
+        "value": "yes",
+        "text": "规律"
+      },
+      {
+        "value": "no",
+        "text": "不规律"
+      }
     ]
   },
   {
@@ -45,7 +84,10 @@
     "type": "time",
     "category": "sleep_habits",
     "required": false,
-    "depends": { "questionId": "sleepregular", "value": "yes" }
+    "depends": {
+      "questionId": "sleepregular",
+      "value": "yes"
+    }
   },
   {
     "id": "getuptime",
@@ -53,7 +95,10 @@
     "type": "time",
     "category": "sleep_habits",
     "required": false,
-    "depends": { "questionId": "sleepregular", "value": "yes" }
+    "depends": {
+      "questionId": "sleepregular",
+      "value": "yes"
+    }
   },
   {
     "id": "hourstosleep",
@@ -61,7 +106,10 @@
     "type": "number",
     "category": "sleep_habits",
     "required": false,
-    "depends": { "questionId": "sleepregular", "value": "no" },
+    "depends": {
+      "questionId": "sleepregular",
+      "value": "no"
+    },
     "min": 0,
     "max": 15,
     "step": 0.5,
@@ -85,11 +133,26 @@
     "category": "sleep_habits",
     "required": true,
     "options": [
-      { "value": "excellent", "text": "很好" },
-      { "value": "good", "text": "良好" },
-      { "value": "fair", "text": "一般" },
-      { "value": "poor", "text": "较差" },
-      { "value": "very_poor", "text": "很差" }
+      {
+        "value": "excellent",
+        "text": "很好"
+      },
+      {
+        "value": "good",
+        "text": "良好"
+      },
+      {
+        "value": "fair",
+        "text": "一般"
+      },
+      {
+        "value": "poor",
+        "text": "较差"
+      },
+      {
+        "value": "very_poor",
+        "text": "很差"
+      }
     ]
   },
   {
@@ -99,11 +162,26 @@
     "category": "lifestyle",
     "required": true,
     "options": [
-      { "value": "best", "text": "有规律且强度适中" },
-      { "value": "good", "text": "有规律但强度较低" },
-      { "value": "normal", "text": "偶尔运动" },
-      { "value": "little", "text": "很少运动" },
-      { "value": "none", "text": "不运动" }
+      {
+        "value": "best",
+        "text": "有规律且强度适中"
+      },
+      {
+        "value": "good",
+        "text": "有规律但强度较低"
+      },
+      {
+        "value": "normal",
+        "text": "偶尔运动"
+      },
+      {
+        "value": "little",
+        "text": "很少运动"
+      },
+      {
+        "value": "none",
+        "text": "不运动"
+      }
     ]
   },
   {
@@ -113,11 +191,26 @@
     "category": "lifestyle",
     "required": true,
     "options": [
-      { "value": "best", "text": "2小时以上" },
-      { "value": "good", "text": "1-2小时" },
-      { "value": "normal", "text": "30分钟-1小时" },
-      { "value": "little", "text": "15-30分钟" },
-      { "value": "none", "text": "很少接触" }
+      {
+        "value": "best",
+        "text": "2小时以上"
+      },
+      {
+        "value": "good",
+        "text": "1-2小时"
+      },
+      {
+        "value": "normal",
+        "text": "30分钟-1小时"
+      },
+      {
+        "value": "little",
+        "text": "15-30分钟"
+      },
+      {
+        "value": "none",
+        "text": "很少接触"
+      }
     ]
   },
   {
@@ -127,11 +220,26 @@
     "category": "lifestyle",
     "required": true,
     "options": [
-      { "value": "very_high", "text": "压力很大" },
-      { "value": "high", "text": "压力较大" },
-      { "value": "normal", "text": "压力适中" },
-      { "value": "low", "text": "压力较小" },
-      { "value": "very_low", "text": "压力很小" }
+      {
+        "value": "very_high",
+        "text": "压力很大"
+      },
+      {
+        "value": "high",
+        "text": "压力较大"
+      },
+      {
+        "value": "normal",
+        "text": "压力适中"
+      },
+      {
+        "value": "low",
+        "text": "压力较小"
+      },
+      {
+        "value": "very_low",
+        "text": "压力很小"
+      }
     ]
   },
   {
@@ -141,11 +249,26 @@
     "category": "lifestyle",
     "required": true,
     "options": [
-      { "value": "very_active", "text": "非常丰富活跃" },
-      { "value": "active", "text": "比较丰富活跃" },
-      { "value": "normal", "text": "一般" },
-      { "value": "inactive", "text": "不太活跃" },
-      { "value": "very_inactive", "text": "很单调" }
+      {
+        "value": "very_active",
+        "text": "非常丰富活跃"
+      },
+      {
+        "value": "active",
+        "text": "比较丰富活跃"
+      },
+      {
+        "value": "normal",
+        "text": "一般"
+      },
+      {
+        "value": "inactive",
+        "text": "不太活跃"
+      },
+      {
+        "value": "very_inactive",
+        "text": "很单调"
+      }
     ]
   },
   {
@@ -155,8 +278,14 @@
     "category": "environment",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -166,8 +295,14 @@
     "category": "environment",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -177,8 +312,14 @@
     "category": "environment",
     "required": true,
     "options": [
-      { "value": "yes", "text": "安静" },
-      { "value": "no", "text": "不安静" }
+      {
+        "value": "yes",
+        "text": "安静"
+      },
+      {
+        "value": "no",
+        "text": "不安静"
+      }
     ]
   },
   {
@@ -187,13 +328,31 @@
     "type": "single_choice",
     "category": "environment",
     "required": false,
-    "depends": { "questionId": "noise", "value": "no" },
+    "depends": {
+      "questionId": "noise",
+      "value": "no"
+    },
     "options": [
-      { "value": "snore", "text": "伴侣打呼噜" },
-      { "value": "neighbour", "text": "邻居吵闹" },
-      { "value": "roommate", "text": "室友吵闹" },
-      { "value": "traffic", "text": "交通噪音" },
-      { "value": "others", "text": "其他" }
+      {
+        "value": "snore",
+        "text": "伴侣打呼噜"
+      },
+      {
+        "value": "neighbour",
+        "text": "邻居吵闹"
+      },
+      {
+        "value": "roommate",
+        "text": "室友吵闹"
+      },
+      {
+        "value": "traffic",
+        "text": "交通噪音"
+      },
+      {
+        "value": "others",
+        "text": "其他"
+      }
     ]
   },
   {
@@ -202,10 +361,19 @@
     "type": "single_choice",
     "category": "work_study",
     "required": false,
-    "depends": { "questionId": "status", "value": "work" },
+    "depends": {
+      "questionId": "status",
+      "value": "work"
+    },
     "options": [
-      { "value": "yes", "text": "需要" },
-      { "value": "no", "text": "不需要" }
+      {
+        "value": "yes",
+        "text": "需要"
+      },
+      {
+        "value": "no",
+        "text": "不需要"
+      }
     ]
   },
   {
@@ -214,10 +382,19 @@
     "type": "single_choice",
     "category": "work_study",
     "required": false,
-    "depends": { "questionId": "status", "value": "study" },
+    "depends": {
+      "questionId": "status",
+      "value": "study"
+    },
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -226,10 +403,19 @@
     "type": "single_choice",
     "category": "work_study",
     "required": false,
-    "depends": { "questionId": "status", "value": "study" },
+    "depends": {
+      "questionId": "status",
+      "value": "study"
+    },
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -239,8 +425,14 @@
     "category": "attitude",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -250,8 +442,14 @@
     "category": "attitude",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -261,8 +459,14 @@
     "category": "attitude",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -272,8 +476,14 @@
     "category": "attitude",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   },
   {
@@ -283,19 +493,14 @@
     "category": "attitude",
     "required": true,
     "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
-    ]
-  },
-  {
-    "id": "medicine",
-    "text": "您是不是去看病或者服用了安眠的药物？",
-    "type": "single_choice",
-    "category": "attitude",
-    "required": true,
-    "options": [
-      { "value": "yes", "text": "是" },
-      { "value": "no", "text": "不是" }
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
+      }
     ]
   }
 ]

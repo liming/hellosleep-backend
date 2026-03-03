@@ -25,6 +25,7 @@ export default function AssessmentPage() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [activeTags, setActiveTags] = useState<Tag[]>([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [historyResolved, setHistoryResolved] = useState(false);
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -45,36 +46,46 @@ export default function AssessmentPage() {
   }, []);
 
   useEffect(() => {
-    if (isLoading || !user || !jwt) return;
+    if (isLoading) return;
+
+    // Not logged in: no server history to load.
+    if (!user || !jwt) {
+      setHistoryResolved(true);
+      return;
+    }
 
     let cancelled = false;
     const restoreFromServer = async () => {
       try {
         const history = await fetchAssessmentHistory(jwt);
-        if (cancelled || !history?.length) return;
+        if (cancelled) return;
 
-        const latest = [...history].sort((a, b) => {
-          const aTs = new Date(a.completedAt || 0).getTime();
-          const bTs = new Date(b.completedAt || 0).getTime();
-          return bTs - aTs;
-        })[0];
+        if (history?.length) {
+          const latest = [...history].sort((a, b) => {
+            const aTs = new Date(a.completedAt || 0).getTime();
+            const bTs = new Date(b.completedAt || 0).getTime();
+            return bTs - aTs;
+          })[0];
 
-        if (latest?.answers && Object.keys(latest.answers).length > 0) {
-          setAnswers(latest.answers);
-          setActiveTags(processAssessment(latest.answers));
-          setScreen('results');
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(
-              LAST_ASSESSMENT_KEY,
-              JSON.stringify({
-                answers: latest.answers,
-                completedAt: latest.completedAt ?? new Date().toISOString(),
-              })
-            );
+          if (latest?.answers && Object.keys(latest.answers).length > 0) {
+            setAnswers(latest.answers);
+            setActiveTags(processAssessment(latest.answers));
+            setScreen('results');
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(
+                LAST_ASSESSMENT_KEY,
+                JSON.stringify({
+                  answers: latest.answers,
+                  completedAt: latest.completedAt ?? new Date().toISOString(),
+                })
+              );
+            }
           }
         }
       } catch (error) {
         console.error('Failed to restore assessment history:', error);
+      } finally {
+        if (!cancelled) setHistoryResolved(true);
       }
     };
 
@@ -177,6 +188,19 @@ export default function AssessmentPage() {
       setShowAuthModal(true);
       return;
     }
+
+    // If this user already has a resolved assessment (from server/local restore), jump to results.
+    if (historyResolved && Object.keys(answers).length > 0) {
+      setActiveTags(processAssessment(answers));
+      setScreen('results');
+      return;
+    }
+
+    // If history is still being resolved, avoid forcing user into questions prematurely.
+    if (!historyResolved) {
+      return;
+    }
+
     setScreen('questions');
     setQuestionIndex(0);
   };
@@ -216,8 +240,9 @@ export default function AssessmentPage() {
         <AuthModal
           onClose={() => setShowAuthModal(false)}
           onSuccess={() => {
-            setScreen('questions');
-            setQuestionIndex(0);
+            setShowAuthModal(false);
+            // Let history restore decide whether to show results or questions.
+            // If no history appears, user can still tap 开始评估进入 questions.
           }}
         />
       )}
