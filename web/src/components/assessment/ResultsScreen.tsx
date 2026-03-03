@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getVisibleQuestions, questions, type Tag } from '@/lib/assessment';
+import { getActionsForTag } from '@/lib/recommendations';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentHistory from '@/components/assessment/AssessmentHistory';
-import actionSuggestions from '../../../../shared/data/action-suggestions.json';
 
 interface ResultsScreenProps {
   answers: Record<string, string>;
@@ -115,41 +115,6 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
       }
       copyFeedbackTimeoutRef.current = setTimeout(() => setCopyState('idle'), 8000);
     }
-  };
-
-  const getActionItems = (tagName: string, currentAnswers: Record<string, string>): string[] => {
-    const base = actionSuggestions[tagName as keyof typeof actionSuggestions] || [];
-
-    // Context-aware filtering to avoid contradictory suggestions.
-    if (tagName === 'unhealthy_lifestyle') {
-      return base.filter((item) => {
-        // Remove pressure suggestion when user already reports low pressure.
-        if (item.includes('减少压力源')) {
-          return !['low', 'very_low'].includes(currentAnswers.pressure || '');
-        }
-        // Remove movement suggestion when user already exercises well.
-        if (item.includes('每天运动')) {
-          return !['best', 'good'].includes(currentAnswers.sport || '');
-        }
-        // Remove sunlight suggestion when user already gets enough sunlight.
-        if (item.includes('晒太阳')) {
-          return !['best', 'good'].includes(currentAnswers.sunshine || '');
-        }
-        return true;
-      });
-    }
-
-    if (tagName === 'idle_lifestyle') {
-      return base.filter((item) => {
-        // If user is already active, do not suggest increasing activity.
-        if (item.includes('增加社交活动') || item.includes('保持适度忙碌')) {
-          return !['very_active', 'active'].includes(currentAnswers.lively || '');
-        }
-        return true;
-      });
-    }
-
-    return base;
   };
 
   const getEfficiencyStatus = (efficiency: number | null) => {
@@ -270,7 +235,7 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                       <div className="space-y-3">
                         {tags.map((tag) => {
                           const config = priorityConfig[tag.priority as keyof typeof priorityConfig] || priorityConfig.medium;
-                          const actions = getActionItems(tag.name, answers);
+                          const actions = getActionsForTag(tag.name, answers);
                           const open = expandedTag === tag.name;
                           return (
                             <div key={tag.name} className="border border-gray-200 rounded-xl overflow-hidden">
