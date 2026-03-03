@@ -90,8 +90,19 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
       if (typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(copyText);
         setCopyState('copied');
+      } else if (typeof document !== 'undefined') {
+        // Fallback for mobile webviews/older browsers.
+        const textarea = document.createElement('textarea');
+        textarea.value = copyText;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setCopyState(ok ? 'copied' : 'error');
       } else {
-        // Fallback: avoid throwing runtime error overlay in mobile browsers/webviews.
         setCopyState('error');
       }
     } catch (error) {
@@ -149,6 +160,11 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
               </a>
               {' '}
               提问。
+            </p>
+          )}
+          {copyState === 'error' && (
+            <p className="mt-3 text-sm text-amber-700 bg-amber-50 rounded-lg px-3 py-2">
+              当前浏览器不支持一键复制，请手动长按选择文本复制。
             </p>
           )}
         </div>
