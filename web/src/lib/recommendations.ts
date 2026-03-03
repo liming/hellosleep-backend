@@ -2,9 +2,24 @@ import actionSuggestions from '../../../shared/data/action-suggestions.json';
 
 export type Answers = Record<string, string>;
 
+export interface RecommendationTag {
+  name: string;
+  text: string;
+  priority: string;
+  recommendation: {
+    title: string;
+    content: string;
+    tutorialLink?: string;
+  };
+}
+
 export interface RecommendationItem {
   id: string;
+  text: string;
+  priority: string;
   title: string;
+  content: string;
+  tutorialLink?: string;
   actions: string[];
 }
 
@@ -41,8 +56,23 @@ export function getActionsForTag(tagName: string, answers: Answers): string[] {
   return filterByContext(tagName, base, answers);
 }
 
+export function buildRecommendations(tags: RecommendationTag[], answers: Answers): RecommendationItem[] {
+  return tags.map((tag) => ({
+    id: tag.name,
+    text: tag.text,
+    priority: tag.priority,
+    title: tag.recommendation.title,
+    content: tag.recommendation.content,
+    tutorialLink: tag.recommendation.tutorialLink,
+    actions: getActionsForTag(tag.name, answers),
+  }));
+}
+
 export function buildTodayActions(tagNames: string[], answers: Answers, limit = 3): string[] {
-  return tagNames
-    .flatMap((name) => getActionsForTag(name, answers))
-    .slice(0, limit);
+  const deduped: string[] = [];
+  for (const action of tagNames.flatMap((name) => getActionsForTag(name, answers))) {
+    if (!deduped.includes(action)) deduped.push(action);
+    if (deduped.length >= limit) break;
+  }
+  return deduped;
 }

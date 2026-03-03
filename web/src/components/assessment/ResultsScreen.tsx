@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getVisibleQuestions, questions, type Tag } from '@/lib/assessment';
-import { getActionsForTag } from '@/lib/recommendations';
+import { buildRecommendations } from '@/lib/recommendations';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentHistory from '@/components/assessment/AssessmentHistory';
 
@@ -125,6 +125,7 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
   };
 
   const efficiencyStatus = getEfficiencyStatus(sleepEfficiency);
+  const recommendationItems = useMemo(() => buildRecommendations(tags, answers), [tags, answers]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6">
@@ -233,14 +234,13 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900 mb-3">⚠️ 问题与建议（点击展开）</h2>
                       <div className="space-y-3">
-                        {tags.map((tag) => {
-                          const config = priorityConfig[tag.priority as keyof typeof priorityConfig] || priorityConfig.medium;
-                          const actions = getActionsForTag(tag.name, answers);
-                          const open = expandedTag === tag.name;
+                        {recommendationItems.map((item) => {
+                          const config = priorityConfig[item.priority as keyof typeof priorityConfig] || priorityConfig.medium;
+                          const open = expandedTag === item.id;
                           return (
-                            <div key={tag.name} className="border border-gray-200 rounded-xl overflow-hidden">
+                            <div key={item.id} className="border border-gray-200 rounded-xl overflow-hidden">
                               <button
-                                onClick={() => setExpandedTag(open ? null : tag.name)}
+                                onClick={() => setExpandedTag(open ? null : item.id)}
                                 className={`w-full p-4 text-left ${config.bg}`}
                               >
                                 <div className="flex items-center justify-between gap-3">
@@ -249,9 +249,9 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text} border ${config.border}`}>
                                         {config.label}
                                       </span>
-                                      <h3 className="font-semibold text-gray-900">{tag.text}</h3>
+                                      <h3 className="font-semibold text-gray-900">{item.text}</h3>
                                     </div>
-                                    <p className="text-sm text-gray-600">{tag.recommendation.title}</p>
+                                    <p className="text-sm text-gray-600">{item.title}</p>
                                   </div>
                                   <span className="text-gray-400">{open ? '▾' : '▸'}</span>
                                 </div>
@@ -259,12 +259,12 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
 
                               {open && (
                                 <div className="p-4 bg-white border-t border-gray-100">
-                                  <p className="text-sm text-gray-700 mb-3">{tag.recommendation.content}</p>
-                                  {actions.length > 0 && (
+                                  <p className="text-sm text-gray-700 mb-3">{item.content}</p>
+                                  {item.actions.length > 0 && (
                                     <div className="bg-gray-50 rounded-lg p-3 mb-3">
                                       <h4 className="text-sm font-medium text-gray-700 mb-2">✅ 立即行动</h4>
                                       <ul className="space-y-1.5">
-                                        {actions.map((action, idx) => (
+                                        {item.actions.map((action, idx) => (
                                           <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
                                             <span className="text-green-500 mt-0.5">•</span>
                                             <span>{action}</span>
@@ -273,9 +273,9 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                                       </ul>
                                     </div>
                                   )}
-                                  {tag.recommendation.tutorialLink && (
+                                  {item.tutorialLink && (
                                     <a
-                                      href={tag.recommendation.tutorialLink}
+                                      href={item.tutorialLink}
                                       className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
                                     >
                                       📖 查看详细教程 →
