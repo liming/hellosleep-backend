@@ -9,13 +9,20 @@ module.exports = createCoreController('api::assessment-result.assessment-result'
       return ctx.unauthorized('You must be logged in to save assessment results.');
     }
 
-    ctx.request.body.data = {
-      ...ctx.request.body.data,
-      user: user.id,
-      completedAt: new Date().toISOString(),
-    };
+    const input = ctx.request.body?.data || {};
 
-    return super.create(ctx);
+    // Use entityService directly for Strapi v5 stability.
+    const created = await strapi.entityService.create('api::assessment-result.assessment-result', {
+      data: {
+        answers: input.answers || {},
+        tags: input.tags || [],
+        completedAt: new Date().toISOString(),
+        user: user.id,
+      },
+    });
+
+    const sanitized = await this.sanitizeOutput(created, ctx);
+    return this.transformResponse(sanitized);
   },
 
   async find(ctx) {
@@ -24,8 +31,6 @@ module.exports = createCoreController('api::assessment-result.assessment-result'
       return ctx.unauthorized('You must be logged in to view assessment results.');
     }
 
-    // Strapi v5 may reject relation filters injected via ctx.query on this content-type.
-    // Query directly via entityService to keep user scoping stable.
     const entries = await strapi.entityService.findMany('api::assessment-result.assessment-result', {
       filters: { user: user.id },
       sort: [{ completedAt: 'desc' }],
