@@ -21,7 +21,8 @@ const priorityConfig = {
 export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreenProps) {
   const { user } = useAuth();
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
-  const [activeSection, setActiveSection] = useState<'summary' | 'advice' | 'qa'>('summary');
+  const [activeSection, setActiveSection] = useState<'summary' | 'qa'>('summary');
+  const [expandedTag, setExpandedTag] = useState<string | null>(null);
   const copyFeedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -210,16 +211,6 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
               🏠 首页
             </button>
             <button
-              onClick={() => setActiveSection('advice')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                activeSection === 'advice'
-                  ? 'bg-green-50 text-green-700 border-b-2 border-green-500'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              💡 自助建议
-            </button>
-            <button
               onClick={() => setActiveSection('qa')}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                 activeSection === 'qa'
@@ -244,69 +235,74 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                 ) : (
                   <>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-3">⚠️ 您的睡眠问题</h2>
+                      <h2 className="text-lg font-semibold text-gray-900 mb-3">⚠️ 问题与建议（点击展开）</h2>
                       <div className="space-y-3">
                         {tags.map((tag) => {
                           const config = priorityConfig[tag.priority as keyof typeof priorityConfig] || priorityConfig.medium;
+                          const actions = getActionItems(tag.name);
+                          const open = expandedTag === tag.name;
                           return (
-                            <div key={tag.name} className={`p-4 rounded-xl ${config.bg} border ${config.border}`}>
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text} border ${config.border}`}>
-                                      {config.label}
-                                    </span>
-                                    <h3 className="font-semibold text-gray-900">{tag.text}</h3>
+                            <div key={tag.name} className="border border-gray-200 rounded-xl overflow-hidden">
+                              <button
+                                onClick={() => setExpandedTag(open ? null : tag.name)}
+                                className={`w-full p-4 text-left ${config.bg}`}
+                              >
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text} border ${config.border}`}>
+                                        {config.label}
+                                      </span>
+                                      <h3 className="font-semibold text-gray-900">{tag.text}</h3>
+                                    </div>
+                                    <p className="text-sm text-gray-600">{tag.recommendation.title}</p>
                                   </div>
-                                  <p className="text-sm text-gray-600 mt-1">{tag.recommendation.title}</p>
+                                  <span className="text-gray-400">{open ? '▾' : '▸'}</span>
                                 </div>
-                              </div>
+                              </button>
+
+                              {open && (
+                                <div className="p-4 bg-white border-t border-gray-100">
+                                  <p className="text-sm text-gray-700 mb-3">{tag.recommendation.content}</p>
+                                  {actions.length > 0 && (
+                                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                                      <h4 className="text-sm font-medium text-gray-700 mb-2">✅ 立即行动</h4>
+                                      <ul className="space-y-1.5">
+                                        {actions.map((action, idx) => (
+                                          <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                                            <span className="text-green-500 mt-0.5">•</span>
+                                            <span>{action}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {tag.recommendation.tutorialLink && (
+                                    <a
+                                      href={tag.recommendation.tutorialLink}
+                                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+                                    >
+                                      📖 查看详细教程 →
+                                    </a>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           );
                         })}
                       </div>
                     </div>
 
-                    {/* Action Items Preview */}
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-3">📋 今日行动</h2>
-                      <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                        {tags.slice(0, 3).flatMap(tag => getActionItems(tag.name)).slice(0, 3).map((action, idx) => (
-                          <div key={idx} className="flex items-start gap-2 text-sm">
-                            <span className="text-gray-400">○</span>
-                            <span className="text-gray-700">{action}</span>
-                          </div>
-                        ))}
-                        {tags.length > 0 && (
-                          <button
-                            onClick={() => setActiveSection('advice')}
-                            className="text-sm text-green-600 hover:text-green-700 font-medium"
-                          >
-                            查看全部建议 →
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Upgrade CTA */}
                     <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
                       <h3 className="font-semibold text-gray-900 mb-3">💬 需要更多帮助？</h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        评估只是开始。如果需要个性化指导，可以选择更深入的服务。
-                      </p>
+                      <p className="text-sm text-gray-600 mb-4">评估只是开始。如果需要个性化指导，可以选择更深入的服务。</p>
                       <div className="grid grid-cols-2 gap-3">
                         <button className="p-3 bg-white rounded-lg border border-green-200 hover:border-green-400 transition-colors text-left">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-lg">🤖</span>
-                            <span className="font-medium text-gray-900">AI 咨询</span>
-                          </div>
+                          <div className="flex items-center gap-2 mb-1"><span className="text-lg">🤖</span><span className="font-medium text-gray-900">AI 咨询</span></div>
                           <div className="text-sm text-gray-500">¥99 起</div>
                         </button>
                         <button className="p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-400 transition-colors text-left">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-lg">📞</span>
-                            <span className="font-medium text-gray-900">电话咨询</span>
-                          </div>
+                          <div className="flex items-center gap-2 mb-1"><span className="text-lg">📞</span><span className="font-medium text-gray-900">电话咨询</span></div>
                           <div className="text-sm text-gray-500">¥499 起</div>
                         </button>
                       </div>
@@ -314,58 +310,7 @@ export default function ResultsScreen({ answers, tags, onRetake }: ResultsScreen
                   </>
                 )}
               </div>
-            )}
-
-            {/* Advice Tab */}
-            {activeSection === 'advice' && (
-              <div className="space-y-6">
-                {tags.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-gray-600">您的睡眠状况良好，无需特别建议。</p>
-                  </div>
-                ) : (
-                  tags.map((tag) => {
-                    const config = priorityConfig[tag.priority as keyof typeof priorityConfig] || priorityConfig.medium;
-                    const actions = getActionItems(tag.name);
-                    return (
-                      <div key={tag.name} className="border border-gray-200 rounded-xl p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text} border ${config.border}`}>
-                            {config.label}
-                          </span>
-                          <h3 className="font-semibold text-lg text-gray-900">{tag.text}</h3>
-                        </div>
-                        
-                        <p className="text-gray-600 text-sm mb-4">{tag.recommendation.content}</p>
-                        
-                        {actions.length > 0 && (
-                          <div className="bg-gray-50 rounded-lg p-4">
-                            <h4 className="text-sm font-medium text-gray-700 mb-3">✅ 立即行动</h4>
-                            <ul className="space-y-2">
-                              {actions.map((action, idx) => (
-                                <li key={idx} className="flex items-start gap-2 text-sm">
-                                  <span className="text-green-500 mt-0.5">✓</span>
-                                  <span className="text-gray-700">{action}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {tag.recommendation.tutorialLink && (
-                          <a
-                            href={tag.recommendation.tutorialLink}
-                            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 mt-3"
-                          >
-                            📖 查看详细教程 →
-                          </a>
-                        )}
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            )}
+            )
 
             {/* QA Tab */}
             {activeSection === 'qa' && (
