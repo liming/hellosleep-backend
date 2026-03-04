@@ -5,20 +5,25 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::assessment-result.assessment-result', ({ strapi }) => ({
   async create(ctx) {
     const user = ctx.state.user;
-    if (!user) {
-      return ctx.unauthorized('You must be logged in to save assessment results.');
-    }
-
     const input = ctx.request.body?.data || {};
 
-    // Use entityService directly for Strapi v5 stability.
+    // Support two create modes:
+    // 1) Normal app flow (JWT user): force relation to current user.
+    // 2) Data migration (API token): accept provided `user` relation if present.
+    const data = {
+      answers: input.answers || {},
+      tags: input.tags || [],
+      completedAt: input.completedAt || new Date().toISOString(),
+    };
+
+    if (user?.id) {
+      data.user = user.id;
+    } else if (input.user) {
+      data.user = input.user;
+    }
+
     const created = await strapi.entityService.create('api::assessment-result.assessment-result', {
-      data: {
-        answers: input.answers || {},
-        tags: input.tags || [],
-        completedAt: new Date().toISOString(),
-        user: user.id,
-      },
+      data,
     });
 
     const sanitized = await this.sanitizeOutput(created, ctx);

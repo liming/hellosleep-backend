@@ -96,12 +96,11 @@ async function main() {
   if (!NEW_STRAPI_TOKEN) throw new Error('Missing NEW_STRAPI_TOKEN / STRAPI_API_TOKEN');
 
   const evaluations = parseJsonl(EVAL_FILE).map(normalizeEvaluation).filter(e => Object.keys(e.answers).length > 0);
-  const users = parseJsonl(USERS_FILE);
+  // Optional export file kept for audit/reference; do not trust old user IDs.
+  // User relation must be resolved against NEW Strapi users by email.
+  parseJsonl(USERS_FILE);
 
-  const userMap = new Map();
-  for (const u of users) {
-    if (u?.email && u?.id) userMap.set(String(u.email).toLowerCase(), u.id);
-  }
+  const userCache = new Map();
 
   const run = {
     startedAt: new Date().toISOString(),
@@ -131,9 +130,12 @@ async function main() {
     const emailKey = ev.email ? String(ev.email).toLowerCase() : null;
 
     let userId = null;
-    if (emailKey && userMap.has(emailKey)) userId = userMap.get(emailKey);
-    if (!userId && ev.email) userId = await findUserByEmail(ev.email);
-
+    if (emailKey && userCache.has(emailKey)) {
+      userId = userCache.get(emailKey);
+    } else if (ev.email) {
+      userId = await findUserByEmail(ev.email);
+      if (emailKey) userCache.set(emailKey, userId || null);
+    }
     if (userId) run.userMatched++; else run.userMissing++;
 
     const payload = {
