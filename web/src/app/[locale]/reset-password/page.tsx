@@ -1,13 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { loginWithEmail, resetPassword, saveAuthToStorage } from '@/lib/auth';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const code = useMemo(() => searchParams.get('code') || '', [searchParams]);
+  const [code, setCode] = useState('');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const c = new URLSearchParams(window.location.search).get('code') || '';
+    setCode(c);
+  }, []);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
