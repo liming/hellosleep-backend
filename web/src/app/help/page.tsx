@@ -45,7 +45,7 @@ export default function HelpPage() {
                 睡吧在几年的时间里积累了不少资料与珍贵的经验，你可以通过阅读这些资料和分享了解如何对待失眠，并按照文章中的建议去尝试和坚持。
               </p>
               <p className="text-gray-700 mb-6 leading-relaxed font-medium">
-                在发起求助之前，阅读知识库和博客的文章，学习和寻找的过程会让你受益终生。
+                在发起求助之前，阅读知识库和分享的文章，学习和寻找的过程会让你受益终生。
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -59,13 +59,13 @@ export default function HelpPage() {
                 睡吧知识库
               </Link>
               <Link
-                href="/blog"
+                href="/share"
                 className="inline-flex items-center px-6 py-3 border-2 border-brand-primary text-brand-primary bg-white hover:bg-brand-primary hover:text-white rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                 </svg>
-                睡吧博客
+                睡吧分享
               </Link>
             </div>
           </div>
