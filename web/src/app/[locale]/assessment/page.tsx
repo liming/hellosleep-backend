@@ -48,8 +48,15 @@ export default function AssessmentPage() {
   useEffect(() => {
     if (isLoading) return;
 
-    // Not logged in: no server history to load.
+    // Not logged in: clear any cached result to avoid showing stale report after logout.
     if (!user || !jwt) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(LAST_ASSESSMENT_KEY);
+      }
+      setAnswers({});
+      setActiveTags([]);
+      setQuestionIndex(0);
+      setScreen('landing');
       setHistoryResolved(true);
       return;
     }

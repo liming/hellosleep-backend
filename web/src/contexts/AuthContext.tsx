@@ -20,6 +20,7 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+const LAST_ASSESSMENT_KEY = 'hellosleep_last_assessment';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -51,6 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     clearAuthFromStorage();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LAST_ASSESSMENT_KEY);
+    }
     setJwt(null);
     setUser(null);
   }, []);
