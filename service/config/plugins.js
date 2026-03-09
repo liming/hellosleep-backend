@@ -42,6 +42,10 @@ module.exports = ({ env }) => ({
           user: env('SMTP_USERNAME'),
           pass: env('SMTP_PASSWORD'),
         },
+        // Fail fast to avoid long hangs when SMTP is unreachable.
+        connectionTimeout: env.int('SMTP_CONNECTION_TIMEOUT', 30000),
+        greetingTimeout: env.int('SMTP_GREETING_TIMEOUT', 30000),
+        socketTimeout: env.int('SMTP_SOCKET_TIMEOUT', 30000),
       },
       settings: {
         defaultFrom: env('SMTP_FROM'),
