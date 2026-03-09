@@ -33,19 +33,9 @@ module.exports = ({ env }) => ({
 
   email: {
     config: {
-      provider: 'nodemailer',
+      provider: 'strapi-provider-email-resend',
       providerOptions: {
-        host: env('SMTP_HOST', 'smtp.resend.com'),
-        port: env.int('SMTP_PORT', 465),
-        secure: env.bool('SMTP_SECURE', true),
-        auth: {
-          user: env('SMTP_USERNAME'),
-          pass: env('SMTP_PASSWORD'),
-        },
-        // Fail fast to avoid long hangs when SMTP is unreachable.
-        connectionTimeout: env.int('SMTP_CONNECTION_TIMEOUT', 30000),
-        greetingTimeout: env.int('SMTP_GREETING_TIMEOUT', 30000),
-        socketTimeout: env.int('SMTP_SOCKET_TIMEOUT', 30000),
+        apiKey: env('RESEND_API_KEY'),
       },
       settings: {
         defaultFrom: env('SMTP_FROM'),
