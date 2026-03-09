@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: '睡吧 - 和失眠说再见',
   description: '睡吧是一个帮助失眠者走出困境的社区平台',
+  icons: {
+    icon: '/favicon-32x32.png',
+    shortcut: '/favicon-32x32.png',
+    apple: '/favicon-32x32.png',
+  },
 };
 
 export default function RootLayout({
