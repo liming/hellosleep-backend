@@ -7,9 +7,10 @@ A comprehensive sleep improvement platform with backend API, web frontend, and m
 ```
 hellosleep/
 ├── service/          # Strapi backend API
-├── web/             # Web frontend (React/Next.js)
-├── shared/          # Shared utilities and types
-└── package.json     # Root workspace configuration
+├── web/              # Web frontend (React/Next.js)
+├── shared/           # Shared utilities and types
+├── ai-assistant/     # Sleep AI assistant service
+└── package.json      # Root workspace configuration
 ```
 
 ## 🚀 Quick Start
@@ -32,12 +33,13 @@ cd ../web && npm install
 
 ### Development
 ```bash
-# Start all services
+# Start main app services
 npm run dev
 
 # Start individual services
 npm run dev:service    # Strapi backend
 npm run dev:web        # Web frontend
+npm run dev:ai         # AI assistant service
 ```
 
 ## 📁 Services
@@ -53,6 +55,10 @@ npm run dev:web        # Web frontend
 - **Port**: 3000
 - **URL**: http://localhost:3000
 
+### AI Assistant
+- **Technology**: Node.js / Express
+- **Port**: 8787
+- **Playground**: http://localhost:8787
 
 
 ## 🔧 Scripts

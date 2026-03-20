@@ -7,18 +7,20 @@
   "workspaces": [
     "service",
     "web",
-    "shared"
+    "shared",
+    "ai-assistant"
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev:service\" \"npm run dev:web\"",
     "dev:service": "cd service && npm run develop",
     "dev:web": "cd web && npm run dev",
+    "dev:ai": "cd ai-assistant && npm run dev",
 
     "build": "npm run build:service && npm run build:web",
     "build:service": "cd service && npm run build",
     "build:web": "cd web && npm run build",
-    "install:all": "npm install && cd service && npm install && cd ../web && npm install",
-    "clean": "rm -rf node_modules service/node_modules web/node_modules shared/node_modules",
+    "install:all": "npm install && cd service && npm install && cd ../web && npm install && cd ../ai-assistant && npm install",
+    "clean": "rm -rf node_modules service/node_modules web/node_modules shared/node_modules ai-assistant/node_modules",
 
     "migration:export": "cd service && npm run migration:export",
     "migration:transform": "cd service && npm run migration:transform",
