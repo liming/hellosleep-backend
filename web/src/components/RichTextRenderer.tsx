@@ -73,53 +73,10 @@ export default function RichTextRenderer({ content, className = '' }: RichTextRe
         );
 
       case 'image':
-        if (!image?.url) return null;
-        
-        // Check if it's an external image that might have CORS issues
-        const isExternalImage = image.url.includes('mmbiz.qpic.cn') || 
-                               image.url.includes('weixin.qq.com') ||
-                               image.url.includes('qq.com');
-        
-        return (
-          <div key={index} className="my-6">
-            <div className="relative">
-              <img
-                src={image.url}
-                alt={image.alternativeText || 'Article image'}
-                width={image.width}
-                height={image.height}
-                className="max-w-full h-auto rounded-lg shadow-md mx-auto"
-                loading="lazy"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  console.warn('Failed to load image:', image.url);
-                  
-                  // Show a fallback message for external images
-                  if (isExternalImage) {
-                    target.style.display = 'none';
-                    const fallbackDiv = document.createElement('div');
-                    fallbackDiv.className = 'bg-gray-100 p-4 rounded-lg text-center text-gray-500';
-                    fallbackDiv.innerHTML = `
-                      <div class="text-sm">
-                        <p>图片无法显示</p>
-                        <p class="text-xs mt-1">External platform image</p>
-                        <button onclick="window.open('${image.url}', '_blank')" class="mt-2 px-3 py-1 bg-blue-500 text-white rounded text-xs">
-                          在新窗口打开
-                        </button>
-                      </div>
-                    `;
-                    target.parentNode?.appendChild(fallbackDiv);
-                  }
-                }}
-              />
-            </div>
-            {image.caption && (
-              <p className="text-sm text-gray-600 text-center mt-2 italic">
-                {image.caption}
-              </p>
-            )}
-          </div>
-        );
+        // Temporarily suppress all inline article images.
+        // Some imported WeChat-hosted images are blocked/hotlink-protected and
+        // currently produce broken placeholders in the article body.
+        return null;
 
       case 'list':
         const ListTag = listType === 'ordered' ? 'ol' : 'ul';
