@@ -8,6 +8,7 @@ Sleep guidance assistant service for HelloSleep.
 - risk routing
 - LLM-backed answer generation
 - playground UI for internal testing
+- ask logging (JSONL) for feedback loop
 
 ## Development
 ```bash
@@ -32,6 +33,16 @@ Typical variables:
 - `LLM_API_KEY`
 - `LLM_BASE_URL`
 - `LLM_MODEL`
+- `MEMORY_CHUNKS_PATH` (unified memory chunks.jsonl)
+- `ARTICLES_JSON_PATH` (optional article index json)
+- `ASK_LOG_PATH` (ask log jsonl path)
+
+## Eval Harness (batch testing)
+Put daily forum questions into `eval/questions.jsonl`, then run:
+
+```bash
+node eval/run-eval.js
+```
 
 ## Notes
 This service is intended to remain an independent runtime even when consumed through `service` / Strapi.

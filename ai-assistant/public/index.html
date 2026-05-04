@@ -259,6 +259,24 @@
           <summary>Raw JSON</summary>
           <pre id="raw">（等待请求）</pre>
         </details>
+
+        <div id="feedbackPanel" style="display:none; margin-top:18px; border-top: 1px solid var(--border); padding-top:16px;">
+          <div class="section-title">反馈（帮助改进 agent）</div>
+          <div class="row" style="margin-top:0;">
+            <button class="ghost" id="fbGood" type="button" style="font-size:20px;">👍 有用</button>
+            <button class="ghost" id="fbBad" type="button" style="font-size:20px;">👎 需改进</button>
+          </div>
+          <div id="fbDetail" style="display:none; margin-top:12px;">
+            <label style="margin-bottom:4px;">哪里不好？（选一个主要原因）</label>
+            <div class="chips" id="fbReasons"></div>
+            <label style="margin-top:12px; margin-bottom:4px;">补充说明（可选）</label>
+            <textarea id="fbNotes" rows="3" style="min-height:80px;" placeholder="比如：应该先问用户失眠多久了再给建议…"></textarea>
+            <div class="row">
+              <button class="primary small" id="fbSubmit" type="button">提交反馈</button>
+            </div>
+          </div>
+          <div id="fbDone" style="display:none; color:var(--ok); margin-top:10px; font-size:14px;">✓ 反馈已保存</div>
+        </div>
       </section>
     </div>
   </div>
@@ -313,7 +331,7 @@
         articlesEl.innerHTML = '<li class="muted">无</li>';
         return;
       }
-      articlesEl.innerHTML = items.map(x => `<li><a href="${x.url}" target="_blank" rel="noreferrer">${x.title}</a></li>`).join('');
+      articlesEl.innerHTML = items.map(x => `<li><a href="${x.url}" target="_blank" rel="noreferrer">${x.title}</a><br><span class="muted" style="user-select:all;word-break:break-all;">${x.url}</span></li>`).join('');
     }
 
     async function ask() {
@@ -381,6 +399,87 @@
     document.getElementById('copyQABtn').onclick = () => copyText(`问题：\n${questionEl.value.trim()}\n\n回答：\n${answerEl.textContent.trim()}`);
 
     setExamples();
+
+    // --- feedback panel ---
+    const fbReasons = [
+      '不贴合我的情况',
+      '建议不够具体',
+      '语气像模板/客服',
+      '引用了不相关内容',
+      '触及医疗/药物边界',
+      '该提醒线下求助但没提醒',
+    ];
+    const fbReasonsEl = document.getElementById('fbReasons');
+    const fbDetailEl = document.getElementById('fbDetail');
+    const fbDoneEl = document.getElementById('fbDone');
+    const fbNotesEl = document.getElementById('fbNotes');
+    let fbSelectedRating = null;
+    let fbSelectedReason = null;
+
+    fbReasons.forEach(text => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.type = 'button';
+      btn.textContent = text;
+      btn.onclick = () => {
+        fbSelectedReason = text;
+        fbReasonsEl.querySelectorAll('.chip').forEach(c => c.style.background = '#fff');
+        btn.style.background = 'var(--primary-soft)';
+      };
+      fbReasonsEl.appendChild(btn);
+    });
+
+    function showFeedbackPanel() {
+      document.getElementById('feedbackPanel').style.display = 'block';
+      fbDetailEl.style.display = 'none';
+      fbDoneEl.style.display = 'none';
+      fbSelectedRating = null;
+      fbSelectedReason = null;
+      fbNotesEl.value = '';
+      fbReasonsEl.querySelectorAll('.chip').forEach(c => c.style.background = '#fff');
+    }
+
+    document.getElementById('fbGood').onclick = async () => {
+      fbSelectedRating = 'good';
+      await submitFeedback();
+    };
+    document.getElementById('fbBad').onclick = () => {
+      fbSelectedRating = 'bad';
+      fbDetailEl.style.display = 'block';
+      fbDoneEl.style.display = 'none';
+    };
+    document.getElementById('fbSubmit').onclick = () => submitFeedback();
+
+    async function submitFeedback() {
+      try {
+        await fetch('/feedback', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            question: questionEl.value.trim(),
+            answer: answerEl.textContent.trim(),
+            rating: fbSelectedRating,
+            reason: fbSelectedReason,
+            notes: fbNotesEl.value.trim(),
+          })
+        });
+        fbDetailEl.style.display = 'none';
+        fbDoneEl.style.display = 'block';
+      } catch (e) {
+        alert('反馈提交失败: ' + e.message);
+      }
+    }
+
+    // hook into ask() to show feedback panel after each answer
+    const origAsk = ask;
+    const patchedAsk = async function() {
+      document.getElementById('feedbackPanel').style.display = 'none';
+      await origAsk();
+      if (answerEl.textContent && !answerEl.textContent.startsWith('错误')) {
+        showFeedbackPanel();
+      }
+    };
+    document.getElementById('askBtn').onclick = patchedAsk;
   </script>
 </body>
 </html>

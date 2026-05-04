@@ -1,4 +1,18 @@
+import fs from 'fs';
 import { SYSTEM_POLICY } from './policy.js';
+
+const PROMPT_RULES_PATH = process.env.PROMPT_RULES_PATH || new URL('../prompt-rules.md', import.meta.url).pathname;
+
+function loadPromptRules() {
+  try {
+    if (!fs.existsSync(PROMPT_RULES_PATH)) return '';
+    const raw = fs.readFileSync(PROMPT_RULES_PATH, 'utf-8');
+    const lines = raw.split('\n').filter(l => !l.startsWith('#') && l.trim());
+    return lines.join('\n').trim();
+  } catch (_e) {
+    return '';
+  }
+}
 
 const LLM_PROVIDER = process.env.LLM_PROVIDER || 'openai_compatible';
 const LLM_API_KEY = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY || '';
@@ -28,6 +42,8 @@ function formatLinks(links = []) {
 }
 
 export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 'normal', scenario = {} }) {
+  const rules = loadPromptRules();
+
   const system = [
     SYSTEM_POLICY,
     '',
@@ -41,6 +57,7 @@ export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 
     '- 先回应用户最核心的困扰',
     '- 给出 1-3 个可执行下一步',
     '- 如果合适，再给推荐阅读/评估入口',
+    ...(rules ? ['', '以下是额外的回答优化规则，必须遵守：', rules] : []),
   ].join('\n');
 
   const user = [

@@ -20,6 +20,7 @@ const DRY_RUN = process.env.DRY_RUN === 'true';
 const LIMIT = parseInt(process.env.LIMIT || '0', 10); // 0 = all
 const WRITE_DELAY_MS = parseInt(process.env.WRITE_DELAY_MS || '50', 10);
 const DEFAULT_PASSWORD = process.env.IMPORT_DEFAULT_PASSWORD || 'Temp#2026ChangeMe!';
+const ROLE_ID_OVERRIDE = process.env.IMPORT_ROLE_ID || null;
 
 const RESULT_FILE = path.join(__dirname, 'import-users-results.json');
 
@@ -36,8 +37,9 @@ function parseJsonl(file) {
     .filter(Boolean);
 }
 
-async function strapiReq(endpoint, method = 'GET', body = null) {
-  const res = await fetch(`${NEW_STRAPI_URL}/api${endpoint}`, {
+async function strapiReq(endpoint, method = 'GET', body = null, withApiPrefix = true) {
+  const base = withApiPrefix ? `${NEW_STRAPI_URL}/api` : NEW_STRAPI_URL;
+  const res = await fetch(`${base}${endpoint}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -65,6 +67,36 @@ async function findUserByEmail(email) {
   return arr[0]?.id || null;
 }
 
+async function resolveAuthenticatedRoleId() {
+  if (ROLE_ID_OVERRIDE) return Number(ROLE_ID_OVERRIDE);
+
+  // Strapi users-permissions roles endpoints can differ by version.
+  const candidates = [
+    { endpoint: '/users-permissions/roles', withApiPrefix: true },
+    { endpoint: '/users-permissions/roles', withApiPrefix: false },
+  ];
+
+  for (const c of candidates) {
+    try {
+      const ret = await strapiReq(c.endpoint, 'GET', null, c.withApiPrefix);
+      const roles = Array.isArray(ret)
+        ? ret
+        : Array.isArray(ret?.roles)
+          ? ret.roles
+          : Array.isArray(ret?.data)
+            ? ret.data
+            : [];
+      const auth = roles.find((r) => (r?.type || r?.attributes?.type) === 'authenticated');
+      const id = auth?.id || auth?.attributes?.id;
+      if (id) return Number(id);
+    } catch {
+      // try next candidate
+    }
+  }
+
+  throw new Error('Cannot resolve authenticated role id. Set IMPORT_ROLE_ID explicitly.');
+}
+
 function normalizeUsername(raw, email, index) {
   const base = (raw || email?.split('@')[0] || `user${index}`)
     .toString()
@@ -74,19 +106,22 @@ function normalizeUsername(raw, email, index) {
   return base || `user${index}`;
 }
 
-async function createUser({ email, username, confirmed, blocked }) {
-  // users-permissions REST endpoint
+async function createUser({ email, username, confirmed, blocked }, roleId) {
   return strapiReq('/users', 'POST', {
     email,
     username,
     password: DEFAULT_PASSWORD,
     confirmed: !!confirmed,
     blocked: !!blocked,
+    role: roleId,
   });
 }
 
 async function main() {
   if (!NEW_STRAPI_TOKEN) throw new Error('Missing NEW_STRAPI_TOKEN / STRAPI_API_TOKEN');
+
+  const roleId = await resolveAuthenticatedRoleId();
+  console.log(`Using role id: ${roleId}`);
 
   const users = parseJsonl(USERS_FILE)
     .filter((u) => u?.email)
@@ -110,6 +145,7 @@ async function main() {
   const run = {
     startedAt: new Date().toISOString(),
     dryRun: DRY_RUN,
+    roleId,
     totalRead: users.length,
     uniqueEmails: unique.length,
     toProcess: target.length,
@@ -139,7 +175,7 @@ async function main() {
           console.log(`[DRY] CREATE ${i + 1}/${target.length} ${u.email}`);
         }
       } else {
-        await createUser(u);
+        await createUser(u, roleId);
         run.created++;
         if ((i + 1) % 100 === 0 || i === target.length - 1) {
           console.log(`CREATED ${i + 1}/${target.length} ${u.email}`);

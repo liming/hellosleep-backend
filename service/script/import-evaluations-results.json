@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-03-05T19:07:50.160Z",
+  "dryRun": false,
+  "file": "/Users/ming/hellosleep/app/evaluations-export.jsonl",
+  "usersFile": "/Users/ming/hellosleep/app/users-export.jsonl",
+  "totalRead": 2338,
+  "imported": 2338,
+  "skippedNoAnswers": 0,
+  "userMatched": 2306,
+  "userMissing": 32,
+  "failed": 0,
+  "errors": [],
+  "finishedAt": "2026-03-05T19:24:35.454Z"
+}

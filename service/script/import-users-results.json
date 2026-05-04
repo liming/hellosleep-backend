@@ -1,0 +1,114 @@
+{
+  "startedAt": "2026-03-05T08:06:29.016Z",
+  "dryRun": false,
+  "roleId": 1,
+  "totalRead": 15010,
+  "uniqueEmails": 14996,
+  "toProcess": 14996,
+  "created": 1930,
+  "existed": 13041,
+  "failed": 25,
+  "errors": [
+    {
+      "email": "412009117@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880088-SIN 1772698614 1350885358</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "13828559@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880027-SIN 1772699985 67526793</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "546299177@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880047-SIN 1772699990 3213425540</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "742971348@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880078-SIN 1772699991 3001826996</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "hasuolamu@126.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880026-SIN 1772700001 2661365938</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2370926186@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880054-SIN 1772700410 2696037442</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2227294855@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880094-SIN 1772700830 415600171</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "1772460913@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880084-SIN 1772700845 3172826700</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2275200018@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsss1830083-SIN 1772700853 449370185</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "3501068088@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880051-SIN 1772700854 1249829700</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "tianhu_1204@163.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880089-SIN 1772700861 3011844653</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "945887883@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880060-SIN 1772701065 1581311172</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "qinbwoaini@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880041-SIN 1772701078 1184934844</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2723782847@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880051-SIN 1772701078 1256863489</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "981412791@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880058-SIN 1772701088 1227571274</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2875491705@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880051-SIN 1772701092 1257287599</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2511255210@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsss1830045-SIN 1772701092 3035586765</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2567686287@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880060-SIN 1772701092 1582164494</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "momo__nono@163.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880069-SIN 1772701096 3846437719</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "398907877@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880091-SIN 1772701110 3313394910</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "geyingy@163.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsss1830029-SIN 1772701111 3786660463</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "xliu066@mymail.sim.edu.sg",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880076-SIN 1772701116 3302109078</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "35807676@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880048-SIN 1772701116 3657534684</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "2247986630@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880042-SIN 1772701349 3254738398</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    },
+    {
+      "email": "1224879671@qq.com",
+      "message": "\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html>\n  <head>\n    <title>503 Backend.max_conn reached</title>\n  </head>\n  <body>\n    <h1>Error 503 Backend.max_conn reached</h1>\n    <p>Backend.max_conn reached</p>\n    <h3>Error 54113</h3>\n    <p>Details: cache-sin-wsat1880043-SIN 1772701355 2604959208</p>\n    <hr>\n    <p>Varnish cache server</p>\n  </body>\n</html>\n"
+    }
+  ],
+  "finishedAt": "2026-03-05T09:03:48.599Z"
+}

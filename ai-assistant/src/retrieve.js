@@ -8,8 +8,8 @@ export const pool = DATABASE_URL
   ? new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } })
   : null;
 
-const ARTICLES_JSON = '/Users/ming/.openclaw/workspace/shuiba-workspace/site-content/migrated-remote-articles-improved.json';
-const UNIFIED_CHUNKS = '/Users/ming/.openclaw/workspace/shuiba-workspace/data/memory-v2/chunks.jsonl';
+const ARTICLES_JSON = process.env.ARTICLES_JSON_PATH || '';
+const UNIFIED_CHUNKS = process.env.MEMORY_CHUNKS_PATH || '';
 
 let articleIndex = null;
 let unifiedMemoryCache = null;
@@ -100,6 +100,10 @@ function loadJsonl(file) {
 
 function loadUnifiedMemory() {
   if (unifiedMemoryCache) return unifiedMemoryCache;
+  if (!UNIFIED_CHUNKS) {
+    unifiedMemoryCache = [];
+    return unifiedMemoryCache;
+  }
   unifiedMemoryCache = loadJsonl(UNIFIED_CHUNKS);
   return unifiedMemoryCache;
 }
@@ -239,48 +243,154 @@ export async function retrieveTopChunks(query, limit = 8) {
 }
 
 function buildArticleIndex() {
+  if (!ARTICLES_JSON) return [];
   if (!fs.existsSync(ARTICLES_JSON)) return [];
-  const arr = JSON.parse(fs.readFileSync(ARTICLES_JSON, 'utf-8'));
-  return arr
+  const raw = JSON.parse(fs.readFileSync(ARTICLES_JSON, 'utf-8'));
+
+  if (Array.isArray(raw) && raw[0]?.documentId) {
+    return raw
+      .filter(a => a.title && a.url)
+      .map(a => ({ title: a.title, documentId: a.documentId, altId: a.altId || '', type: a.type, url: a.url }));
+  }
+
+  return raw
     .map(x => x?.data)
     .filter(Boolean)
     .map(a => ({
       title: a.title,
       altId: a.altId,
       type: a.type,
-      url: a.altId ? `https://www.hellosleep.net/tutorial/${a.altId}` : null
+      url: a.altId ? `https://www.hellosleep.net/article/${a.altId}` : null
     }))
     .filter(x => x.title && x.url);
 }
 
-export function findRelatedArticles(refs = [], question = '', topN = 4) {
-  if (!articleIndex) articleIndex = buildArticleIndex();
-  const q = `${question}\n${refs.map(r => r.title || '').join('\n')}`;
-
-  if (/学生|学校|宿舍|室友/.test(q)) {
-    return [
+const SCENARIO_ARTICLES = [
+  {
+    match: /清闲|不活跃|无所事事|退休|太闲|没事做/,
+    articles: [
+      { title: '你的无所事事，才是罪魁祸首', url: 'https://www.hellosleep.net/article/xk9vpbyfd5xahyjujvyd2qr5', score: 100 },
+      { title: '慢性失眠，来自于我们的精心培育', url: 'https://www.hellosleep.net/article/qbxxs9tba1laaght1mqkh1j2', score: 90 },
+    ],
+  },
+  {
+    match: /卧室|床上.*手机|长时间.*床|躺.*床/,
+    articles: [
+      { title: '为什么躺在床上便困意全无', url: 'https://www.hellosleep.net/article/ck6cc8a2g9kni2m6m3piuua6', score: 100 },
+    ],
+  },
+  {
+    match: /抱怨|哭诉/,
+    articles: [
+      { title: '抱怨的背后', url: 'https://www.hellosleep.net/article/og4k19tp9ag31ui40uesly99', score: 100 },
+    ],
+  },
+  {
+    match: /减少.*工作|放弃.*学习|减少.*社交|找机会.*休息|为失眠.*努力/,
+    articles: [
+      { title: '慢性失眠，来自于我们的精心培育', url: 'https://www.hellosleep.net/article/qbxxs9tba1laaght1mqkh1j2', score: 100 },
+      { title: '面对失眠应该无为而治', url: 'https://www.hellosleep.net/article/q06w2x12f2av3w1bgw6l4av0', score: 90 },
+    ],
+  },
+  {
+    match: /不规律|补觉|晚起/,
+    articles: [
+      { title: '按时早起', url: 'https://www.hellosleep.net/article/xwlah6ktprvcr468s0j7dm2c', score: 100 },
+    ],
+  },
+  {
+    match: /想早睡|早点睡|早睡不着|几点.*才.*睡|凌晨.*才.*睡|熬夜.*睡不着|晚睡|睡不早|入睡.*晚/,
+    articles: [
+      { title: '怎样才能早睡？', url: 'https://www.hellosleep.net/article/hihvqpr6y00a0nzgd15y2d4x', score: 100 },
+    ],
+  },
+  {
+    match: /运动.*少|缺乏运动|很少.*阳光|不运动/,
+    articles: [
+      { title: '运动是最好的安眠药', url: 'https://www.hellosleep.net/article/h8d72mrob3jy8dfwffas3pui', score: 100 },
+    ],
+  },
+  {
+    match: /学生|学校|宿舍|室友/,
+    articles: [
       { title: '先做评估', url: 'https://www.hellosleep.net/zh/assessment', score: 100 },
-      { title: '写给失眠的学生 - 珍惜自己的每一天', url: 'https://www.hellosleep.net/article/lloh7g9kg9ef4ds6axzyj5tb', score: 99 },
-    ].slice(0, topN);
+      { title: '写给失眠的学生', url: 'https://www.hellosleep.net/article/lloh7g9kg9ef4ds6axzyj5tb', score: 99 },
+    ],
+  },
+  {
+    match: /产后|带孩子|哄睡|宝宝/,
+    articles: [
+      { title: '正确对待产后失眠', url: 'https://www.hellosleep.net/article/tgzol6anrle9c0oh1nmp4pkx', score: 100 },
+      { title: '产后妈妈失眠不要恐慌，可以恢复好', url: 'https://www.hellosleep.net/article/yw23viud068v6n7nbsymzg5a', score: 99 },
+    ],
+  },
+  {
+    match: /孕期|怀孕/,
+    articles: [
+      { title: '正确对待孕期失眠', url: 'https://www.hellosleep.net/article/abcotb09wygvv51xvia8akt4', score: 100 },
+    ],
+  },
+  {
+    match: /倒班|夜班|值班/,
+    articles: [
+      { title: '倒班工作', url: 'https://www.hellosleep.net/article/e8mc9mta5jkdli0gh8lmu6lc', score: 100 },
+    ],
+  },
+  {
+    // 用户在求"助眠捷径"（白噪音、助眠音频/APP、褪黑素、各类睡眠小工具）
+    // 这类请求睡吧不提倡，统一引导到自助指南。
+    match: /白噪音|助眠音频|助眠歌|助眠APP|助眠.*音乐|助眠工具|催眠音频|睡眠.*音频|褪黑素|眼罩|安神/,
+    articles: [
+      { title: '睡吧失眠者指南（先看这里）', url: 'https://www.hellosleep.net/help', score: 100 },
+    ],
+  },
+  {
+    // 真正的环境噪音问题（邻居/伴侣/室友打鼾等），排除"白噪音/助眠"语境
+    match: (q) => /噪音|呼噜|打鼾|邻居.*吵|声音.*睡/.test(q) && !/白噪音|助眠/.test(q),
+    articles: [
+      { title: '怎样对待恼人的噪音', url: 'https://www.hellosleep.net/article/vfvpri4m7f5qut3bka7lu886', score: 100 },
+    ],
+  },
+  {
+    match: /效率.*低|睡眠效率/,
+    articles: [
+      { title: '如何提高睡眠效率', url: 'https://www.hellosleep.net/article/j3f7i07zhlykbdibtnj1gixp', score: 100 },
+    ],
+  },
+];
+
+export function findRelatedArticles(refs = [], question = '', topN = 2) {
+  if (!articleIndex) articleIndex = buildArticleIndex();
+  // 只用用户问题做场景匹配，不要混入 refs 的标题——否则
+  // memory 里碰巧命中的"产后/学生"标题会把无关场景的文章推上来。
+  const q = String(question || '');
+
+  const scenarioHits = [];
+  const seen = new Set();
+  for (const rule of SCENARIO_ARTICLES) {
+    const matched = typeof rule.match === 'function'
+      ? rule.match(q)
+      : rule.match.test(q);
+    if (matched) {
+      for (const a of rule.articles) {
+        if (!seen.has(a.url)) {
+          seen.add(a.url);
+          scenarioHits.push(a);
+        }
+      }
+    }
+  }
+  if (scenarioHits.length) {
+    return scenarioHits.sort((a, b) => b.score - a.score).slice(0, topN);
   }
 
-  if (/产后|带孩子|哄睡|宝宝/.test(q)) {
-    return [
-      { title: '正确对待产后失眠', url: 'https://www.hellosleep.net/tutorial/5c5c3f03e2e01d103e0f9b1f', score: 100 },
-      { title: '产后妈妈失眠不要恐慌，可以恢复好', url: 'https://www.hellosleep.net/tutorial/5b1f2399f4612c136e02a07b', score: 99 },
-    ].slice(0, topN);
-  }
-
+  // 用户问题里直接提到了某篇文章的标题/标题关键词时，给出该文章
   const scored = articleIndex
     .map(a => {
       let s = 0;
       if (q.includes(a.title)) s += 4;
       const key = a.title.replace(/[《》\-：:（）()]/g, '').slice(0, 6);
       if (key && q.includes(key)) s += 2;
-      if (/躺在床上|入睡|清醒/.test(q) && /躺在床上便困意全无|快要入睡的时候会突然惊醒/.test(a.title)) s += 3;
-      if (/上学|宿舍|学生/.test(q) && /写给失眠的学生|你的无所事事/.test(a.title)) s += 3;
-      if (/失眠|焦虑|压力/.test(q) && /失眠是个平常事|慢性失眠|无为而治/.test(a.title)) s += 3;
-      if (/评估/.test(q) && /评估/.test(a.title)) s += 4;
       return { ...a, score: s };
     })
     .filter(x => x.score > 0)
@@ -289,6 +399,10 @@ export function findRelatedArticles(refs = [], question = '', topN = 4) {
 
   if (scored.length) return scored;
 
-  const fallbackTitles = ['失眠是个平常事', '为什么躺在床上便困意全无', '写给失眠的学生-学会换气-才能游向更广阔的世界', '不为失眠做功'];
-  return articleIndex.filter(a => fallbackTitles.some(t => a.title.includes(t))).slice(0, topN);
+  // 没匹配到任何场景：不强推具体文章，只引导用户去自助指南。
+  // 这比推一篇可能不相关的"通用文章"更负责任。
+  return [
+    { title: '睡吧失眠者指南（先看这里）', url: 'https://www.hellosleep.net/help', score: 60 },
+    { title: '睡眠评估', url: 'https://www.hellosleep.net/zh/assessment', score: 50 },
+  ].slice(0, topN);
 }

@@ -3,6 +3,7 @@ import express from 'express';
 import { retrieveTopChunks, pool, findRelatedArticles, detectRiskLevel } from './retrieve.js';
 import { SYSTEM_POLICY } from './policy.js';
 import { llmAvailable, generateAnswerWithLLM, buildLlmMessages, getLlmConfig } from './llm.js';
+import { logAskEvent } from './log.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -23,6 +24,15 @@ function extractSignals(text = '') {
     earlyWaking: /早醒|凌晨.*醒|半夜.*醒/.test(text),
     noise: /噪音|呼噜|声音|吵/.test(text),
   };
+}
+
+function isLowInfoComplaint(text = '') {
+  const q = String(text || '').trim();
+  if (!q) return false;
+  // Short, emotional complaint with no concrete context.
+  const genericComplaint = /(失眠|睡不着|崩溃|好痛苦|太难受|怎么办|绝望|熬不住)/.test(q);
+  const hasConcreteContext = /(评估|白天|工作|学习|生活|学生|宿舍|产后|孕期|倒班|噪音|药|安眠药|褪黑素|\d{1,2}[:：点]\d{0,2}|\d+小时)/.test(q);
+  return q.length <= 36 && genericComplaint && !hasConcreteContext;
 }
 
 function buildCrisisAnswer(question) {
@@ -139,15 +149,42 @@ app.get('/policy', (_req, res) => {
 });
 
 app.post('/ask', async (req, res) => {
+  const startedAt = Date.now();
   try {
     const question = (req.body?.question || '').trim();
     const useLlm = req.body?.use_llm !== false;
     const debug = req.body?.debug === true;
     if (!question) return res.status(400).json({ error: 'question is required' });
 
+    if (isLowInfoComplaint(question)) {
+      const answer = '看到了你的留言。仅凭这一句抱怨还无法判断造成失眠的根本原因，也没法给出针对性意见。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help';
+      const response = {
+        question,
+        answer,
+        related_articles: [
+          { title: '睡吧失眠者指南（先看这里）', url: 'https://www.hellosleep.net/help', score: 100 },
+        ],
+        policy: SYSTEM_POLICY,
+        risk_level: detectRiskLevel(question),
+        mode: 'intake-guide',
+        llm_available: llmAvailable(),
+      };
+      logAskEvent({
+        event: 'ask',
+        risk_level: response.risk_level,
+        mode: response.mode,
+        use_llm: useLlm,
+        debug,
+        question,
+        response_preview: String(answer).slice(0, 400),
+        duration_ms: Date.now() - startedAt,
+      });
+      return res.json(response);
+    }
+
     const riskLevel = detectRiskLevel(question);
     if (riskLevel === 'high') {
-      return res.json({
+      const response = {
         question,
         answer: buildCrisisAnswer(question),
         references: debug ? [] : undefined,
@@ -155,12 +192,25 @@ app.post('/ask', async (req, res) => {
         policy: SYSTEM_POLICY,
         risk_level: riskLevel,
         mode: 'crisis-fallback',
+      };
+
+      logAskEvent({
+        event: 'ask',
+        risk_level: riskLevel,
+        mode: response.mode,
+        use_llm: useLlm,
+        debug,
+        question,
+        response_preview: String(response.answer || '').slice(0, 400),
+        duration_ms: Date.now() - startedAt,
       });
+
+      return res.json(response);
     }
 
     const refs = await retrieveTopChunks(question, 8);
     const top = refs.slice(0, 6);
-    const links = findRelatedArticles(top, question, 4);
+    const links = findRelatedArticles(top, question, 2);
     const scenario = extractSignals(question);
 
     let answer;
@@ -198,7 +248,55 @@ app.post('/ask', async (req, res) => {
       response.prompt_preview = buildLlmMessages({ question, refs: top, links, riskLevel, scenario });
     }
 
+    logAskEvent({
+      event: 'ask',
+      risk_level: riskLevel,
+      mode,
+      use_llm: useLlm,
+      llm_available: llmAvailable(),
+      llm: llmMeta || null,
+      debug,
+      question,
+      scenario,
+      references: (top || []).map(r => ({
+        source_type: r.source_type,
+        source_id: r.source_id,
+        title: r.title,
+        hit_score: r.hit_score,
+        url: r.url || null,
+      })),
+      related_articles: links,
+      response_preview: String(answer || '').slice(0, 400),
+      duration_ms: Date.now() - startedAt,
+    });
+
     res.json(response);
+  } catch (e) {
+    try {
+      logAskEvent({
+        event: 'ask_error',
+        question: (req.body?.question || '').trim(),
+        error: e.message,
+        duration_ms: Date.now() - startedAt,
+      });
+    } catch (_ignored) {}
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/feedback', (req, res) => {
+  try {
+    const { question, answer, rating, reason, notes } = req.body || {};
+    if (!question) return res.status(400).json({ error: 'question is required' });
+    logAskEvent({
+      event: 'feedback',
+      question,
+      answer: String(answer || '').slice(0, 600),
+      rating: rating || null,
+      reason: reason || null,
+      notes: notes || '',
+    });
+    res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
