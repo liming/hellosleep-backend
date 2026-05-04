@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "intake_low_info",
+      "scope": "intent:intake_low_info",
+      "priority": 100,
+      "enabled": true,
+      "action": "template",
+      "template_id": "guide_help"
+    },
+    {
+      "id": "shortcut_request",
+      "scope": "intent:shortcut_request",
+      "priority": 90,
+      "enabled": true,
+      "action": "template",
+      "template_id": "guide_help_shortcuts"
+    },
+    {
+      "id": "crisis",
+      "scope": "intent:crisis",
+      "priority": 1000,
+      "enabled": true,
+      "action": "crisis"
+    },
+    {
+      "id": "default_allow_rag",
+      "scope": "intent:*",
+      "priority": 1,
+      "enabled": true,
+      "action": "allow_rag"
+    }
+  ],
+  "templates": {
+    "guide_help": {
+      "mode": "intake-guide",
+      "answer": "看到了你的留言。仅凭这一句抱怨还无法判断造成失眠的根本原因，也没法给出针对性意见。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help",
+      "related_articles": [
+        { "title": "睡吧失眠者指南（先看这里）", "url": "https://www.hellosleep.net/help", "score": 100 }
+      ]
+    },
+    "guide_help_shortcuts": {
+      "mode": "guide-help",
+      "answer": "睡吧不推荐用白噪音、助眠音频、助眠工具这类东西来“解决失眠”。它们治标不治本，靠它们入睡反而容易形成依赖，也没解决造成失眠的根本原因。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help",
+      "related_articles": [
+        { "title": "睡吧失眠者指南（先看这里）", "url": "https://www.hellosleep.net/help", "score": 100 }
+      ]
+    }
+  }
+}
+
