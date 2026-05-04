@@ -4,6 +4,8 @@ import { retrieveTopChunks, pool, findRelatedArticles, detectRiskLevel } from '.
 import { SYSTEM_POLICY } from './policy.js';
 import { llmAvailable, generateAnswerWithLLM, buildLlmMessages, getLlmConfig } from './llm.js';
 import { logAskEvent } from './log.js';
+import { routeIntent } from './router.js';
+import { decidePolicy } from './policy-engine.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -24,15 +26,6 @@ function extractSignals(text = '') {
     earlyWaking: /早醒|凌晨.*醒|半夜.*醒/.test(text),
     noise: /噪音|呼噜|声音|吵/.test(text),
   };
-}
-
-function isLowInfoComplaint(text = '') {
-  const q = String(text || '').trim();
-  if (!q) return false;
-  // Short, emotional complaint with no concrete context.
-  const genericComplaint = /(失眠|睡不着|崩溃|好痛苦|太难受|怎么办|绝望|熬不住)/.test(q);
-  const hasConcreteContext = /(评估|白天|工作|学习|生活|学生|宿舍|产后|孕期|倒班|噪音|药|安眠药|褪黑素|\d{1,2}[:：点]\d{0,2}|\d+小时)/.test(q);
-  return q.length <= 36 && genericComplaint && !hasConcreteContext;
 }
 
 function buildCrisisAnswer(question) {
@@ -156,17 +149,17 @@ app.post('/ask', async (req, res) => {
     const debug = req.body?.debug === true;
     if (!question) return res.status(400).json({ error: 'question is required' });
 
-    if (isLowInfoComplaint(question)) {
-      const answer = '看到了你的留言。仅凭这一句抱怨还无法判断造成失眠的根本原因，也没法给出针对性意见。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help';
+    const route = routeIntent(question);
+    const policyDecision = decidePolicy({ intent: route.intent, risk_level: route.risk_level });
+    if (policyDecision.decision === 'crisis') {
       const response = {
         question,
-        answer,
-        related_articles: [
-          { title: '睡吧失眠者指南（先看这里）', url: 'https://www.hellosleep.net/help', score: 100 },
-        ],
+        answer: buildCrisisAnswer(question),
+        references: debug ? [] : undefined,
+        related_articles: [],
         policy: SYSTEM_POLICY,
-        risk_level: detectRiskLevel(question),
-        mode: 'intake-guide',
+        risk_level: route.risk_level,
+        mode: 'crisis-fallback',
         llm_available: llmAvailable(),
       };
       logAskEvent({
@@ -176,27 +169,26 @@ app.post('/ask', async (req, res) => {
         use_llm: useLlm,
         debug,
         question,
-        response_preview: String(answer).slice(0, 400),
+        response_preview: String(response.answer || '').slice(0, 400),
         duration_ms: Date.now() - startedAt,
       });
       return res.json(response);
     }
 
-    const riskLevel = detectRiskLevel(question);
-    if (riskLevel === 'high') {
+    if (policyDecision.decision === 'template') {
+      const t = policyDecision.template;
       const response = {
         question,
-        answer: buildCrisisAnswer(question),
-        references: debug ? [] : undefined,
-        related_articles: [],
+        answer: t.answer,
+        related_articles: t.related_articles || [],
         policy: SYSTEM_POLICY,
-        risk_level: riskLevel,
-        mode: 'crisis-fallback',
+        risk_level: route.risk_level,
+        mode: t.mode || 'template',
+        llm_available: llmAvailable(),
       };
-
       logAskEvent({
         event: 'ask',
-        risk_level: riskLevel,
+        risk_level: response.risk_level,
         mode: response.mode,
         use_llm: useLlm,
         debug,
@@ -204,7 +196,6 @@ app.post('/ask', async (req, res) => {
         response_preview: String(response.answer || '').slice(0, 400),
         duration_ms: Date.now() - startedAt,
       });
-
       return res.json(response);
     }
 
@@ -217,9 +208,9 @@ app.post('/ask', async (req, res) => {
     let mode = 'rule-based';
     let llmMeta = null;
 
-    if (useLlm && llmAvailable()) {
+    if (policyDecision.decision === 'allow_rag' && useLlm && llmAvailable()) {
       try {
-        const llm = await generateAnswerWithLLM({ question, refs: top, links, riskLevel, scenario });
+        const llm = await generateAnswerWithLLM({ question, refs: top, links, riskLevel: route.risk_level, scenario });
         answer = llm.answer;
         mode = 'llm';
         llmMeta = { provider: llm.provider, model: llm.model };
@@ -237,7 +228,7 @@ app.post('/ask', async (req, res) => {
       answer,
       related_articles: links,
       policy: SYSTEM_POLICY,
-      risk_level: riskLevel,
+      risk_level: route.risk_level,
       mode,
       llm_available: llmAvailable(),
     };
@@ -250,7 +241,7 @@ app.post('/ask', async (req, res) => {
 
     logAskEvent({
       event: 'ask',
-      risk_level: riskLevel,
+      risk_level: route.risk_level,
       mode,
       use_llm: useLlm,
       llm_available: llmAvailable(),
