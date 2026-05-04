@@ -6,6 +6,7 @@ import { llmAvailable, generateAnswerWithLLM, buildLlmMessages, getLlmConfig } f
 import { logAskEvent } from './log.js';
 import { routeIntent } from './router.js';
 import { decidePolicy } from './policy-engine.js';
+import { verifyAnswer } from './verifier.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -232,6 +233,20 @@ app.post('/ask', async (req, res) => {
       mode,
       llm_available: llmAvailable(),
     };
+
+    const verification = verifyAnswer({ answer, risk_level: route.risk_level });
+    if (!verification.ok) {
+      // Safety net: fall back to a safe, consistent guide response if we violate hard constraints.
+      const safe = decidePolicy({ intent: 'shortcut_request', risk_level: route.risk_level });
+      if (safe.decision === 'template') {
+        response.answer = safe.template.answer;
+        response.related_articles = safe.template.related_articles || response.related_articles;
+        response.mode = 'verifier-fallback';
+      }
+      if (debug) response.verifier = verification;
+    } else {
+      if (debug) response.verifier = verification;
+    }
 
     if (llmMeta) response.llm = llmMeta;
     if (debug) {
