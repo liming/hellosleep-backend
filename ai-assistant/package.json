@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "bridge": "node src/discord-bridge.js"
+    "bridge": "node src/discord-bridge.js",
+    "eval": "node eval/run-eval.js",
+    "test": "node test/policy.test.js"
   },
   "dependencies": {
     "discord.js": "^14.16.3",

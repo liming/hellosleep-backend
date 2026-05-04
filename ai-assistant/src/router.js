@@ -4,7 +4,7 @@ function isLowInfoComplaint(text = '') {
   const q = String(text || '').trim();
   if (!q) return false;
   const genericComplaint = /(失眠|睡不着|崩溃|好痛苦|太难受|怎么办|绝望|熬不住)/.test(q);
-  const hasConcreteContext = /(评估|白天|工作|学习|生活|学生|宿舍|产后|孕期|倒班|噪音|药|安眠药|褪黑素|\d{1,2}[:：点]\d{0,2}|\d+小时)/.test(q);
+  const hasConcreteContext = /(评估|白天|工作|学习|生活|学生|宿舍|产后|孕期|倒班|噪音|药|安眠药|褪黑素|早醒|入睡|半夜.*醒|\d{1,2}[:：点]\d{0,2}|\d+小时)/.test(q);
   return q.length <= 36 && genericComplaint && !hasConcreteContext;
 }
 
