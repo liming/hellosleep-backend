@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "default_assessment_url": "https://www.hellosleep.net/zh/assessment",
+  "topics": [
+    {
+      "id": "fear_sudden_death",
+      "priority": 95,
+      "min_score": 1,
+      "patterns": ["猝死", "突然死", "会不会死", "会死吗", "失眠.*死", "睡不着.*死"],
+      "core_message": "不会。失眠本身不会导致猝死。",
+      "reframe_message": "你现在最需要处理的是“反复担心会不会出事”这个负担，而不是继续围绕睡眠细节做推演。",
+      "action_message": "把这份担心转成明天的实际行动：照常起床、照常去上课或工作，白天保持活动（哪怕只是散步半小时）。",
+      "article": {
+        "title": "失眠了并非「世界末日」",
+        "url": "https://www.hellosleep.net/article/pz8q62vjwiwcw3jms1mlh2x1",
+        "score": 100
+      }
+    },
+    {
+      "id": "boredom_idle",
+      "priority": 90,
+      "min_score": 2,
+      "patterns": ["退休", "非常清闲", "无所事事", "不活跃", "长时间.*卧室", "长时间.*床上"],
+      "core_message": "你现在最核心的问题不是“怎么操作睡眠”，而是白天生活密度太低，身体并不需要你试图睡那么久。",
+      "reframe_message": "把注意力从“观察睡眠”转回“过日子本身”，才是根本方向。",
+      "action_message": "明天开始把试图睡觉时间缩短到更接近实际睡着时长，困了再睡；白天给自己安排一件必须完成的具体任务。",
+      "article": {
+        "title": "你的无所事事，才是罪魁祸首",
+        "url": "https://www.hellosleep.net/article/xk9vpbyfd5xahyjujvyd2qr5",
+        "score": 100
+      }
+    }
+  ]
+}
+

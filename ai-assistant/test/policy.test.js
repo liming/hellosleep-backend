@@ -1,6 +1,7 @@
 import assert from 'assert';
 import { routeIntent } from '../src/router.js';
 import { decidePolicy } from '../src/policy-engine.js';
+import { detectPrimaryFocus, buildFocusResponse, mergeFocusArticle } from '../src/focus-engine.js';
 
 function test(name, fn) {
   try {
@@ -35,7 +36,7 @@ test('normal question -> allow_rag', () => {
   assert.equal(d.decision, 'allow_rag');
 });
 
-test('assessment boredom/idle -> template with forced article', () => {
+test('assessment boredom/idle -> primary focus and bound article', () => {
   const text = [
     '这是评估结果：',
     '生活状态：退休',
@@ -47,28 +48,32 @@ test('assessment boredom/idle -> template with forced article', () => {
     '实际睡眠：3小时',
   ].join('\n');
   const r = routeIntent(text);
-  assert.equal(r.intent, 'assessment_boredom_idle');
-  const d = decidePolicy({ intent: r.intent, risk_level: r.risk_level });
-  assert.equal(d.decision, 'template');
-  assert.ok(d.template.related_articles?.[0]?.url?.includes('/article/xk9vpbyfd5xahyjujvyd2qr5'));
-  assert.ok(String(d.template.answer).includes('缩短'));
-  assert.ok(!/按时上床/.test(String(d.template.answer)));
+  assert.equal(r.intent, 'allow_rag');
+  const f = detectPrimaryFocus({ question: text });
+  assert.equal(f?.id, 'boredom_idle');
+  const merged = mergeFocusArticle([], f, 2);
+  assert.ok(merged[0]?.url?.includes('/article/xk9vpbyfd5xahyjujvyd2qr5'));
+  assert.ok(String(buildFocusResponse(f)).includes('缩短'));
+  assert.ok(!/按时上床/.test(String(buildFocusResponse(f))));
 });
 
-test('fear sudden death -> template with world-not-end article', () => {
-  const r = routeIntent([
+test('fear sudden death -> primary focus and bound article', () => {
+  const q = [
     '失眠会不会猝死？',
     '',
     '应该是午觉睡多了导致的失眠，每次失眠的时候都会担心这个问题',
     '',
     '明天还要早八救命啊',
-  ].join('\n'));
-  assert.equal(r.intent, 'fear_sudden_death');
-  const d = decidePolicy({ intent: r.intent, risk_level: r.risk_level });
-  assert.equal(d.decision, 'template');
-  assert.ok(d.template.related_articles?.[0]?.url?.includes('/article/pz8q62vjwiwcw3jms1mlh2x1'));
-  assert.ok(String(d.template.answer).startsWith('不会'));
-  assert.ok(!/今晚一定要睡着/.test(String(d.template.answer)));
-  assert.ok(!/死循环/.test(String(d.template.answer)));
+  ].join('\n');
+  const r = routeIntent(q);
+  assert.equal(r.intent, 'allow_rag');
+  const f = detectPrimaryFocus({ question: q });
+  assert.equal(f?.id, 'fear_sudden_death');
+  const merged = mergeFocusArticle([], f, 2);
+  assert.ok(merged[0]?.url?.includes('/article/pz8q62vjwiwcw3jms1mlh2x1'));
+  const reply = String(buildFocusResponse(f));
+  assert.ok(reply.startsWith('不会'));
+  assert.ok(!/今晚一定要睡着/.test(reply));
+  assert.ok(!/死循环/.test(reply));
 });
 

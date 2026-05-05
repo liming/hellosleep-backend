@@ -8,6 +8,7 @@ import { routeIntent } from './router.js';
 import { decidePolicy } from './policy-engine.js';
 import { verifyAnswer } from './verifier.js';
 import { assessmentToFacts } from './assessment.js';
+import { detectPrimaryFocus, buildFocusResponse, mergeFocusArticle } from './focus-engine.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -153,7 +154,8 @@ app.post('/ask', async (req, res) => {
     if (!question) return res.status(400).json({ error: 'question is required' });
 
     const assessmentInfo = assessmentToFacts(assessmentRaw);
-    const route = routeIntent(assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question);
+    const focusedInput = assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question;
+    const route = routeIntent(focusedInput);
     const policyDecision = decidePolicy({ intent: route.intent, risk_level: route.risk_level });
     if (policyDecision.decision === 'crisis') {
       const response = {
@@ -207,10 +209,11 @@ app.post('/ask', async (req, res) => {
     const retrievalQuery = assessmentInfo.facts_text
       ? `${question}\n\n[评估事实]\n${assessmentInfo.facts_text}`
       : question;
+    const focus = detectPrimaryFocus({ question, assessment_facts: assessmentInfo.facts_text });
     const refs = await retrieveTopChunks(retrievalQuery, 8);
     const top = refs.slice(0, 6);
-    const forcedArticles = policyDecision.template?.related_articles || null;
-    const links = forcedArticles?.length ? forcedArticles : findRelatedArticles(top, question, 2);
+    const baseLinks = findRelatedArticles(top, question, 2);
+    const links = mergeFocusArticle(baseLinks, focus, 2);
     const scenario = extractSignals(assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question);
 
     let answer;
@@ -219,17 +222,17 @@ app.post('/ask', async (req, res) => {
 
     if (policyDecision.decision === 'allow_rag' && useLlm && llmAvailable()) {
       try {
-        const llm = await generateAnswerWithLLM({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario });
+        const llm = await generateAnswerWithLLM({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario, focus });
         answer = llm.answer;
         mode = 'llm';
         llmMeta = { provider: llm.provider, model: llm.model };
       } catch (e) {
-        answer = buildAnswer(retrievalQuery, top, links);
+        answer = focus ? buildFocusResponse(focus) : buildAnswer(retrievalQuery, top, links);
         mode = 'rule-based-fallback';
         llmMeta = { error: e.message };
       }
     } else {
-      answer = buildAnswer(retrievalQuery, top, links);
+      answer = focus ? buildFocusResponse(focus) : buildAnswer(retrievalQuery, top, links);
     }
 
     const response = {
@@ -259,7 +262,8 @@ app.post('/ask', async (req, res) => {
     if (llmMeta) response.llm = llmMeta;
     if (debug) {
       response.references = mapDisplayReferences(top);
-      response.prompt_preview = buildLlmMessages({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario });
+      response.prompt_preview = buildLlmMessages({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario, focus });
+      response.focus = focus;
       if (assessmentInfo.facts_text) response.assessment_facts = assessmentInfo.facts_text;
     }
 
@@ -273,6 +277,7 @@ app.post('/ask', async (req, res) => {
       debug,
       question,
       scenario,
+      focus,
       references: (top || []).map(r => ({
         source_type: r.source_type,
         source_id: r.source_id,

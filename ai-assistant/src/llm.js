@@ -41,7 +41,7 @@ function formatLinks(links = []) {
   return links.map((x, i) => `${i + 1}. ${x.title}: ${x.url}`).join('\n');
 }
 
-export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 'normal', scenario = {} }) {
+export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 'normal', scenario = {}, focus = null }) {
   const rules = loadPromptRules();
 
   const system = [
@@ -54,8 +54,10 @@ export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 
     '输出要求：',
     '- 语言自然，不要机械模板化',
     '- 回答要贴合当前场景',
-    '- 先回应用户最核心的困扰',
+    '- 只回答一个最核心问题，不要面面俱到',
+    '- 先回应用户最核心的困扰，不要引入用户没提到的额外议题',
     '- 给出 1-3 个可执行下一步',
+    '- 把负面情绪转为白天可执行的积极行动',
     '- 如果合适，再给推荐阅读/评估入口',
     ...(rules ? ['', '以下是额外的回答优化规则，必须遵守：', rules] : []),
   ].join('\n');
@@ -64,6 +66,7 @@ export function buildLlmMessages({ question, refs = [], links = [], riskLevel = 
     `用户问题：${question}`,
     `risk_level=${riskLevel}`,
     `scenario_signals=${JSON.stringify(scenario)}`,
+    `focus=${focus ? JSON.stringify(focus) : 'null'}`,
     '',
     '管理员/知识库检索结果：',
     formatRefs(refs) || '（无）',
@@ -104,12 +107,12 @@ async function chatCompletionsCompatible({ messages }) {
   return answer;
 }
 
-export async function generateAnswerWithLLM({ question, refs = [], links = [], riskLevel = 'normal', scenario = {} }) {
+export async function generateAnswerWithLLM({ question, refs = [], links = [], riskLevel = 'normal', scenario = {}, focus = null }) {
   if (!llmAvailable()) {
     throw new Error('LLM provider not configured');
   }
 
-  const messages = buildLlmMessages({ question, refs, links, riskLevel, scenario });
+  const messages = buildLlmMessages({ question, refs, links, riskLevel, scenario, focus });
 
   switch (LLM_PROVIDER) {
     case 'openai_compatible':
