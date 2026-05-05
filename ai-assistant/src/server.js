@@ -209,7 +209,8 @@ app.post('/ask', async (req, res) => {
       : question;
     const refs = await retrieveTopChunks(retrievalQuery, 8);
     const top = refs.slice(0, 6);
-    const links = findRelatedArticles(top, question, 2);
+    const forcedArticles = policyDecision.template?.related_articles || null;
+    const links = forcedArticles?.length ? forcedArticles : findRelatedArticles(top, question, 2);
     const scenario = extractSignals(assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question);
 
     let answer;
