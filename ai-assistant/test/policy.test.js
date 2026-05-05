@@ -55,3 +55,13 @@ test('assessment boredom/idle -> template with forced article', () => {
   assert.ok(!/按时上床/.test(String(d.template.answer)));
 });
 
+test('fear sudden death -> template with world-not-end article', () => {
+  const r = routeIntent('失眠会不会猝死？每次失眠我都担心会不会死');
+  assert.equal(r.intent, 'fear_sudden_death');
+  const d = decidePolicy({ intent: r.intent, risk_level: r.risk_level });
+  assert.equal(d.decision, 'template');
+  assert.ok(d.template.related_articles?.[0]?.url?.includes('/article/pz8q62vjwiwcw3jms1mlh2x1'));
+  assert.ok(String(d.template.answer).startsWith('不会'));
+  assert.ok(!/今晚一定要睡着/.test(String(d.template.answer)));
+});
+

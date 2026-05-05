@@ -18,6 +18,14 @@
       "template_id": "guide_help_shortcuts"
     },
     {
+      "id": "fear_sudden_death",
+      "scope": "intent:fear_sudden_death",
+      "priority": 92,
+      "enabled": true,
+      "action": "template",
+      "template_id": "fear_sudden_death"
+    },
+    {
       "id": "assessment_boredom_idle",
       "scope": "intent:assessment_boredom_idle",
       "priority": 95,
@@ -53,6 +61,13 @@
       "answer": "睡吧不推荐用白噪音、助眠音频、助眠工具这类东西来“解决失眠”。它们治标不治本，靠它们入睡反而容易形成依赖，也没解决造成失眠的根本原因。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help",
       "related_articles": [
         { "title": "睡吧失眠者指南（先看这里）", "url": "https://www.hellosleep.net/help", "score": 100 }
+      ]
+    },
+    "fear_sudden_death": {
+      "mode": "fear-sudden-death",
+      "answer": "不会。失眠本身并不会导致猝死。\n\n你反复担心“会不会猝死”，说明你很在意身体，但这份在意更适合用行动来表达：明天按计划起床、白天照常活动（哪怕只是散步半小时），不要把一天都用来监控自己“昨晚睡了多少”。\n\n更完整的解释在这篇文章里（建议直接读完）：失眠了并非「世界末日」https://www.hellosleep.net/article/pz8q62vjwiwcw3jms1mlh2x1\n\n如果你想弄清楚自己到底是哪类失眠模式，可以去做一下睡眠评估：https://www.hellosleep.net/zh/assessment",
+      "related_articles": [
+        { "title": "失眠了并非「世界末日」", "url": "https://www.hellosleep.net/article/pz8q62vjwiwcw3jms1mlh2x1", "score": 100 }
       ]
     },
     "assessment_boredom_idle": {

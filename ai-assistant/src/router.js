@@ -18,10 +18,16 @@ function isShortcutRequest(text = '') {
   return /(白噪音|助眠音频|助眠歌|助眠app|助眠.*音乐|助眠工具|催眠音频|睡眠.*音频|褪黑素|眼罩|重力毯|助眠方法|快速入睡|能快入睡)/i.test(q);
 }
 
+function isFearSuddenDeath(text = '') {
+  const q = String(text || '');
+  return /(猝死|突然死|会不会死|会死吗|睡不着.*死|失眠.*死)/.test(q);
+}
+
 export function routeIntent(question = '') {
   const q = String(question || '').trim();
   const risk = detectRiskLevel(q);
   if (risk === 'high') return { intent: 'crisis', confidence: 1, risk_level: risk };
+  if (isFearSuddenDeath(q)) return { intent: 'fear_sudden_death', confidence: 0.85, risk_level: risk };
   if (isLowInfoComplaint(q)) return { intent: 'intake_low_info', confidence: 0.9, risk_level: risk };
   if (isShortcutRequest(q)) return { intent: 'shortcut_request', confidence: 0.8, risk_level: risk };
   if (isAssessmentBoredomIdle(q)) return { intent: 'assessment_boredom_idle', confidence: 0.7, risk_level: risk };
