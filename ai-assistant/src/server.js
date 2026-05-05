@@ -7,6 +7,7 @@ import { logAskEvent } from './log.js';
 import { routeIntent } from './router.js';
 import { decidePolicy } from './policy-engine.js';
 import { verifyAnswer } from './verifier.js';
+import { assessmentToFacts } from './assessment.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -146,10 +147,12 @@ app.post('/ask', async (req, res) => {
   const startedAt = Date.now();
   try {
     const question = (req.body?.question || '').trim();
+    const assessmentRaw = req.body?.assessment || null;
     const useLlm = req.body?.use_llm !== false;
     const debug = req.body?.debug === true;
     if (!question) return res.status(400).json({ error: 'question is required' });
 
+    const assessmentInfo = assessmentToFacts(assessmentRaw);
     const route = routeIntent(question);
     const policyDecision = decidePolicy({ intent: route.intent, risk_level: route.risk_level });
     if (policyDecision.decision === 'crisis') {
@@ -187,6 +190,7 @@ app.post('/ask', async (req, res) => {
         mode: t.mode || 'template',
         llm_available: llmAvailable(),
       };
+      if (debug && assessmentInfo.facts_text) response.assessment_facts = assessmentInfo.facts_text;
       logAskEvent({
         event: 'ask',
         risk_level: response.risk_level,
@@ -200,10 +204,13 @@ app.post('/ask', async (req, res) => {
       return res.json(response);
     }
 
-    const refs = await retrieveTopChunks(question, 8);
+    const retrievalQuery = assessmentInfo.facts_text
+      ? `${question}\n\n[评估事实]\n${assessmentInfo.facts_text}`
+      : question;
+    const refs = await retrieveTopChunks(retrievalQuery, 8);
     const top = refs.slice(0, 6);
     const links = findRelatedArticles(top, question, 2);
-    const scenario = extractSignals(question);
+    const scenario = extractSignals(assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question);
 
     let answer;
     let mode = 'rule-based';
@@ -211,17 +218,17 @@ app.post('/ask', async (req, res) => {
 
     if (policyDecision.decision === 'allow_rag' && useLlm && llmAvailable()) {
       try {
-        const llm = await generateAnswerWithLLM({ question, refs: top, links, riskLevel: route.risk_level, scenario });
+        const llm = await generateAnswerWithLLM({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario });
         answer = llm.answer;
         mode = 'llm';
         llmMeta = { provider: llm.provider, model: llm.model };
       } catch (e) {
-        answer = buildAnswer(question, top, links);
+        answer = buildAnswer(retrievalQuery, top, links);
         mode = 'rule-based-fallback';
         llmMeta = { error: e.message };
       }
     } else {
-      answer = buildAnswer(question, top, links);
+      answer = buildAnswer(retrievalQuery, top, links);
     }
 
     const response = {
@@ -251,7 +258,8 @@ app.post('/ask', async (req, res) => {
     if (llmMeta) response.llm = llmMeta;
     if (debug) {
       response.references = mapDisplayReferences(top);
-      response.prompt_preview = buildLlmMessages({ question, refs: top, links, riskLevel, scenario });
+      response.prompt_preview = buildLlmMessages({ question: retrievalQuery, refs: top, links, riskLevel: route.risk_level, scenario });
+      if (assessmentInfo.facts_text) response.assessment_facts = assessmentInfo.facts_text;
     }
 
     logAskEvent({
