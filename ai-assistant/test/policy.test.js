@@ -35,3 +35,23 @@ test('normal question -> allow_rag', () => {
   assert.equal(d.decision, 'allow_rag');
 });
 
+test('assessment boredom/idle -> template with forced article', () => {
+  const text = [
+    '这是评估结果：',
+    '生活状态：退休',
+    '忙碌程度：非常清闲',
+    '活跃程度：不活跃',
+    '长时间在卧室：是',
+    '长时间在床上：是',
+    '试图睡觉：6小时',
+    '实际睡眠：3小时',
+  ].join('\n');
+  const r = routeIntent(text);
+  assert.equal(r.intent, 'assessment_boredom_idle');
+  const d = decidePolicy({ intent: r.intent, risk_level: r.risk_level });
+  assert.equal(d.decision, 'template');
+  assert.ok(d.template.related_articles?.[0]?.url?.includes('/article/xk9vpbyfd5xahyjujvyd2qr5'));
+  assert.ok(String(d.template.answer).includes('缩短'));
+  assert.ok(!/按时上床/.test(String(d.template.answer)));
+});
+
