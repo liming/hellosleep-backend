@@ -18,6 +18,14 @@
       "template_id": "guide_help_shortcuts"
     },
     {
+      "id": "assessment_boredom_idle",
+      "scope": "intent:assessment_boredom_idle",
+      "priority": 95,
+      "enabled": true,
+      "action": "template",
+      "template_id": "assessment_boredom_idle"
+    },
+    {
       "id": "crisis",
       "scope": "intent:crisis",
       "priority": 1000,
@@ -45,6 +53,13 @@
       "answer": "睡吧不推荐用白噪音、助眠音频、助眠工具这类东西来“解决失眠”。它们治标不治本，靠它们入睡反而容易形成依赖，也没解决造成失眠的根本原因。\n\n睡吧有完整的自助指南，可以仔细阅读失眠者指南，通过睡吧推荐的方式求助：http://hellosleep.net/help",
       "related_articles": [
         { "title": "睡吧失眠者指南（先看这里）", "url": "https://www.hellosleep.net/help", "score": 100 }
+      ]
+    },
+    "assessment_boredom_idle": {
+      "mode": "assessment-boredom-idle",
+      "answer": "看你的评估，最关键的不是“技术上怎么睡”，而是：退休后生活太清闲、太不活跃，加上白天长时间在卧室/床上，导致你把大量精力都耗在“观察睡眠/等待睡眠”上。\n\n这类情况下，一个非常直接的结论是：你的身体可能根本不需要你“试图睡 6 小时”。你试图睡得越久，床上清醒的时间越多，失眠就越被巩固。\n\n你现在最该做的一件事是：把“试图睡觉的时间”明显缩短（先往接近你实际睡着的时长靠拢），困了再睡，不要“按点上床”。白天也不要再把卧室/床当成休息区——不困就不进去。\n\n把生活重新过起来（有挑战、有目标、有社交连接），睡眠会慢慢退到背景里。你现在要做的不是找工作才算“有事做”，而是让每天都有“必须完成”的事，而不是填时间。\n\n推荐你读这篇文章（就是你这种情况的核心）：《你的无所事事，才是罪魁祸首》。",
+      "related_articles": [
+        { "title": "你的无所事事，才是罪魁祸首", "url": "https://www.hellosleep.net/article/xk9vpbyfd5xahyjujvyd2qr5", "score": 100 }
       ]
     }
   }

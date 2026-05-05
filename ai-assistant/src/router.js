@@ -1,5 +1,10 @@
 import { detectRiskLevel } from './retrieve.js';
 
+function isAssessmentBoredomIdle(text = '') {
+  const q = String(text || '');
+  return /(退休|清闲|非常清闲|无所事事|不活跃|很少交流|长时间.*卧室|长时间.*床上)/.test(q);
+}
+
 function isLowInfoComplaint(text = '') {
   const q = String(text || '').trim();
   if (!q) return false;
@@ -19,6 +24,7 @@ export function routeIntent(question = '') {
   if (risk === 'high') return { intent: 'crisis', confidence: 1, risk_level: risk };
   if (isLowInfoComplaint(q)) return { intent: 'intake_low_info', confidence: 0.9, risk_level: risk };
   if (isShortcutRequest(q)) return { intent: 'shortcut_request', confidence: 0.8, risk_level: risk };
+  if (isAssessmentBoredomIdle(q)) return { intent: 'assessment_boredom_idle', confidence: 0.7, risk_level: risk };
   return { intent: 'allow_rag', confidence: 0.5, risk_level: risk };
 }
 

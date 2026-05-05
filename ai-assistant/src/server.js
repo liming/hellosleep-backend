@@ -153,7 +153,7 @@ app.post('/ask', async (req, res) => {
     if (!question) return res.status(400).json({ error: 'question is required' });
 
     const assessmentInfo = assessmentToFacts(assessmentRaw);
-    const route = routeIntent(question);
+    const route = routeIntent(assessmentInfo.facts_text ? `${question}\n${assessmentInfo.facts_text}` : question);
     const policyDecision = decidePolicy({ intent: route.intent, risk_level: route.risk_level });
     if (policyDecision.decision === 'crisis') {
       const response = {
