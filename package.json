@@ -32,7 +32,8 @@
     "migration:download-images": "cd service && npm run migration:download-images"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "next": "^15.5.12"
   },
   "engines": {
     "node": ">=18.0.0 <=24.x.x",
