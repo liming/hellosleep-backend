@@ -41,6 +41,56 @@ const BUSY_MAP: Record<string, number> = {
   very_busy: 5, busy: 4, normal: 3, idle: 2, very_idle: 1,
 };
 
+const VALUE_ALIASES: Record<string, string> = {
+  // common yes/no text values from legacy exports or copied QA text
+  '是': 'yes',
+  '不是': 'no',
+  '规律': 'yes',
+  '不规律': 'no',
+  '需要': 'yes',
+  '不需要': 'no',
+  '安静': 'yes',
+  '不安静': 'no',
+
+  // busy level
+  '非常忙碌': 'very_busy',
+  '比较忙碌': 'busy',
+  '比较清闲': 'idle',
+  '非常清闲': 'very_idle',
+
+  // pressure level
+  '压力很大': 'very_high',
+  '压力较大': 'high',
+  '压力适中': 'normal',
+  '压力较小': 'low',
+  '压力很小': 'very_low',
+
+  // lively level
+  '非常丰富活跃': 'very_active',
+  '比较丰富活跃': 'active',
+  '不太活跃': 'inactive',
+  '很单调': 'very_inactive',
+
+  // sport level
+  '有规律且强度适中': 'best',
+  '有规律但强度较低': 'good',
+  '偶尔运动': 'normal',
+  '很少运动': 'little',
+  '不运动': 'none',
+
+  // sunshine level
+  '2小时以上': 'best',
+  '1-2小时': 'good',
+  '30分钟-1小时': 'normal',
+  '15-30分钟': 'little',
+  '很少接触': 'none',
+};
+
+function normalizeValue(value: string | undefined): string {
+  if (!value) return '';
+  return VALUE_ALIASES[value] ?? value;
+}
+
 function getSleepHours(sleeptime: string, getuptime: string, hourstosleep: string): number {
   const hours = parseFloat(hourstosleep);
   if (hours > 0) return hours;
@@ -76,32 +126,35 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
       break;
 
     case 'irregular_schedule':
-      match = (a) => a.sleepregular === 'no';
+      match = (a) => normalizeValue(a.sleepregular) === 'no';
       break;
 
     case 'unhealthy_lifestyle':
       match = (a) => {
-        const sport = POINT_MAP[a.sport] ?? 3;
-        const sunshine = POINT_MAP[a.sunshine] ?? 3;
+        const sport = POINT_MAP[normalizeValue(a.sport)] ?? 3;
+        const sunshine = POINT_MAP[normalizeValue(a.sunshine)] ?? 3;
         return sport + sunshine < 4;
       };
       break;
 
     case 'idle_lifestyle':
       match = (a) => {
-        const pressure = POINT_MAP[a.pressure] ?? 3;
-        const lively = POINT_MAP[a.lively] ?? 3;
-        const busy = BUSY_MAP[a.busy] ?? 3;
+        const pressure = POINT_MAP[normalizeValue(a.pressure)] ?? 3;
+        const lively = POINT_MAP[normalizeValue(a.lively)] ?? 3;
+        const busy = BUSY_MAP[normalizeValue(a.busy)] ?? 3;
         return pressure + lively < 5 || busy <= 2;
       };
       break;
 
     case 'stress':
-      match = (a) => a.pressure === 'very_high' || a.pressure === 'high';
+      match = (a) => {
+        const pressure = normalizeValue(a.pressure);
+        return pressure === 'very_high' || pressure === 'high';
+      };
       break;
 
     case 'bedroom_overuse':
-      match = (a) => a.bedroom === 'yes' || a.bed === 'yes';
+      match = (a) => normalizeValue(a.bedroom) === 'yes' || normalizeValue(a.bed) === 'yes';
       break;
 
     case 'prenatal':
@@ -113,29 +166,31 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
       break;
 
     case 'student_issues':
-      match = (a) => a.status === 'study' && (a.holiday === 'yes' || a.bedtimeearly === 'yes');
+      match = (a) =>
+        a.status === 'study' &&
+        (normalizeValue(a.holiday) === 'yes' || normalizeValue(a.bedtimeearly) === 'yes');
       break;
 
     case 'shift_work':
-      match = (a) => a.shiftwork === 'yes' && a.sleepregular === 'no';
+      match = (a) => normalizeValue(a.shiftwork) === 'yes' && normalizeValue(a.sleepregular) === 'no';
       break;
 
     case 'distraction':
-      match = (a) => a.distraction === 'yes';
+      match = (a) => normalizeValue(a.distraction) === 'yes';
       break;
 
     case 'maladaptive_behaviors': {
       const behaviorKeys = ['irresponsible', 'inactive', 'excessive_rest', 'complain', 'ignore'];
-      match = (a) => behaviorKeys.filter((k) => a[k] === 'yes').length >= 3;
+      match = (a) => behaviorKeys.filter((k) => normalizeValue(a[k]) === 'yes').length >= 3;
       break;
     }
 
     case 'excessive_complaining':
-      match = (a) => a.complain === 'yes';
+      match = (a) => normalizeValue(a.complain) === 'yes';
       break;
 
     case 'noise_problem':
-      match = (a) => a.noise === 'no';
+      match = (a) => normalizeValue(a.noise) === 'no';
       break;
 
     case 'partner_snoring':
