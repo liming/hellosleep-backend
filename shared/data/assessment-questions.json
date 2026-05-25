@@ -127,35 +127,6 @@
     "unit": "小时"
   },
   {
-    "id": "sleep_quality",
-    "text": "您觉得自己的睡眠质量如何？",
-    "type": "single_choice",
-    "category": "sleep_habits",
-    "required": true,
-    "options": [
-      {
-        "value": "excellent",
-        "text": "很好"
-      },
-      {
-        "value": "good",
-        "text": "良好"
-      },
-      {
-        "value": "fair",
-        "text": "一般"
-      },
-      {
-        "value": "poor",
-        "text": "较差"
-      },
-      {
-        "value": "very_poor",
-        "text": "很差"
-      }
-    ]
-  },
-  {
     "id": "sport",
     "text": "您会有规律的运动吗？",
     "type": "single_choice",
@@ -181,6 +152,35 @@
       {
         "value": "none",
         "text": "不运动"
+      }
+    ]
+  },
+  {
+    "id": "busy",
+    "text": "您的生活非常忙碌吗？",
+    "type": "single_choice",
+    "category": "lifestyle",
+    "required": true,
+    "options": [
+      {
+        "value": "very_busy",
+        "text": "非常忙碌"
+      },
+      {
+        "value": "busy",
+        "text": "比较忙碌"
+      },
+      {
+        "value": "normal",
+        "text": "一般"
+      },
+      {
+        "value": "idle",
+        "text": "比较清闲"
+      },
+      {
+        "value": "very_idle",
+        "text": "非常清闲"
       }
     ]
   },
@@ -352,6 +352,23 @@
       {
         "value": "others",
         "text": "其他"
+      }
+    ]
+  },
+  {
+    "id": "distraction",
+    "text": "失眠后您是不是很难专心工作（或学习）？",
+    "type": "single_choice",
+    "category": "work_study",
+    "required": true,
+    "options": [
+      {
+        "value": "yes",
+        "text": "是"
+      },
+      {
+        "value": "no",
+        "text": "不是"
       }
     ]
   },

@@ -36,6 +36,14 @@ export function normalizeAssessment(raw) {
   return raw;
 }
 
+const BUSY_LABELS = {
+  very_busy: '非常忙碌',
+  busy: '比较忙碌',
+  normal: '一般',
+  idle: '比较清闲',
+  very_idle: '非常清闲',
+};
+
 export function assessmentToFacts(assessment) {
   const a = normalizeAssessment(assessment);
   if (!a) return { facts_text: '', facts: {}, flags: {} };
@@ -45,11 +53,19 @@ export function assessmentToFacts(assessment) {
 
   const facts = {
     life_status: get(answers, '生活状态') ?? get(answers, 'life_status') ?? '',
-    busy_level: get(answers, '你的生活非常忙碌吗？') ?? get(answers, '生活非常忙碌吗？') ?? get(answers, 'busy_level') ?? '',
+    busy_level: get(answers, '您的生活非常忙碌吗？')
+      ?? get(answers, '你的生活非常忙碌吗？')
+      ?? get(answers, '生活非常忙碌吗？')
+      ?? BUSY_LABELS[get(answers, 'busy')]
+      ?? get(answers, 'busy_level')
+      ?? '',
     active: get(answers, '生活很丰富活跃吗') ?? get(answers, '生活很丰富活跃吗？') ?? get(answers, 'active') ?? '',
     long_in_bedroom: get(answers, '你总是长时间呆在卧室吗？') ?? get(answers, 'long_in_bedroom') ?? '',
     long_in_bed: get(answers, '你总是长时间呆在床上吗？（比如玩手机）') ?? get(answers, '你总是长时间呆在床上吗？（比如玩手机）：') ?? get(answers, 'long_in_bed') ?? '',
-    hard_focus: get(answers, '你是不是很难专心工作（或学习）？') ?? get(answers, 'hard_focus') ?? '',
+    hard_focus: get(answers, '失眠后您是不是很难专心工作（或学习）？')
+      ?? get(answers, '你是不是很难专心工作（或学习）？')
+      ?? get(answers, 'hard_focus')
+      ?? (get(answers, 'distraction') === 'yes' ? '是' : get(answers, 'distraction') === 'no' ? '不是' : ''),
     low_efficiency: get(answers, '你的工作（或学习）效率是不是很低？') ?? get(answers, 'low_efficiency') ?? '',
     social_low: get(answers, '你是不是很少和同事（或同学）交流？') ?? get(answers, 'social_low') ?? '',
     tried_sleep_hours: pickNum(get(answers, '晚上试图睡觉时间有多少？') ?? get(answers, 'tried_sleep_hours')),

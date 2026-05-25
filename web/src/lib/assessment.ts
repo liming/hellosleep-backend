@@ -37,6 +37,10 @@ const POINT_MAP: Record<string, number> = {
   very_active: 5, active: 4, inactive: 2, very_inactive: 1,
 };
 
+const BUSY_MAP: Record<string, number> = {
+  very_busy: 5, busy: 4, normal: 3, idle: 2, very_idle: 1,
+};
+
 function getSleepHours(sleeptime: string, getuptime: string, hourstosleep: string): number {
   const hours = parseFloat(hourstosleep);
   if (hours > 0) return hours;
@@ -75,10 +79,6 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
       match = (a) => a.sleepregular === 'no';
       break;
 
-    case 'poor_sleep_quality':
-      match = (a) => a.sleep_quality === 'poor' || a.sleep_quality === 'very_poor';
-      break;
-
     case 'unhealthy_lifestyle':
       match = (a) => {
         const sport = POINT_MAP[a.sport] ?? 3;
@@ -91,8 +91,13 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
       match = (a) => {
         const pressure = POINT_MAP[a.pressure] ?? 3;
         const lively = POINT_MAP[a.lively] ?? 3;
-        return pressure + lively < 5;
+        const busy = BUSY_MAP[a.busy] ?? 3;
+        return pressure + lively < 5 || busy <= 2;
       };
+      break;
+
+    case 'stress':
+      match = (a) => a.pressure === 'very_high' || a.pressure === 'high';
       break;
 
     case 'bedroom_overuse':
@@ -113,6 +118,10 @@ export const tags: Tag[] = (tagsData as Omit<Tag, 'match'>[]).map((meta) => {
 
     case 'shift_work':
       match = (a) => a.shiftwork === 'yes' && a.sleepregular === 'no';
+      break;
+
+    case 'distraction':
+      match = (a) => a.distraction === 'yes';
       break;
 
     case 'maladaptive_behaviors': {

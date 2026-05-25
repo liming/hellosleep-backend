@@ -145,22 +145,6 @@ export const staticQuestions: StaticQuestion[] = [
     unit: '小时'
   },
   {
-    id: 'sleep_quality',
-    text: '您觉得自己的睡眠质量如何？',
-    type: 'single_choice',
-    category: 'sleep_habits',
-    required: true,
-    options: [
-      { id: 'excellent', value: 'excellent', text: '很好', score: 5 },
-      { id: 'good', value: 'good', text: '良好', score: 4 },
-      { id: 'fair', value: 'fair', text: '一般', score: 3 },
-      { id: 'poor', value: 'poor', text: '较差', score: 2 },
-      { id: 'very_poor', value: 'very_poor', text: '很差', score: 1 }
-    ]
-  },
-
-  // Lifestyle
-  {
     id: 'sport',
     text: '您会有规律的运动吗？',
     type: 'single_choice',
@@ -172,6 +156,20 @@ export const staticQuestions: StaticQuestion[] = [
       { id: 'normal', value: 'normal', text: '偶尔运动', score: 3 },
       { id: 'little', value: 'little', text: '很少运动', score: 2 },
       { id: 'none', value: 'none', text: '不运动', score: 1 }
+    ]
+  },
+  {
+    id: 'busy',
+    text: '您的生活非常忙碌吗？',
+    type: 'single_choice',
+    category: 'lifestyle',
+    required: true,
+    options: [
+      { id: 'very_busy', value: 'very_busy', text: '非常忙碌', score: 5 },
+      { id: 'busy', value: 'busy', text: '比较忙碌', score: 4 },
+      { id: 'normal', value: 'normal', text: '一般', score: 3 },
+      { id: 'idle', value: 'idle', text: '比较清闲', score: 2 },
+      { id: 'very_idle', value: 'very_idle', text: '非常清闲', score: 1 }
     ]
   },
   {
@@ -271,6 +269,17 @@ export const staticQuestions: StaticQuestion[] = [
   },
 
   // Work/Study Specific
+  {
+    id: 'distraction',
+    text: '失眠后您是不是很难专心工作（或学习）？',
+    type: 'single_choice',
+    category: 'work_study',
+    required: true,
+    options: [
+      { id: 'yes', value: 'yes', text: '是', score: 1 },
+      { id: 'no', value: 'no', text: '不是', score: 3 }
+    ]
+  },
   {
     id: 'shiftwork',
     text: '您的工作需要倒班吗？',
@@ -425,26 +434,6 @@ export const staticTags: StaticTag[] = [
     }
   },
   {
-    name: 'poor_sleep_quality',
-    text: '睡眠质量差',
-    description: '主观睡眠质量评价较低',
-    category: 'sleep',
-    priority: 'medium',
-    calc: {
-      type: 'simple',
-      question: 'sleep_quality',
-      value: 'poor'
-    },
-    severity: 'moderate',
-    recommendation: {
-      title: '改善睡眠环境',
-      content: '睡眠质量差往往与睡眠环境、生活习惯和心理状态有关。建议保持卧室安静、黑暗、凉爽，避免在床上进行非睡眠活动，建立规律的睡前仪式，放松心情。',
-      tutorialLink: '/article/ck6cc8a2g9kni2m6m3piuua6'
-    }
-  },
-
-  // Lifestyle tags
-  {
     name: 'unhealthy_lifestyle',
     text: '生活方式不健康',
     description: '缺乏运动和阳光接触',
@@ -471,13 +460,31 @@ export const staticTags: StaticTag[] = [
     calc: {
       type: 'function',
       func: 'isIdle',
-      input: ['pressure', 'lively']
+      input: ['pressure', 'lively', 'busy']
     },
     severity: 'mild',
     recommendation: {
       title: '充实生活',
       content: '睡眠最根本的目的，是为了消除一天劳作带来的疲劳，恢复我们身体和精神的能量。理解睡眠是一种需求，我们就应该明白为什么清闲的生活反而更容易失眠。因为无所事事的状态中大脑和身体的活跃度非常低，一直处于休息的状态，所以到了入睡的时间难以产生困意。',
       tutorialLink: '/article/xk9vpbyfd5xahyjujvyd2qr5'
+    }
+  },
+  {
+    name: 'stress',
+    text: '压力过大',
+    description: '生活或工作压力较大',
+    category: 'lifestyle',
+    priority: 'high',
+    calc: {
+      type: 'function',
+      func: 'hasHighStress',
+      input: ['pressure']
+    },
+    severity: 'moderate',
+    recommendation: {
+      title: '合理对待压力',
+      content: '生活和工作中的压力会带来短期失眠，却很少导致慢性失眠。面对压力时，许多人会下意识减压——减少工作量、回避挑战、放弃责任——这反而会让失眠被精心培育。我们需要的是承受暂时的失眠，保持健康身心，解决实际问题，并努力前进。',
+      tutorialLink: '/article/v9usa9otqyvfg9xxy26x9m0d'
     }
   },
   {
@@ -570,6 +577,24 @@ export const staticTags: StaticTag[] = [
       title: '适应作息',
       content: '「并不是工作和生活的形式让一个人失眠，而是错误的对待自己的工作和生活让一个人失眠」。一定要弄明白这两点的区别。同样的工作，有些人积极和主动，有些人懒散和被动，就会有很大区别。事实上，因为倒班失眠求助的人非常少，并不是今天上白班明天上夜班的人就容易失眠。',
       tutorialLink: '/article/e8mc9mta5jkdli0gh8lmu6lc'
+    }
+  },
+  {
+    name: 'distraction',
+    text: '难以集中精力',
+    description: '失眠后难以专心工作或学习',
+    category: 'work',
+    priority: 'high',
+    calc: {
+      type: 'simple',
+      question: 'distraction',
+      value: 'yes'
+    },
+    severity: 'moderate',
+    recommendation: {
+      title: '有效集中精力',
+      content: '许多人无法很好地做事，并不是因为自己身心不舒适，而是不去承担压力和责任。我们越是失眠，越应该努力承担并履行自己的责任——它会带给我们压力、动力和专注，减少疲劳和不适，让每一天变得积极和活跃。即便在失眠的状态下，我们也能做好每件事。',
+      tutorialLink: '/article/opi5a10cfnssqyc8gx0ic17s'
     }
   },
 
@@ -712,14 +737,14 @@ export const assessmentSections: AssessmentSection[] = [
     name: 'sleep_habits',
     description: '睡眠习惯',
     order: 1,
-    questions: ['sleepregular', 'sleeptime', 'getuptime', 'hourstosleep', 'hourstofallinsleep', 'sleep_quality']
+    questions: ['sleepregular', 'sleeptime', 'getuptime', 'hourstosleep', 'hourstofallinsleep']
   },
   {
     id: 'lifestyle',
     name: 'lifestyle',
     description: '生活状态',
     order: 2,
-    questions: ['sport', 'sunshine', 'pressure', 'lively']
+    questions: ['sport', 'busy', 'sunshine', 'pressure', 'lively']
   },
   {
     id: 'environment',
@@ -733,7 +758,7 @@ export const assessmentSections: AssessmentSection[] = [
     name: 'work_study',
     description: '工作和学习',
     order: 4,
-    questions: ['shiftwork', 'holiday', 'bedtimeearly']
+    questions: ['distraction', 'shiftwork', 'holiday', 'bedtimeearly']
   },
   {
     id: 'attitude',

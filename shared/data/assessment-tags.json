@@ -22,17 +22,6 @@
     }
   },
   {
-    "name": "poor_sleep_quality",
-    "text": "睡眠质量差",
-    "category": "sleep",
-    "priority": "medium",
-    "recommendation": {
-      "title": "改善睡眠环境",
-      "content": "睡眠质量差往往与睡眠环境、生活习惯和心理状态有关。建议保持卧室安静、黑暗、凉爽，避免在床上进行非睡眠活动，建立规律的睡前仪式，放松心情。",
-      "tutorialLink": "/article/ck6cc8a2g9kni2m6m3piuua6"
-    }
-  },
-  {
     "name": "unhealthy_lifestyle",
     "text": "生活方式不健康",
     "category": "lifestyle",
@@ -52,6 +41,17 @@
       "title": "充实生活",
       "content": "睡眠最根本的目的，是为了消除一天劳作带来的疲劳，恢复我们身体和精神的能量。理解睡眠是一种需求，我们就应该明白为什么清闲的生活反而更容易失眠。因为无所事事的状态中大脑和身体的活跃度非常低，一直处于休息的状态，所以到了入睡的时间难以产生困意。",
       "tutorialLink": "/article/xk9vpbyfd5xahyjujvyd2qr5"
+    }
+  },
+  {
+    "name": "stress",
+    "text": "压力过大",
+    "category": "lifestyle",
+    "priority": "high",
+    "recommendation": {
+      "title": "合理对待压力",
+      "content": "生活和工作中的压力会带来短期失眠，却很少导致慢性失眠。面对压力时，许多人会下意识减压——减少工作量、回避挑战、放弃责任——这反而会让失眠被精心培育。我们需要的是承受暂时的失眠，保持健康身心，解决实际问题，并努力前进。",
+      "tutorialLink": "/article/v9usa9otqyvfg9xxy26x9m0d"
     }
   },
   {
@@ -107,6 +107,17 @@
       "title": "适应作息",
       "content": "「并不是工作和生活的形式让一个人失眠，而是错误的对待自己的工作和生活让一个人失眠」。一定要弄明白这两点的区别。同样的工作，有些人积极和主动，有些人懒散和被动，就会有很大区别。事实上，因为倒班失眠求助的人非常少，并不是今天上白班明天上夜班的人就容易失眠。",
       "tutorialLink": "/article/e8mc9mta5jkdli0gh8lmu6lc"
+    }
+  },
+  {
+    "name": "distraction",
+    "text": "难以集中精力",
+    "category": "work",
+    "priority": "high",
+    "recommendation": {
+      "title": "有效集中精力",
+      "content": "许多人无法很好地做事，并不是因为自己身心不舒适，而是不去承担压力和责任。我们越是失眠，越应该努力承担并履行自己的责任——它会带给我们压力、动力和专注，减少疲劳和不适，让每一天变得积极和活跃。即便在失眠的状态下，我们也能做好每件事。",
+      "tutorialLink": "/article/opi5a10cfnssqyc8gx0ic17s"
     }
   },
   {
