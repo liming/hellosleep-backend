@@ -58,6 +58,49 @@ export interface StrapiResponse<T> {
   };
 }
 
+const TUTORIAL_LIST_FIELDS = ['title', 'excerpt', 'documentId', 'date'];
+const TUTORIAL_LIST_POPULATE = {
+  category: {
+    fields: ['name', 'key'],
+  },
+};
+
+function appendNestedQueryParams(
+  searchParams: URLSearchParams,
+  prefix: string,
+  value: unknown
+): void {
+  if (value === undefined || value === null) return;
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      appendNestedQueryParams(searchParams, `${prefix}[${index}]`, item);
+    });
+    return;
+  }
+  if (typeof value === 'object') {
+    Object.entries(value as Record<string, unknown>).forEach(([key, nested]) => {
+      appendNestedQueryParams(searchParams, `${prefix}[${key}]`, nested);
+    });
+    return;
+  }
+  searchParams.append(prefix, String(value));
+}
+
+function tutorialListParams(extraFilters?: Record<string, unknown>) {
+  return {
+    filters: {
+      type: {
+        $eq: 'tutorial',
+      },
+      ...extraFilters,
+    },
+    fields: TUTORIAL_LIST_FIELDS,
+    populate: TUTORIAL_LIST_POPULATE,
+    sort: 'date:desc',
+    pagination: { pageSize: 100 },
+  };
+}
+
 // Generic API request function
 export async function makeApiRequest(
   endpoint: string, 
@@ -101,7 +144,8 @@ export async function makeApiRequest(
 // Fetch articles from Strapi
 export async function fetchArticles(params?: {
   filters?: Record<string, any>;
-  populate?: string;
+  fields?: string[];
+  populate?: string | Record<string, unknown>;
   sort?: string;
   pagination?: {
     page?: number;
@@ -137,8 +181,18 @@ export async function fetchArticles(params?: {
     });
   }
   
+  if (params?.fields) {
+    params.fields.forEach((field, index) => {
+      searchParams.append(`fields[${index}]`, field);
+    });
+  }
+
   if (params?.populate) {
-    searchParams.append('populate', params.populate);
+    if (typeof params.populate === 'string') {
+      searchParams.append('populate', params.populate);
+    } else {
+      appendNestedQueryParams(searchParams, 'populate', params.populate);
+    }
   }
   
   if (params?.sort) {
@@ -146,7 +200,12 @@ export async function fetchArticles(params?: {
   }
   
   if (params?.pagination) {
-    searchParams.append('pagination', JSON.stringify(params.pagination));
+    if (params.pagination.page !== undefined) {
+      searchParams.append('pagination[page]', String(params.pagination.page));
+    }
+    if (params.pagination.pageSize !== undefined) {
+      searchParams.append('pagination[pageSize]', String(params.pagination.pageSize));
+    }
   }
 
   const url = `${API_BASE_URL}/api/articles?${searchParams.toString()}`;
@@ -192,15 +251,7 @@ export async function fetchCategories(): Promise<StrapiResponse<Category>> {
 // Fetch tutorials (articles with type 'tutorial')
 export async function fetchTutorials(): Promise<StrapiResponse<Article>> {
   console.log('fetchTutorials called');
-  return fetchArticles({
-    filters: {
-      type: {
-        $eq: 'tutorial'
-      }
-    },
-    populate: 'category',
-    sort: 'date:desc'
-  });
+  return fetchArticles(tutorialListParams());
 }
 
 // Fetch shared articles (articles with type 'share')
@@ -234,39 +285,25 @@ export async function fetchBlogArticles(): Promise<StrapiResponse<Article>> {
 // Fetch tutorials by category
 export async function fetchTutorialsByCategory(categoryId: number): Promise<StrapiResponse<Article>> {
   console.log('fetchTutorialsByCategory called with categoryId:', categoryId);
-  return fetchArticles({
-    filters: {
-      type: {
-        $eq: 'tutorial'
+  return fetchArticles(tutorialListParams({
+    category: {
+      id: {
+        $eq: categoryId,
       },
-      category: {
-        id: {
-          $eq: categoryId
-        }
-      }
     },
-    populate: 'category',
-    sort: 'date:desc'
-  });
+  }));
 }
 
 // Fetch tutorials by category key
 export async function fetchTutorialsByCategoryKey(categoryKey: string): Promise<StrapiResponse<Article>> {
   console.log('fetchTutorialsByCategoryKey called with categoryKey:', categoryKey);
-  return fetchArticles({
-    filters: {
-      type: {
-        $eq: 'tutorial'
+  return fetchArticles(tutorialListParams({
+    category: {
+      key: {
+        $eq: categoryKey,
       },
-      category: {
-        key: {
-          $eq: categoryKey
-        }
-      }
     },
-    populate: 'category',
-    sort: 'date:desc'
-  });
+  }));
 }
 
 // Fetch a single article by documentId

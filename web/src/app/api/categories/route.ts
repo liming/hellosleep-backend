@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (API_TOKEN) headers.Authorization = `Bearer ${API_TOKEN}`;
 
-    const response = await fetch(strapiUrl, { headers, cache: 'no-store' });
+    const response = await fetch(strapiUrl, {
+      headers,
+      next: { revalidate: 86400 },
+    });
 
     if (!response.ok) {
       const text = await response.text();
@@ -23,7 +26,11 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    });
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to fetch categories', detail: error?.message || 'unknown' },

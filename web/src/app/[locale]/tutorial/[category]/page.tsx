@@ -38,15 +38,17 @@ export default function TutorialCategoryPage() {
           }
         }
         
-        // Category page: validate category key and load tutorials
-        const categoriesResponse = await fetchCategories();
-        console.log('TutorialCategoryPage: Categories fetched successfully');
-        
-        const validCategories = categoriesResponse.data.filter(category => 
+        const [categoriesResponse, tutorialsResponse] = await Promise.all([
+          fetchCategories(),
+          fetchTutorialsByCategoryKey(categoryKey),
+        ]);
+        console.log('TutorialCategoryPage: Categories and tutorials fetched');
+
+        const validCategories = categoriesResponse.data.filter(category =>
           category && category.name
         );
         setCategories(validCategories);
-        
+
         const category = validCategories.find(cat => cat.key === categoryKey);
         if (!category) {
           console.error('TutorialCategoryPage: Category not found for key:', categoryKey);
@@ -54,14 +56,10 @@ export default function TutorialCategoryPage() {
           setLoading(false);
           return;
         }
-        
+
         setCurrentCategory(category);
-        console.log('TutorialCategoryPage: Found category:', category);
-        
-        const tutorialsResponse = await fetchTutorialsByCategoryKey(categoryKey);
-        console.log('TutorialCategoryPage: Tutorials fetched successfully');
-        
-        const validTutorials = tutorialsResponse.data.filter(tutorial => 
+
+        const validTutorials = tutorialsResponse.data.filter(tutorial =>
           tutorial && tutorial.title
         );
         console.log('TutorialCategoryPage: Valid tutorials:', validTutorials);

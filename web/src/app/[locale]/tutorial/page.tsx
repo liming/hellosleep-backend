@@ -23,19 +23,11 @@ export default function TutorialPage() {
         setError(null);
         
         console.log('TutorialPage: About to fetch categories and tutorials');
-        
-        // Fetch tutorials first, then try to fetch categories
-        const tutorialsResponse = await fetchTutorials();
-        console.log('TutorialPage: Tutorials fetched successfully');
-        
-        let categoriesResponse = null;
-        try {
-          categoriesResponse = await fetchCategories();
-          console.log('TutorialPage: Categories fetched successfully');
-        } catch (categoryError) {
-          console.log('TutorialPage: Categories fetch failed, continuing without categories');
-        }
-        
+
+        const [tutorialsResponse, categoriesResponse] = await Promise.all([
+          fetchTutorials(),
+          fetchCategories().catch(() => null),
+        ]);
         console.log('TutorialPage: API calls completed');
         console.log('Tutorials response:', tutorialsResponse);
         console.log('Categories response:', categoriesResponse);
