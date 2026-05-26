@@ -65,7 +65,7 @@ export default function RichTextRenderer({ content, className = '' }: RichTextRe
         );
 
       case 'heading':
-        const HeadingTag = `h${level || 2}` as keyof JSX.IntrinsicElements;
+        const HeadingTag = `h${level || 2}` as keyof React.JSX.IntrinsicElements;
         return (
           <HeadingTag key={index} className={`font-bold mb-4 mt-6 ${level === 1 ? 'text-2xl' : level === 2 ? 'text-xl' : 'text-lg'}`}>
             {children?.map((child, childIndex) => renderNode(child, childIndex))}
